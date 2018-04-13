@@ -1,0 +1,23 @@
+services:
+  - docker
+language: python
+install: true
+git:
+  depth: 3
+  submodules: true
+branches:
+  only:
+  - master
+  - "/^release-.*$/"
+before_script:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+script:
+  - cd function/
+  - docker build -t saidsef/faas-convert-to-text .
+  - docker push saidsef/faas-convert-to-text
+notifications:
+  email: true
+  on_success: always
+  on_failure: change
+after_success:
+  - echo "All done!"
