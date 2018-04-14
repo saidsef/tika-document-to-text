@@ -12,7 +12,7 @@ def get_stdin():
 
 if(__name__ == "__main__"):
     st = get_stdin()
-    if st == "" or len(sr) < 1:
+    if st == "" or len(st) < 1:
         raise Exception("input string is empty")
 
     print(handler.handle(st))
