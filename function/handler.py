@@ -1,5 +1,6 @@
 from subprocess import Popen, PIPE
 from json import dumps, loads
+from os import environ
 
 def byte2json(b):
     doc = loads(b.decode("utf-8").replace("'", '"'))
@@ -13,7 +14,8 @@ def handle(req):
     Args:
         req (str): request body
     """
-    p = Popen(["java","-jar","tika-app.jar", "-J", "-T", "-r", "{}".format(req)], stdout=PIPE, stderr=PIPE)
+    env = environ.copy()
+    p = Popen(["java","org.apache.tika.cli.TikaCLI", "-J", "-T", "-r", "{}".format(req)], stdout=PIPE, stderr=PIPE, env=env)
     out, err = p.communicate()
     data = []
     if len(out) > 0:
