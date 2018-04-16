@@ -20,11 +20,11 @@ RUN apt-get update && \
     apt-get install -yy openjdk-8-jre-headless curl && \
     curl -vSL http://www.mirrorservice.org/sites/ftp.apache.org/tika/tika-app-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-app.jar && \
     curl -vSL https://github.com/openfaas/faas/releases/download/${OPENFAAS_VERSION}/fwatchdog -o /usr/bin/watchdog && \
-    curl -vSL http://central.maven.org/maven2/org/xerial/sqlite-jdbc/${SQLITE_JDBC}/sqlite-jdbc-${SQLITE_JDBC}.jar -o /opt/tika/libs/sqlite-jdbc.jar
-    curl -vSL http://central.maven.org/maven2/com/levigo/jbig2/levigo-jbig2-imageio/${JBIG2_IMAGEIO}/levigo-jbig2-imageio-${JBIG2_IMAGEIO}.jar -o /opt/tika/libs/levigo-jbig2-imageio.jar
-    curl -vSL http://central.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar
+    curl -vSL http://central.maven.org/maven2/org/xerial/sqlite-jdbc/${SQLITE_JDBC}/sqlite-jdbc-${SQLITE_JDBC}.jar -o /opt/tika/libs/sqlite-jdbc.jar && \
+    curl -vSL http://central.maven.org/maven2/com/levigo/jbig2/levigo-jbig2-imageio/${JBIG2_IMAGEIO}/levigo-jbig2-imageio-${JBIG2_IMAGEIO}.jar -o /opt/tika/libs/levigo-jbig2-imageio.jar && \
+    curl -vSL http://central.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar && \
     apt-get purge -yy curl && apt-get autoremove -yy && \
-    rm -rf /var/cache/apt/* && \
+    rm -rf /var/cache/apt/* /tmp/* && \
     chmod a+x /usr/bin/watchdog /opt/tika/index.py /opt/tika/handler.py
 
 HEALTHCHECK --interval=1s CMD [ -e /tmp/.lock ] || exit 1
