@@ -5,3 +5,30 @@ The Apache Tika™ toolkit detects and extracts metadata and text from over a th
 ## Prerequisite
 
 You must have OpenFaas Services running
+
+## Deployment
+
+From GitHub:
+
+```shell
+git clone https://github.com/saidsef/faas-convert-to-text.git
+cd faas-convert-to-text/
+faas-cli deploy -f ./convert-to-text.yml
+```
+
+```shell
+faas-cli deploy -f https://raw.githubusercontent.com/saidsef/faas-convert-to-text/master/convert-to-text.yml
+```
+
+Take it for a test drive:
+
+```shell
+curl -d 'https://d1.awsstatic.com/whitepapers/aws-overview.pdf' http://localhost:8080/function/convert-to-text
+```
+
+```python
+from requests import post
+data='https://d1.awsstatic.com/whitepapers/aws-overview.pdf'
+r = post('http://localhost:8080/function/convert-to-text', data=data)
+print(r.text)
+```
