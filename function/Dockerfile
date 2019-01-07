@@ -25,6 +25,7 @@ RUN apt-get update && \
     curl -vSL http://central.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar && \
     apt-get purge -yy curl && apt-get autoremove -yy && \
     rm -rf /var/cache/apt/* /tmp/* && \
+    pip install --no-cache-dir -r requirements.txt && \
     chmod a+x /opt/tika/index.py /opt/tika/handler.py
 
 HEALTHCHECK --interval=1s CMD [ -e /tmp/.lock ] || exit 1
