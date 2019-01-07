@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tika
+  namespace: web
+  labels:
+    name: tika
+    app: tika
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tika
+  template:
+    metadata:
+      labels:
+        app: tika
+    spec:
+      containers:
+      - name: tika
+        image: saidsef/tika-convert-to-text:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 7070
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tika
+  namespace: web
+  labels:
+    app: tika
+    tier: frontend
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  tika
+      prefix: /
+      service: tika:7070
+      host: tika.saidsef.co.uk
+spec:
+  type: NodePort
+  selector:
+    app: tika
+  ports:
+  - protocol: TCP
+    port: 7070
+    targetPort: 7070
+    name: web
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tika
+  namespace: web
+spec:
+  rules:
+  - host: tika.saidsef.co.uk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tika
+          servicePort: 7070

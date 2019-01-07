@@ -13,7 +13,8 @@ before_script:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 script:
   - cd function/
-  - docker build -t saidsef/faas-convert-to-text .
+  - docker build -t saidsef/tika-convert-to-text:latest .
+  - docker build -t saidsef/tika-convert-to-text:faas . Dockerfile.faas
   - docker push saidsef/faas-convert-to-text
 notifications:
   email: true

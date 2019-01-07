@@ -1,18 +1,34 @@
-# Copyright (c) Alex Ellis 2017. All rights reserved.
-# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import sys
+import os
+import logging
 import handler
+from json import dumps, loads
+from flask import Flask, request, jsonify, Response
+from prometheus_flask_exporter import PrometheusMetrics
 
-def get_stdin():
-    buf = ""
-    for line in sys.stdin:
-        buf = buf + line
-    return buf
+PORT  = os.environ.get("PORT")
+app   = Flask(__name__)
 
-if(__name__ == "__main__"):
-    st = get_stdin()
-    if st == "" or len(st) < 1:
-        raise Exception("input string is empty")
+#PrometheusMetrics(app, group_by='path')         # the default
+#PrometheusMetrics(app, group_by='endpoint')     # by endpoint
+PrometheusMetrics(app, group_by='url_rule')     # by URL rule
 
-    print(handler.handle(st))
+logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+
+@app.route('/', methods=['GET'])
+def index():
+  return jsonify(['{} {}'.format(list(rule.methods), rule) for rule in app.url_map.iter_rules() if 'static' not in str(rule)])
+
+@app.route('/api/v1/version', methods=['GET', 'POST'])
+def transform():
+  if request.method == 'POST':
+    j = loads(request.get_data())
+    url = j['url']
+    data = handler.handle(url)
+    Response(dumps({'url': url, 'data': data}), mimetype='application/json')
+  else:
+    return Response(dumps({'message': 'healthy'}), mimetype='application/json')
+
+if __name__ =='__main__':
+    app.run(host='0.0.0.0', port=PORT)
