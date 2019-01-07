@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.DEBUG)
 def index():
   return jsonify(['{} {}'.format(list(rule.methods), rule) for rule in app.url_map.iter_rules() if 'static' not in str(rule)])
 
-@app.route('/api/v1/version', methods=['GET', 'POST'])
+@app.route('/api/v1/url', methods=['GET', 'POST'])
 def transform():
   if request.method == 'POST':
     j = loads(request.get_data())
