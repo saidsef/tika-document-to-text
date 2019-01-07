@@ -15,7 +15,7 @@ script:
   - cd function/
   - docker build -t saidsef/tika-convert-to-text:latest .
   - docker build -t saidsef/tika-convert-to-text:faas . -f Dockerfile.faas
-  - docker push saidsef/faas-convert-to-text
+  - docker push saidsef/tika-convert-to-text
 notifications:
   email: true
   on_success: always
