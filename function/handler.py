@@ -1,6 +1,7 @@
-from subprocess import Popen, PIPE
-from json import dumps, loads
+
 from os import environ
+from json import dumps, loads
+from subprocess import Popen, PIPE
 
 def byte2json(b):
     doc = loads(b.decode("utf-8").replace("'", '"'))
