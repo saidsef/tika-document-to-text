@@ -26,7 +26,7 @@ def transform():
     j = loads(request.get_data())
     url = j['url']
     data = handler.handle(url)
-    Response(dumps({'url': url, 'data': str(data)}), mimetype='application/json')
+    return Response(dumps({'url': url, 'data': data}), mimetype='application/json')
   else:
     return Response(dumps({'message': 'healthy'}), mimetype='application/json')
 

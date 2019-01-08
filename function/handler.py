@@ -1,7 +1,11 @@
 
+import logging
 from os import environ
 from json import dumps, loads
 from subprocess import Popen, PIPE
+
+logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 def byte2json(b):
     doc = loads(b.decode("utf-8").replace("'", '"'))
@@ -23,4 +27,4 @@ def handle(req):
         data.append(byte2json(out))
     if len(out) < 1 and len(err) > 0:
         data.append({"error":"{}".format(err), "url":"{}".format(req)})
-    return "\n\n".join(data)
+    return "\n\n".join(data).rstrip()

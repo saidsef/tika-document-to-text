@@ -1,7 +1,7 @@
 FROM python:3-slim-stretch
 MAINTAINER Said Sef <said@saidsef.co.uk>
 
-ENV APACHE_TIKA_VERSION 1.19.1
+ENV APACHE_TIKA_VERSION 1.20
 ENV CLASSPATH /opt/tika/tika-app.jar:/opt/tika/libs/*
 ENV OPENFAAS_VERSION 0.9.14
 ENV SQLITE_JDBC 3.25.2

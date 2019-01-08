@@ -3,7 +3,7 @@ MAINTAINER Said Sef <said@saidsef.co.uk>
 
 ARG PORT=""
 
-ENV APACHE_TIKA_VERSION 1.19.1
+ENV APACHE_TIKA_VERSION 1.20
 ENV CLASSPATH /opt/tika/tika-app.jar:/opt/tika/libs/*
 ENV SQLITE_JDBC 3.25.2
 ENV JBIG2_IMAGEIO 2.0
@@ -28,6 +28,6 @@ RUN apt-get update && \
     pip install --no-cache-dir -r requirements.txt && \
     chmod a+x /opt/tika/index.py /opt/tika/handler.py
 
-HEALTHCHECK --interval=1s CMD [ -e /tmp/.lock ] || exit 1
+EXPOSE ${PORT}
 
 CMD ["python3", "index.py"]
