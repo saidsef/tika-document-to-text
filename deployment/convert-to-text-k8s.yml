@@ -32,15 +32,6 @@ metadata:
   labels:
     app: tika
     tier: frontend
-  annotations:
-    getambassador.io/config: |
-      ---
-      apiVersion: ambassador/v0
-      kind:  Mapping
-      name:  tika
-      prefix: /
-      service: tika:7070
-      host: tika.saidsef.co.uk
 spec:
   type: NodePort
   selector:
