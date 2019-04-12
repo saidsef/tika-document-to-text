@@ -49,7 +49,6 @@ metadata:
   namespace: web
   annotations:
     nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
-    nginx.ingress.kubernetes.io/lua-resty-waf: "active"
 spec:
   rules:
   - host: tika.saidsef.co.uk
