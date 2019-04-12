@@ -17,11 +17,19 @@ cd faas-convert-to-text/
 faas-cli deploy -f ./convert-to-text.yml
 ```
 
+FaaS Deployment
+
 ```shell
 faas-cli deploy -f https://raw.githubusercontent.com/saidsef/faas-convert-to-text/master/convert-to-text.yml
 ```
 
-Take it for a test drive:
+Kubernetes Deployment
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/saidsef/faas-convert-to-text/master/deployment/convert-to-text-k8s.yml
+```
+
+FaaS - Take it for a test drive:
 
 ```shell
 curl -d 'https://d1.awsstatic.com/whitepapers/aws-overview.pdf' http://localhost:8080/function/convert-to-text
@@ -33,3 +41,10 @@ data='https://d1.awsstatic.com/whitepapers/aws-overview.pdf'
 r = post('http://localhost:8080/function/convert-to-text', data=data)
 print(r.text)
 ```
+
+Kubernetes - Take it for a test drive:
+
+```shell
+curl -d @test/url.json https://tika.saidsef.co.uk
+```
+
