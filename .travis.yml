@@ -15,19 +15,19 @@ script:
   - cd function/
   - |
     if [ "$TRAVIS_BRANCH" != "master" ]; then
-     docker build --platform amd64 --squash --compress -t saidsef/tika-convert-to-text:${TRAVIS_BRANCH} . 
+     docker build -t saidsef/tika-convert-to-text:${TRAVIS_BRANCH} .;
     fi
   - |
     if [ "$TRAVIS_BRANCH" == "master" ]; then
-     docker build --platform amd64 --squash --compress -t saidsef/tika-convert-to-text:latest . 
+     docker build -t saidsef/tika-convert-to-text:latest .;
     fi
   - |
     if [ "$TRAVIS_BRANCH" != "master" ]; then
-     docker build --platform amd64 --squash --compress -t saidsef/tika-convert-to-text:openfaas-${TRAVIS_BRANCH} . -f Dockerfile.faas
+     docker build -t saidsef/tika-convert-to-text:openfaas-${TRAVIS_BRANCH} . -f Dockerfile.faas;
     fi
   - |
-    if [ "$TRAVIS_BRANCH" != "master" ]; then
-     docker build --platform amd64 --squash --compress -t saidsef/tika-convert-to-text:openfaas . -f Dockerfile.faas
+    if [ "$TRAVIS_BRANCH" == "master" ]; then
+     docker build -t saidsef/tika-convert-to-text:openfaas . -f Dockerfile.faas;
     fi
   - docker push saidsef/tika-convert-to-text
 notifications:
