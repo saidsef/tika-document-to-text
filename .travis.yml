@@ -13,8 +13,23 @@ before_script:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 script:
   - cd function/
-  - docker build -t saidsef/tika-convert-to-text:latest .
-  - docker build -t saidsef/tika-convert-to-text:faas . -f Dockerfile.faas
+  - export BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-TRAVIS_BRANCH}
+  - |
+    if [ "${BRANCH}" != "master" ]; then
+     docker build -t saidsef/tika-convert-to-text:${BRANCH} .;
+    fi
+  - |
+    if [ "${BRANCH}" == "master" ]; then
+     docker build -t saidsef/tika-convert-to-text:latest .;
+    fi
+  - |
+    if [ "${BRANCH}" != "master" ]; then
+     docker build -t saidsef/tika-convert-to-text:openfaas-${BRANCH} . -f Dockerfile.faas;
+    fi
+  - |
+    if [ "${BRANCH}" == "master" ]; then
+     docker build -t saidsef/tika-convert-to-text:openfaas . -f Dockerfile.faas;
+    fi
   - docker push saidsef/tika-convert-to-text
 notifications:
   email: true
