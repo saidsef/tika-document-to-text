@@ -13,20 +13,21 @@ before_script:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 script:
   - cd function/
+  - export BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-TRAVIS_BRANCH}
   - |
-    if [ "$TRAVIS_BRANCH" != "master" ]; then
-     docker build -t saidsef/tika-convert-to-text:${TRAVIS_BRANCH} .;
+    if [ "${BRANCH}" != "master" ]; then
+     docker build -t saidsef/tika-convert-to-text:${BRANCH} .;
     fi
   - |
-    if [ "$TRAVIS_BRANCH" == "master" ]; then
+    if [ "${BRANCH}" == "master" ]; then
      docker build -t saidsef/tika-convert-to-text:latest .;
     fi
   - |
-    if [ "$TRAVIS_BRANCH" != "master" ]; then
-     docker build -t saidsef/tika-convert-to-text:openfaas-${TRAVIS_BRANCH} . -f Dockerfile.faas;
+    if [ "${BRANCH}" != "master" ]; then
+     docker build -t saidsef/tika-convert-to-text:openfaas-${BRANCH} . -f Dockerfile.faas;
     fi
   - |
-    if [ "$TRAVIS_BRANCH" == "master" ]; then
+    if [ "${BRANCH}" == "master" ]; then
      docker build -t saidsef/tika-convert-to-text:openfaas . -f Dockerfile.faas;
     fi
   - docker push saidsef/tika-convert-to-text
