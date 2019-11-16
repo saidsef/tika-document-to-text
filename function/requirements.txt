@@ -1,2 +1,3 @@
-flask
-prometheus-flask-exporter
+-i https://pypi.org/simple
+flask==1.1.1
+prometheus-flask-exporter==0.11.0
