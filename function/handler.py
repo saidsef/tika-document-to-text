@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 import logging
 from os import environ
