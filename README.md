@@ -38,13 +38,13 @@ curl -d 'https://d1.awsstatic.com/whitepapers/aws-overview.pdf' http://localhost
 ```python
 from requests import post
 data='https://d1.awsstatic.com/whitepapers/aws-overview.pdf'
-r = post('http://localhost:8080/function/convert-to-text', data=data)
+headers = { 'Content-Type': 'application/json'
+r = post('http://localhost:8080/function/convert-to-text', headers=headers, data=data)
 print(r.text)
 ```
 
 Kubernetes - Take it for a test drive:
 
 ```shell
-curl -d @test/url.json https://tika.saidsef.co.uk
+curl -d @test/url.json https://tika.saidsef.co.uk -H 'Content-Type|: application/json'
 ```
-
