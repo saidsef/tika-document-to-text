@@ -21,21 +21,21 @@ spec:
         app: ui
     spec:
       containers:
-      - name: tika
-        image: saidsef/tika-convert-to-text:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 7070
-      - name: ui
-        image: saidsef/tika-convert-to-text:ui-latest
-        imagePullPolicy: Always
-        env:
-          - name: HOST
-            value: "tika"
-          - name: HOST_PORT
-            value: 7070
-        ports:
-        - containerPort: 8080
+        - name: tika
+          image: saidsef/tika-convert-to-text:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7070
+        - name: ui
+          image: saidsef/tika-convert-to-text:ui-latest
+          imagePullPolicy: Always
+          env:
+            - name: HOST
+              value: "tika"
+            - name: HOST_PORT
+              value: "7070"
+          ports:
+            - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
