@@ -26,7 +26,7 @@ app.use(morgan('combined'));
 app.get('/', (req, res, next) => {
   res.render('index', {
     url: req.body.url,
-    text: req.body.text
+    text: ''
   });
 });
 
@@ -52,8 +52,8 @@ app.post('/', (req, res, next) => {
       response.on("end", () => {
         body = JSON.parse(body);
         res.render('index', {
-          url: req.body.url,
-          text: body['data']
+          url: req.body.url.trim(),
+          text: body['data'].trim()
         });
       });
     });
