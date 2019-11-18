@@ -1,0 +1,31 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
+    <title>Object to Text</title>
+    <link rel="stylesheet" href="////stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+</head>
+<body class="container-fluid" itemscope itemtype="http://schema.org/WebPage">
+    <div class="container-fluid">
+        <form action="" method="post">
+            <div class="modal-body">
+                <label for="url">Enter URL: </label>
+                <input id="url" type="text" class="form-control" name="url" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
+            </div>
+            <div class="modal-body">
+                <textarea id="text" name="text" class="form-control" aria-label="With textarea" rows="10">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+    
+</body>
+</html>
