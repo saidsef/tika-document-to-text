@@ -32,7 +32,9 @@ script:
     if [ "${BRANCH}" == "master" ]; then
      docker build -t saidsef/tika-convert-to-text:openfaas . -f Dockerfile.faas;
     fi
-  - docker push saidsef/tika-convert-to-text
+  - |
+    docker push saidsef/tika-convert-to-text || true
+    docker push saidsef/tika-convert-to-text-ui || true
 notifications:
   email: true
   on_success: always
