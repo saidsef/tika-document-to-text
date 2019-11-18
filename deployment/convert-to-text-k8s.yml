@@ -22,12 +22,12 @@ spec:
     spec:
       containers:
       - name: tika
-        image: saidsef/tika-convert-to-text:master
+        image: saidsef/tika-convert-to-text:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 7070
       - name: ui
-        image: saidsef/tika-convert-to-text-ui:master
+        image: saidsef/tika-convert-to-text:ui-latest
         imagePullPolicy: Always
         env:
           - name: HOST
