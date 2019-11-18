@@ -19,10 +19,12 @@ script:
   - |
     if [ "${BRANCH}" == "master" ]; then
      docker build -t saidsef/tika-convert-to-text:latest .
-     docker build -t saidsef/tika-convert-to-text:ui-latest ../ui/ -f Dockerfile
+     cd ../ui/
+     docker build -t saidsef/tika-convert-to-text:ui-latest .
     else
      docker build -t saidsef/tika-convert-to-text:${BRANCH} .
-     docker build -t saidsef/tika-convert-to-text:ui-${BRANCH} ../ui/ -f Dockerfile
+     cd ../ui/
+     docker build -t saidsef/tika-convert-to-text:ui-${BRANCH} .
     fi
 
   - |
