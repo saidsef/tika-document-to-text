@@ -45,6 +45,9 @@ metadata:
   labels:
     app: ui
     tier: frontend
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
 spec:
   type: NodePort
   selector:

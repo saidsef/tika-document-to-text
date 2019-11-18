@@ -53,7 +53,7 @@ app.post('/', (req, res, next) => {
         body = JSON.parse(body);
         res.render('index', {
           url: req.body.url.trim(),
-          text: body['data'].trim()
+          text: body['data'].replace(/\n{2,}/g, '\n').trim()
         });
       });
     });
