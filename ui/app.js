@@ -3,7 +3,6 @@
 const express = require('express');
 const helmet  = require('helmet');
 const morgan  = require('morgan');
-const https   = require('https');
 const promMid = require('express-prometheus-middleware');
 const tl      = require('./libs/render');
 const app     = express();
@@ -11,6 +10,7 @@ const app     = express();
 const PORT      = process.env.PORT || 8080;
 const HOST      = process.env.HOST || 'tika';
 const HOST_PORT = process.env.HOST_PORT || 7070;
+const protocol  = (process.env.PROTOCOL == 'https') ? require('https') : require('http');
 
 app.enable('trust proxy');
 app.set('view engine', 'html');
@@ -43,7 +43,7 @@ app.post('/', (req, res, next) => {
     },
     method: 'POST'
   };
-  let post = https.request(options, (response) => {
+  let post = protocol.request(options, (response) => {
       response.setEncoding("utf8");
       let body = '';
       response.on("data", (data) => {
