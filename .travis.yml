@@ -15,7 +15,7 @@ after_script:
   - docker images
 script:
   - cd function/
-  - export BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-TRAVIS_BRANCH}
+  - export BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
   - |
     if [ "${BRANCH}" == "master" ]; then
      docker build -t saidsef/tika-convert-to-text:latest .
