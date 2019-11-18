@@ -1,0 +1,37 @@
+{
+  "name": "faas-convert-to-text",
+  "version": "0.1.0",
+  "description": "FaaS Conver to Text Using Apache Tika",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tika",
+    "FaaS",
+    "pdf",
+    "to",
+    "text",
+    "docx",
+    "to",
+    "text",
+    "doc",
+    "to",
+    "text",
+    "jpg",
+    "to",
+    "text",
+    "png",
+    "to",
+    "text"
+  ],
+  "author": "Said Sef <saidsef@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-prometheus-middleware": "^0.8.4",
+    "helmet": "^3.21.2",
+    "morgan": "^1.9.1",
+    "template-literal": "^1.0.3"
+  }
+}
