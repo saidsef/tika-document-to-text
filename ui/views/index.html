@@ -19,6 +19,7 @@
                 <textarea disabled="disabled" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
             </div>
             <div class="modal-footer">
+                <button type="button" onCLick="responsiveVoice.speak($('#text').val(),'UK English Female');">TTS - Read</button>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
@@ -26,6 +27,6 @@
     <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
-    
+    <script src="//code.responsivevoice.org/responsivevoice.js"></script>
 </body>
 </html>
