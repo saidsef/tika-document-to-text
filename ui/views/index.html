@@ -19,8 +19,8 @@
                 <textarea disabled="disabled" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
             </div>
             <div class="modal-footer">
-                <select class="form-control" id="voiceselection"></select>
-                <button type="button" class="btn btn-dark" onCLick="responsiveVoice.speak($('#text').val(),'UK English Female');">TTS - Read</button>
+                <select class="custom-select" id="voiceselection"></select>
+                <button type="button" class="btn btn-dark" onCLick="responsiveVoice.speak($('#text').val(),'UK English Female');">Read</button>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
