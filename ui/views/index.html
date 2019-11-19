@@ -19,7 +19,8 @@
                 <textarea disabled="disabled" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" onCLick="responsiveVoice.speak($('#text').val(),'UK English Female');">TTS - Read</button>
+                <select class="custom-select mr-sm-2" id="voiceselection"></select>
+                <button type="button" class="btn btn-dark" onCLick="responsiveVoice.speak($('#text').val(),'UK English Female');">TTS - Read</button>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
@@ -28,5 +29,12 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
     <script src="//code.responsivevoice.org/responsivevoice.js"></script>
+    <script type="text/javascript">
+        let voicelist = responsiveVoice.getVoices();
+        let vselect = $("#voiceselection");
+        $.each(voicelist, function() {
+          vselect.append($("<option />").val(this.name).text(this.name));
+        });
+    </script>
 </body>
 </html>
