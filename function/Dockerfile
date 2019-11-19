@@ -20,6 +20,7 @@ RUN apt-get update && \
     mkdir -p /usr/share/man/man1 /opt/tika/libs && \
     apt-get install -yy openjdk-8-jre-headless curl && \
     curl -vSL http://www.mirrorservice.org/sites/ftp.apache.org/tika/tika-app-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-app.jar && \
+    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-langdetect/${APACHE_TIKA_VERSION}/tika-langdetect-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-langdetect.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-translate/${APACHE_TIKA_VERSION}/tika-translate-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-translate.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-nlp/${APACHE_TIKA_VERSION}/tika-nlp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-nlp.jar && \
