@@ -26,6 +26,11 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 7070
+        - name: server
+          image: saidsef/tika-convert-to-text:server-latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7071
         - name: ui
           image: saidsef/tika-convert-to-text:ui-latest
           imagePullPolicy: Always
@@ -57,6 +62,10 @@ spec:
     port: 7070
     targetPort: 7070
     name: web
+  - protocol: TCP
+    port: 7071
+    targetPort: 7071
+    name: server
   - protocol: TCP
     port: 8080
     targetPort: 8080
