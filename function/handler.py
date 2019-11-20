@@ -21,7 +21,7 @@ def handle(req):
         req (str): request body
     """
     env = environ.copy()
-    p = Popen(["java", "-cp '/opt/tika/libs'", "org.apache.tika.cli.TikaCLI", "-J", "-t", "{}".format(req)], stdout=PIPE, stderr=PIPE, env=env)
+    p = Popen(["java", "-cp tika-app.jar:/opt/tika/libs", "org.apache.tika.cli.TikaCLI", "-J", "-t", "{}".format(req)], stdout=PIPE, stderr=PIPE, env=env)
     out, err = p.communicate()
     data = []
     if len(out) > 0:
