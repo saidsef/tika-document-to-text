@@ -21,11 +21,11 @@ spec:
         app: ui
     spec:
       containers:
-        - name: tika
-          image: saidsef/tika-convert-to-text:latest
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 7070
+        # - name: tika
+        #   image: saidsef/tika-convert-to-text:latest
+        #   imagePullPolicy: Always
+        #   ports:
+        #     - containerPort: 7070
         - name: server
           image: saidsef/tika-convert-to-text:server-latest
           imagePullPolicy: Always
@@ -58,10 +58,10 @@ spec:
   selector:
     app: ui
   ports:
-  - protocol: TCP
-    port: 7070
-    targetPort: 7070
-    name: web
+  # - protocol: TCP
+  #   port: 7070
+  #   targetPort: 7070
+  #   name: web
   - protocol: TCP
     port: 7071
     targetPort: 7071
