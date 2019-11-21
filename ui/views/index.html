@@ -16,9 +16,9 @@
       <label for="url">Enter URL: </label>
       <input id="url" type="text" class="form-control" name="url" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
     </div>
-    <div class="form-group">
-      <label class="form-control-label" for="doc"><small>(or)</small> Upload File:</label>
-      <input type="file" class="form-control" id="doc" name="doc" />
+    <div class="custom-file">
+      <label class="custom-file-label" for="doc"><small>(or)</small> Upload File:</label>
+      <input type="file" class="custom-file-input" id="doc" name="doc" />
     </div>
     </div>
     <div class="modal-body">
@@ -43,6 +43,10 @@
       let vselect = $("#voiceselection");
       $.each(voicelist, function() {
         vselect.append($("<option />").val(this.name).text(this.name));
+      });
+      $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
       });
     });
   </script>
