@@ -38,7 +38,7 @@ spec:
             - name: HOST
               value: "ui"
             - name: HOST_PORT
-              value: "7070"
+              value: "7071"
           ports:
             - containerPort: 8080
 ---
