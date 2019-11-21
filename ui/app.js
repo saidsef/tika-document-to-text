@@ -1,15 +1,20 @@
 'use strict';
 
-const express = require('express');
-const helmet  = require('helmet');
-const morgan  = require('morgan');
-const promMid = require('express-prometheus-middleware');
-const tl      = require('./libs/render');
+const express      = require('express');
+const helmet       = require('helmet');
+const morgan       = require('morgan');
+const multer       = require('multer');
+const promMid      = require('express-prometheus-middleware');
+const tl           = require('./libs/render');
+const errorHandler = require('./libs/express-error');
+
 const app     = express();
+const storage = multer.memoryStorage();
+const uploads = multer({ storage: storage});
 
 const PORT      = process.env.PORT || 8080;
-const HOST      = process.env.HOST || 'tika';
-const HOST_PORT = process.env.HOST_PORT || 7070;
+const HOST      = process.env.HOST || 'server';
+const HOST_PORT = process.env.HOST_PORT || 7071;
 const protocol  = (process.env.PROTOCOL == 'https') ? require('https') : require('http');
 
 app.enable('trust proxy');
@@ -30,39 +35,56 @@ app.get('/', (req, res, next) => {
   });
 });
 
-app.post('/', (req, res, next) => {
-  console.log('begin post action');
-  let payload = JSON.stringify({ url: req.body.url });
-  let options = {
-    host: HOST,
-    port: HOST_PORT,
-    path: '/api/v1/url',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': payload.length
-    },
-    method: 'POST'
-  };
-  let post = protocol.request(options, (response) => {
+app.post('/', uploads.single('doc'), (req, res, next) => {
+  if (req.file || req.body.url) {
+    console.log('uploading file');
+    // res.json({"originalname": req.file.originalname, "mimetype": req.file.mimetype});
+    let payload = '';
+    let options = {
+      host: HOST,
+      port: HOST_PORT,
+      path: '/tika',
+      method: 'PUT',
+      encoding: null
+    };
+    if (req.file) {
+      payload = req.file.buffer;
+      options['headers'] = {
+        'Content-Type': req.file.mimetype
+      };
+    }
+    if (req.body.url && req.body.url.length > 5) {
+      payload = req.body.url;
+      options['headers'] = {
+        'fileUrl': req.body.url
+      };
+    }
+    let post = protocol.request(options, (response) => {
       response.setEncoding("utf8");
       let body = '';
       response.on("data", (data) => {
         body += data;
       });
       response.on("end", () => {
-        body = JSON.parse(body);
         res.render('index', {
-          url: req.body.url.trim(),
-          text: body['data'].replace(/\n{3,}/g, '\n\n').trim()
+          text: body
         });
+      });
+      response.on("error", (error) => {
+        next(error);
       });
     });
     post.write(payload);
     post.end();
+  } else {
+    next(new Error('Something went horribly wrong!'));
+  }
 });
 
 app.get('/healthz', (req, res, next) => {
   res.json({'status': 'healthy'});
 });
+
+app.use(errorHandler);
 
 app.listen(PORT);
