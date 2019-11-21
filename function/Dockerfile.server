@@ -5,9 +5,6 @@ ARG PORT=""
 
 ENV APACHE_TIKA_VERSION 1.22
 ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
-ENV SQLITE_JDBC 3.28.0
-ENV JBIG2_IMAGEIO 3.0.2
-ENV JAI_IMAGEIO_JPEG2000 1.3.0
 ENV JAVA_HOME /opt/openjdk-14
 ENV TIKA_SERVER_JAR /opt/tika/tika-server.jar
 ENV PORT ${PORT:-7071}
@@ -15,18 +12,16 @@ ENV PORT ${PORT:-7071}
 WORKDIR /opt/tika
 # https://mvnrepository.com/artifact/org.apache.tika
 RUN mkdir -p /opt/tika/libs && \
-    apk add -U curl && \
+    apk add -U curl tesseract-ocr tesseract-ocr-data-enm tesseract-ocr-data-ara && \
     curl -vSL http://www.mirrorservice.org/sites/ftp.apache.org/tika/tika-server-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-server.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
+    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-xmp/${APACHE_TIKA_VERSION}/tika-xmp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-xmp.jar && \
+    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-serialization/${APACHE_TIKA_VERSION}/tika-serialization-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-serialization.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-parsers/${APACHE_TIKA_VERSION}/tika-parsers-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-parsers.jar && \
-    curl  -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-app/${APACHE_TIKA_VERSION}/tika-app-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-app.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-langdetect/${APACHE_TIKA_VERSION}/tika-langdetect-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-langdetect.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-translate/${APACHE_TIKA_VERSION}/tika-translate-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-translate.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-nlp/${APACHE_TIKA_VERSION}/tika-nlp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-nlp.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-dl/${APACHE_TIKA_VERSION}/tika-dl-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-dl.jar && \
-    curl -vSL http://central.maven.org/maven2/org/xerial/sqlite-jdbc/${SQLITE_JDBC}/sqlite-jdbc-${SQLITE_JDBC}.jar -o /opt/tika/libs/sqlite-jdbc.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/pdfbox/jbig2-imageio/${JBIG2_IMAGEIO}/jbig2-imageio-${JBIG2_IMAGEIO}.jar -o /opt/tika/libs/levigo-jbig2-imageio.jar && \
-    curl -vSL http://central.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar && \
     rm -rf /var/cache/apk/* /tmp/* && \
     chown -R nobody .
 
@@ -36,4 +31,4 @@ EXPOSE ${PORT}
 
 HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
-CMD ["sh", "-c","java -cp '$CLASSPATH' -jar tika-server.jar -enableUnsecureFeatures -enableFileUrl -h '*' -p $PORT"]
+CMD ["sh", "-c","java -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -spawnChild -enableUnsecureFeatures -enableFileUrl -h '*' -p $PORT"]
