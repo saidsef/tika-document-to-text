@@ -1,40 +1,50 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta charset="utf-8" />
-    <meta http-equiv="x-dns-prefetch-control" content="on" />
-    <title>Object to Text</title>
-    <link rel="stylesheet" href="////stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="utf-8" />
+  <meta http-equiv="x-dns-prefetch-control" content="on" />
+  <title>Object to Text</title>
+  <link rel="stylesheet" href="////stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 </head>
 <body class="container-fluid" itemscope itemtype="http://schema.org/WebPage">
-    <div class="container-fluid">
-        <form action="" method="post">
-            <div class="modal-body">
-                <label for="url">Enter URL: </label>
-                <input id="url" type="text" class="form-control" name="url" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
-            </div>
-            <div class="modal-body">
-                <textarea disabled="disabled" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
-            </div>
-            <div class="modal-footer">
-                <select class="custom-select" id="voiceselection"></select>
-                <button type="button" class="btn btn-dark" onCLick="responsiveVoice.speak($('#text').val(),'UK English Female');">Read</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </form>
+  <div class="container-fluid">
+  <form action="" method="post" enctype="multipart/form-data">
+    <div class="modal-body">
+    <div class="form-group">
+      <label for="url">Enter URL: </label>
+      <input id="url" type="text" class="form-control" name="url" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
     </div>
-    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
-    <script src="//code.responsivevoice.org/responsivevoice.js"></script>
-    <script type="text/javascript">
-        let voicelist = responsiveVoice.getVoices();
-        let vselect = $("#voiceselection");
-        $.each(voicelist, function() {
-          vselect.append($("<option />").val(this.name).text(this.name));
-        });
-    </script>
+    <div class="form-group">
+      <label class="form-control-label" for="doc"><small>(or)</small> Upload File:</label>
+      <input type="file" class="form-control" id="doc" name="doc" />
+    </div>
+    </div>
+    <div class="modal-body">
+    <textarea disabled="disabled" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
+    </div>
+    <div class="modal-footer">
+    <select class="custom-select" id="voiceselection"></select>
+    <button type="button" class="btn btn-dark" onClick="responsiveVoice.speak($('#text').val(),$('#voiceselection').val());">Read</button>
+    <button type="button" class="btn btn-secondary" onClick="responsiveVoice.pause();$('#resume').toggle();">Pause</button>
+    <button type="button" class="btn btn-success" onClick="responsiveVoice.resume();$('#resume').toggle();" style="display: none;" id="resume">Resume</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+  </div>
+  <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+  <script src="//code.responsivevoice.org/responsivevoice.js"></script>
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+      let voicelist = responsiveVoice.getVoices();
+      let vselect = $("#voiceselection");
+      $.each(voicelist, function() {
+        vselect.append($("<option />").val(this.name).text(this.name));
+      });
+    });
+  </script>
 </body>
 </html>
