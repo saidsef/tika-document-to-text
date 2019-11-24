@@ -45,6 +45,12 @@ print(r.text)
 
 Kubernetes - Take it for a test drive:
 
+You can visit the UI via:
 ```shell
-curl -d @test/url.json https://tika.saidsef.co.uk -H 'Content-Type|: application/json'
+http(s)://tika-ui.hostname.tld
+```
+Via CLI:
+
+```shell
+curl -d @test/url.json https://server.hostname.tld/tika -H 'Content-Type|: application/json'
 ```
