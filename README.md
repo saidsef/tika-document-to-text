@@ -26,7 +26,7 @@ faas-cli deploy -f https://raw.githubusercontent.com/saidsef/faas-convert-to-tex
 Kubernetes Deployment
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/saidsef/faas-convert-to-text/master/deployment/convert-to-text-k8s.yml
+kubectl apply -k ./deployment
 ```
 
 FaaS - Take it for a test drive:

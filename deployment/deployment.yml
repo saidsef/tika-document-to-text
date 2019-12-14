@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tika-ui
+  namespace: web
+  labels:
+    name: tika-ui
+    app: ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+      labels:
+        app: ui
+    spec:
+      containers:
+        # - name: tika
+        #   image: saidsef/tika-convert-to-text:latest
+        #   imagePullPolicy: Always
+        #   ports:
+        #     - containerPort: 7070
+        - name: server
+          image: saidsef/tika-convert-to-text:server-latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7071
+        - name: ui
+          image: saidsef/tika-convert-to-text:ui-latest
+          imagePullPolicy: Always
+          env:
+            - name: HOST
+              value: "ui"
+            - name: HOST_PORT
+              value: "7071"
+          ports:
+            - containerPort: 8080
