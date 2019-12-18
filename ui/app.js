@@ -4,6 +4,7 @@ const express      = require('express');
 const helmet       = require('helmet');
 const morgan       = require('morgan');
 const multer       = require('multer');
+const compression  = require('compression');
 const promMid      = require('express-prometheus-middleware');
 const tl           = require('./libs/render');
 const errorHandler = require('./libs/express-error');
@@ -26,6 +27,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: true, limit: '50mb'})); 
 app.use(express.json({limit: '50mb'}));
 app.use(helmet());
+app.use(compression());
 app.use(morgan('combined'));
 
 app.get('/', (req, res, next) => {
@@ -37,8 +39,6 @@ app.get('/', (req, res, next) => {
 
 app.post('/', uploads.single('doc'), (req, res, next) => {
   if (req.file || req.body.url) {
-    console.log('uploading file');
-    // res.json({"originalname": req.file.originalname, "mimetype": req.file.mimetype});
     let payload = '';
     let options = {
       host: HOST,
