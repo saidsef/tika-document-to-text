@@ -18,7 +18,7 @@ before_script:
 script:
   - cd function/
   - |
-   if [ "${TRAVIS_BRANCH}" == "master" ]; then
+   if [ $TRAVIS_BRANCH == "master" ]; then
      export TAG="latest"
    else
      export TAG=${TRAVIS_BRANCH}
