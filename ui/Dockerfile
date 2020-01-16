@@ -1,11 +1,8 @@
 FROM node:13-alpine
-MAINTAINER Said Sef <saidsef@gmail.com> (saidsef.co.uk/)
+
+LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
 USER root
-
-## Build ARG
-ARG PORT=""
-ARG PROTOCOL=""
 
 ## PRODUCTION MODE
 ENV NODE_ENV production
