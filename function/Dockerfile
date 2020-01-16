@@ -1,7 +1,6 @@
 FROM python:3-slim-stretch
-MAINTAINER Said Sef <said@saidsef.co.uk>
 
-ARG PORT=""
+LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
 ENV APACHE_TIKA_VERSION 1.23
 ENV CLASSPATH "/opt/tika/tika-app.jar:/opt/tika/libs"

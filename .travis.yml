@@ -1,41 +1,34 @@
-services:
-  - docker
-language: python
-install: true
-git:
-  depth: 3
-  submodules: true
+dist: xenial
+sudo: required
 branches:
   only:
   - master
   - "/^release-.*$/"
+before_install:
+  - curl -fsSL https://get.docker.com | sh
+  - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
+  - mkdir -p $HOME/.docker
+  - echo '{"experimental":"enabled"}' | sudo tee $HOME/.docker/config.json
+  - sudo service docker start
+install:
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  - docker buildx create --name xbuilder --use
 before_script:
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-after_script:
-  - docker images
+  - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 script:
   - cd function/
-  - export BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
   - |
-    if [ "${BRANCH}" == "master" ]; then
-     docker build -t saidsef/tika-convert-to-text:latest .
-     docker build -t saidsef/tika-convert-to-text:server-latest . -f Dockerfile.server
-     docker build -t saidsef/tika-convert-to-text:ui-latest ../ui/ -f ../ui/Dockerfile
-    else
-     docker build -t saidsef/tika-convert-to-text:${BRANCH} .
-     docker build -t saidsef/tika-convert-to-text:server-${BRANCH} . -f Dockerfile.server
-     docker build -t saidsef/tika-convert-to-text:ui-${BRANCH} ../ui/ -f ../ui/Dockerfile
-    fi
-
-  - |
-    if [ "${BRANCH}" == "master" ]; then
-     docker build -t saidsef/tika-convert-to-text:openfaas . -f Dockerfile.faas
-    else
-     docker build -t saidsef/tika-convert-to-text:openfaas-${BRANCH} . -f Dockerfile.faas
-    fi
-  - |
-    docker push saidsef/tika-convert-to-text || true
-
+   if [ $TRAVIS_BRANCH == "master" ]; then
+     export TAG="latest"
+   else
+     export TAG=$TRAVIS_BRANCH
+   fi
+  - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t saidsef/tika-convert-to-text:$TAG --push .
+  - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t saidsef/tika-convert-to-text:server-$TAG -f Dockerfile.server --push .
+  - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t saidsef/tika-convert-to-text:ui-$TAG -f ../ui/Dockerfile --push .
+  - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t saidsef/tika-convert-to-text:openfaas-$TAG -f Dockerfile.faas --push .
+after_script:
+  - docker images
 notifications:
   email: true
   on_success: always
