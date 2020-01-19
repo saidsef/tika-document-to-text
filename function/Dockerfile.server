@@ -4,7 +4,7 @@ LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
 ENV APACHE_TIKA_VERSION 1.23
 ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
-ENV JAVA_HOME /opt/openjdk-14
+ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk/jre
 ENV TIKA_SERVER_JAR /opt/tika/tika-server.jar
 ENV PORT ${PORT:-7071}
 
@@ -30,4 +30,4 @@ EXPOSE ${PORT}
 
 HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
-CMD ["sh", "-c","java -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -spawnChild -enableUnsecureFeatures -enableFileUrl -h '*' -p $PORT"]
+CMD ["sh", "-c","/usr/bin/java -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -spawnChild -enableUnsecureFeatures -enableFileUrl -h '*' -p $PORT"]
