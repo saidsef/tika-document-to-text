@@ -4,7 +4,7 @@ LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
 ENV APACHE_TIKA_VERSION 1.23
 ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
-ENV JAVA_HOME /opt/openjdk-14
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV TIKA_SERVER_JAR /opt/tika/tika-server.jar
 ENV PORT ${PORT:-7071}
 
