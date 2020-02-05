@@ -7,9 +7,6 @@ metadata:
   labels:
     app: ui
     tier: frontend
-  annotations:
-    prometheus.io/scrape: "true"
-    filter.by.port.name: "true"
 spec:
   type: NodePort
   selector:

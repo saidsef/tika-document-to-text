@@ -1,7 +1,8 @@
 ---
-hostPort: 0.0.0.0:7072
-lowercaseOutputName: false
-lowercaseOutputLabelNames: false
+startDelaySeconds: 0
+ssl: false
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
 
 rules:
 - pattern: ".*"
