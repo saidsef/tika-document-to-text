@@ -9,21 +9,21 @@ metadata:
     tier: frontend
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "8080"
+    filter.by.port.name: "true"
 spec:
   type: NodePort
   selector:
     app: ui
   ports:
-  # - protocol: TCP
+  # - name: web
+  #   protocol: TCP
   #   port: 7070
   #   targetPort: 7070
-  #   name: web
-  - protocol: TCP
+  - name: server
+    protocol: TCP
     port: 7071
     targetPort: 7071
-    name: server
-  - protocol: TCP
+  - name: ui
+    protocol: TCP
     port: 8080
     targetPort: 8080
-    name: ui
