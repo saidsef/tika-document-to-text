@@ -1,0 +1,4 @@
+---
+#hostPort: 0.0.0.0:7071
+lowercaseOutputName: false
+lowercaseOutputLabelNames: false
