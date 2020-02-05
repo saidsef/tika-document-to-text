@@ -33,6 +33,9 @@ spec:
           - name: server
             containerPort: 7071
             protocol: TCP
+          - name: monitoring
+            containerPort: 7072
+            protocol: TCP
           resources:
             requests:
               cpu: 100m
