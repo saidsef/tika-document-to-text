@@ -16,7 +16,7 @@ spec:
     metadata:
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
+        filter.by.port.name: "true"
       labels:
         app: ui
     spec:
@@ -30,14 +30,56 @@ spec:
           image: saidsef/tika-convert-to-text:server-latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 7071
+          - name: server
+            containerPort: 7071
+            protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 200m
+              memory: 1024Mi
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - java
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+                port: 7071
+            initialDelaySeconds: 5
+            periodSeconds: 5
         - name: ui
           image: saidsef/tika-convert-to-text:ui-latest
           imagePullPolicy: Always
           env:
-            - name: HOST
-              value: "ui"
-            - name: HOST_PORT
-              value: "7071"
+          - name: HOST
+            value: "ui"
+          - name: HOST_PORT
+            value: "7071"
           ports:
-            - containerPort: 8080
+            - name: ui
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 512Mi
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - node
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            tcpSocket:
+                port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
