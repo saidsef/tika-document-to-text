@@ -6,12 +6,16 @@ ENV APACHE_TIKA_VERSION 1.23
 ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk/jre
 ENV TIKA_SERVER_JAR /opt/tika/tika-server.jar
+ENV PROMETHEUS_JMX_JAR_VERSION 0.12.0
 ENV PORT ${PORT:-7071}
 
 WORKDIR /opt/tika
+
+COPY prometheus-jmx-config.yaml /opt/tika
+
 # https://mvnrepository.com/artifact/org.apache.tika
 RUN mkdir -p /opt/tika/libs && \
-    apk add -U curl tesseract-ocr tesseract-ocr-data-enm tesseract-ocr-data-ara && \
+    apk add -U --no-cache curl tesseract-ocr tesseract-ocr-data-enm tesseract-ocr-data-ara && \
     curl -vSL http://www.mirrorservice.org/sites/ftp.apache.org/tika/tika-server-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-server.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-xmp/${APACHE_TIKA_VERSION}/tika-xmp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-xmp.jar && \
@@ -21,13 +25,14 @@ RUN mkdir -p /opt/tika/libs && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-translate/${APACHE_TIKA_VERSION}/tika-translate-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-translate.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-nlp/${APACHE_TIKA_VERSION}/tika-nlp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-nlp.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-dl/${APACHE_TIKA_VERSION}/tika-dl-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-dl.jar && \
+    curl -vSL https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/${PROMETHEUS_JMX_JAR_VERSION}/jmx_prometheus_javaagent-${PROMETHEUS_JMX_JAR_VERSION}.jar -o /opt/tika/jmx_prometheus_javaagent.jar && \
     rm -rf /var/cache/apk/* /tmp/* && \
     chown -R nobody .
 
 USER nobody
 
-EXPOSE ${PORT}
+EXPOSE ${PORT} 7072
 
 HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
-CMD ["sh", "-c","/usr/bin/java -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -spawnChild -enableUnsecureFeatures -enableFileUrl -h '*' -p $PORT"]
+CMD ["sh", "-c","/usr/bin/java -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=7072:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -spawnChild -enableUnsecureFeatures -enableFileUrl -h '*' -p $PORT"]
