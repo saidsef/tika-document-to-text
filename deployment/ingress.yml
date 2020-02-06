@@ -16,7 +16,7 @@ metadata:
       server_tokens off;
 spec:
   rules:
-  - host: tika-ui.saidsef.co.uk
+  - host: tika-ui.hostname.tld
     http:
       paths:
       - path: /
