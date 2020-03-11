@@ -4,12 +4,13 @@ The Apache Tika™ toolkit detects and extracts metadata and text from over a th
 
 ## Prerequisite
 
- - OpenFaas Services [or]
- - Kubernetes Cluster
+- OpenFaas Services [or]
+- Kubernetes Cluster
 
 ## Deployment
 
 ### Kubernetes Deployment
+
 > Create `namespace`, via `kubectl create ns web`
 
 > Assuming you've checked out this repo
@@ -37,6 +38,7 @@ curl -d @test/url.json http://localhost/tika -H 'Content-Type|: application/json
 ---
 
 ### FaaS Deployment
+
 > This assumes that you've already [deployed OpenFaas](https://docs.openfaas.com/deployment/) and installed the [OpenFaas CLI](https://github.com/openfaas/faas-cli)
 
 ```shell
