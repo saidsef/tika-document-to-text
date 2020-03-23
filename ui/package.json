@@ -44,13 +44,13 @@
   "author": "Said Sef <saidsef@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "compression": ">=1.7.4",
-    "express": ">=4.17.1",
-    "express-prometheus-middleware": ">=0.8.5",
-    "helmet": ">=3.21.2",
-    "morgan": ">=1.9.1",
-    "multer": ">=1.4.2",
-    "template-literal": ">=1.0.3"
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "express-prometheus-middleware": "^0.8.5",
+    "helmet": "^3.21.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "template-literal": "^1.0.3"
   },
   "homepage": "https://github.com/saidsef/faas-convert-to-text#readme",
   "devDependencies": {}

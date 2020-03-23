@@ -50,9 +50,12 @@ spec:
                 - java
             initialDelaySeconds: 5
             periodSeconds: 5
+            successThreshold: 2
+            failureThreshold: 2
           readinessProbe:
-            tcpSocket:
-                port: 7071
+            httpGet:
+              port: 7071
+              path: /api/v1/url'
             initialDelaySeconds: 5
             periodSeconds: 5
             successThreshold: 2
@@ -83,9 +86,12 @@ spec:
                 - node
             initialDelaySeconds: 5
             periodSeconds: 5
+            successThreshold: 2
+            failureThreshold: 2
           readinessProbe:
-            tcpSocket:
-                port: 8080
+            httpGet:
+              port: 8080
+              path: /healthz
             initialDelaySeconds: 5
             periodSeconds: 5
             successThreshold: 2

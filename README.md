@@ -4,8 +4,8 @@ The Apache Tika™ toolkit detects and extracts metadata and text from over a th
 
 ## Prerequisite
 
-- OpenFaas Services [or]
-- Kubernetes Cluster
+- [Kubernetes Cluster](https://kubernetes.io/docs/tutorials/) [or]
+- [OpenFaas Services](https://www.openfaas.com/)
 
 ## Deployment
 
@@ -32,7 +32,7 @@ Via CLI:
 > You'll need to forward service via `kubectl port-forward -n web svc/server 7071`
 
 ```shell
-curl -d @test/url.json http://localhost/tika -H 'Content-Type|: application/json'
+curl -d @test/url.json http://localhost:7071/tika -H 'Content-Type: application/json'
 ```
 
 ---
