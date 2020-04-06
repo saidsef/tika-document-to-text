@@ -55,7 +55,8 @@ spec:
           readinessProbe:
             httpGet:
               port: 7071
-              path: /api/v1/url'
+              path: /api/v1/url
+              scheme: "HTTP"
             initialDelaySeconds: 5
             periodSeconds: 5
             successThreshold: 2
@@ -92,6 +93,7 @@ spec:
             httpGet:
               port: 8080
               path: /healthz
+              scheme: "HTTP"
             initialDelaySeconds: 5
             periodSeconds: 5
             successThreshold: 2
