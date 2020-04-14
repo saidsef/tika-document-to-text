@@ -87,4 +87,4 @@ app.get('/healthz', (req, res, next) => {
 
 app.use(errorHandler);
 
-protocol.createServer(app).listen(PORT);
+new protocol.createServer(app).listen(PORT);
