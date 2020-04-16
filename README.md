@@ -4,10 +4,13 @@ The Apache Tika™ toolkit detects and extracts metadata and text from over a th
 
 ## Prerequisite
 
-- [Kubernetes Cluster](https://kubernetes.io/docs/tutorials/) [or]
+- [Kubernetes Cluster](https://kubernetes.io/docs/tutorials/) [and]
+- [Kubeless](https://kubeless.io/) [or]
 - [OpenFaas Services](https://www.openfaas.com/)
 
 ## Deployment
+
+> Third party [Responsive Voices](https://responsivevoice.org/text-to-speech-script-server/) text-to-speach *might* require license key.
 
 ### Kubernetes Deployment
 
