@@ -21,11 +21,6 @@ spec:
         app: ui
     spec:
       containers:
-        # - name: tika
-        #   image: saidsef/tika-convert-to-text:latest
-        #   imagePullPolicy: Always
-        #   ports:
-        #     - containerPort: 7070
         - name: server
           image: saidsef/tika-convert-to-text:server-latest
           imagePullPolicy: Always

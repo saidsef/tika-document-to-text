@@ -4,6 +4,7 @@ const express      = require('express');
 const helmet       = require('helmet');
 const morgan       = require('morgan');
 const multer       = require('multer');
+const cors         = require('cors');
 const compression  = require('compression');
 const promMid      = require('express-prometheus-middleware');
 const tl           = require('./libs/render');
@@ -26,9 +27,34 @@ app.use(promMid({metricsPath: '/metrics', collectDefaultMetrics: true, requestDu
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: true, limit: '50mb'})); 
 app.use(express.json({limit: '50mb'}));
-app.use(helmet());
 app.use(compression());
 app.use(morgan('combined'));
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      baseUri: ["'self'"],
+      defaultSrc: ["'self'"],
+      formAction: ["'self'"],
+      frameAncestors: ["'self'"],
+      objectSrc: ["'none'"],
+      sandbox: ['allow-forms', 'allow-scripts'],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "''unsafe-hashes''", 'code.jquery.com', 'cdnjs.cloudflare.com', 'code.responsivevoice.org'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'stackpath.bootstrapcdn.com'],
+      upgradeInsecureRequests: true,
+    },
+  },
+  referrerPolicy: { policy: 'same-origin' },
+  featurePolicy: {
+    features: {
+      fullscreen: ["'self'"],
+      vibrate: ["'self'"],
+      geolocation: ["'self'"],
+      wakeLock: ["'self'"],
+    },
+  },
+}));
+app.use(cors());
+app.options('*', cors());
 
 app.get('/', (req, res, next) => {
   res.render('index', {
@@ -87,4 +113,4 @@ app.get('/healthz', (req, res, next) => {
 
 app.use(errorHandler);
 
-protocol.createServer(app).listen(PORT);
+new protocol.createServer(app).listen(PORT);
