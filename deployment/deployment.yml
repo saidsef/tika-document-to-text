@@ -45,17 +45,17 @@ spec:
                 - java
             initialDelaySeconds: 5
             periodSeconds: 5
-            successThreshold: 2
+            successThreshold: 1
             failureThreshold: 2
+            timeoutSeconds: 3
           readinessProbe:
-            httpGet:
+            tcpSocket:
               port: 7071
-              path: /api/v1/url
-              scheme: "HTTP"
             initialDelaySeconds: 5
             periodSeconds: 5
-            successThreshold: 2
+            successThreshold: 1
             failureThreshold: 2
+            timeoutSeconds: 3
         - name: ui
           image: saidsef/tika-convert-to-text:ui-latest
           imagePullPolicy: Always
@@ -82,8 +82,9 @@ spec:
                 - node
             initialDelaySeconds: 5
             periodSeconds: 5
-            successThreshold: 2
+            successThreshold: 1
             failureThreshold: 2
+            timeoutSeconds: 3
           readinessProbe:
             httpGet:
               port: 8080
@@ -91,5 +92,6 @@ spec:
               scheme: "HTTP"
             initialDelaySeconds: 5
             periodSeconds: 5
-            successThreshold: 2
+            successThreshold: 1
             failureThreshold: 2
+            timeoutSeconds: 3
