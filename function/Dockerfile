@@ -2,7 +2,7 @@ FROM python:3-slim-stretch
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
-ENV APACHE_TIKA_VERSION 1.24
+ENV APACHE_TIKA_VERSION 1.24.1
 ENV CLASSPATH "/opt/tika/tika-app.jar:/opt/tika/libs"
 ENV SQLITE_JDBC 3.28.0
 ENV JBIG2_IMAGEIO 3.0.2
