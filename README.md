@@ -10,8 +10,6 @@ The Apache Tika™ toolkit detects and extracts metadata and text from over a th
 
 ## Deployment
 
-> Third party [Responsive Voices](https://responsivevoice.org/text-to-speech-script-server/) text-to-speach *might* require license key.
-
 ### Kubernetes Deployment
 
 > Create `namespace`, via `kubectl create ns web`
