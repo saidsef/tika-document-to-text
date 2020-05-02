@@ -15,7 +15,7 @@
     <div class="modal-body">
     <div class="form-group">
       <label for="url">Enter URL: </label>
-      <input id="url" type="text" class="form-control" name="url" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
+      <input id="url" type="text" class="form-control" name="url" x-webkit-speech="x-webkit-speech" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
     </div>
     <div class="custom-file">
       <label class="custom-file-label" for="doc"><small>(or)</small> Upload File:</label>
@@ -23,13 +23,13 @@
     </div>
     </div>
     <div class="modal-body">
-    <textarea disabled="disabled" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
+    <textarea x-webkit-speech="x-webkit-speech" disabled="disabled" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
     </div>
     <div class="modal-footer">
     <select class="custom-select" id="voiceselection"></select>
-    <button type="button" class="btn btn-dark" onClick="responsiveVoice.speak($('#text').val(),$('#voiceselection').val());">Read</button>
-    <button type="button" class="btn btn-secondary" onClick="responsiveVoice.pause();$('#resume').toggle();">Pause</button>
-    <button type="button" class="btn btn-success" onClick="responsiveVoice.resume();$('#resume').toggle();" style="display: none;" id="resume">Resume</button>
+    <button type="button" class="btn btn-dark" id="read">Read</button>
+    <button type="button" class="btn btn-secondary" onclick="$('#resume').toggle();" id="pause">Pause</button>
+    <button type="button" class="btn btn-success" onclick="$('#resume').toggle();" id="resume" style="display: none;">Resume</button>
     <button type="submit" class="btn btn-primary">Submit</button>
     </div>
   </form>
@@ -37,17 +37,49 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
-  <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
   <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-      let voicelist = responsiveVoice.getVoices();
-      let vselect = $("#voiceselection");
-      $.each(voicelist, function() {
-        vselect.append($("<option />").val(this.name).text(this.name));
-      });
-      $(".custom-file-input").on("change", function() {
-        var fileName = $(this).val();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    document.addEventListener('DOMContentLoaded', () => {
+      $(() => {
+        if ('speechSynthesis' in window) {
+          let synth   = window.speechSynthesis;
+          let voices  = synth.getVoices();
+          let msg     = new SpeechSynthesisUtterance();
+          synth.cancel();
+          synth.onvoiceschanged = () => {
+            let voicelist = $('#voiceselection');
+            if (voicelist.find('option').length == 0) {
+              voices.forEach((voice, index) => {
+              let option = $('<option>').val(index).html(voice.name + ' (' + voice.lang + ' )' + (voice.default ? ' (default)' : ''));
+              voicelist.append(option);
+              });
+              voicelist.find(":selected").val();
+            }
+          }
+          $('#read').click(() => {
+            synth.cancel();
+            msg.voice   = voices[$('#voiceselection').val()];
+            msg.rate    = 10/10;
+            msg.pitch   = 1;
+            msg.text    = $('#text').val();
+            msg.onpause = (e) => {
+              console.log('Speech paused after ' + e.elapsedTime + ' milliseconds.');
+            }
+            msg.onresume = (e) => {
+              console.log('Speech resumed after ' + e.elapsedTime + ' milliseconds.');
+            }
+            msg.onend = (e) => {
+              console.log('Speech finished after ' + e.elapsedTime + ' milliseconds.');
+            };
+            synth.speak(msg);
+          });
+          $('#pause').click(() => {
+            synth.pause();
+            msg.paused = true;
+          });
+          $('#resume').click(() => {
+            synth.resume();
+          });
+        }
       });
     });
   </script>
