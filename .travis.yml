@@ -3,7 +3,7 @@ sudo: required
 branches:
   only:
   - master
-  - "/^release-.*$/"
+  - /.*/
 before_install:
   - curl -fsSL https://get.docker.com | sh
   - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
@@ -31,7 +31,5 @@ after_script:
   - docker images
 notifications:
   email: true
-  on_success: always
-  on_failure: change
 after_success:
   - echo "All done!"
