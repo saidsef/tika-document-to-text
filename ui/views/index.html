@@ -11,52 +11,49 @@
 </head>
 <body class="container-fluid" itemscope itemtype="https://schema.org/WebPage">
   <div class="container-fluid">
-  <form action="" method="post" enctype="multipart/form-data">
-    <div class="modal-body">
-    <div class="form-group">
-      <label for="url">Enter URL: </label>
-      <input id="url" type="text" class="form-control" name="url" x-webkit-speech="x-webkit-speech" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
-    </div>
-    <div class="custom-file">
-      <label class="custom-file-label" for="doc"><small>(or)</small> Upload File:</label>
-      <input type="file" class="custom-file-input" id="doc" name="doc" />
-    </div>
-    </div>
-    <div class="modal-body">
-    <textarea x-webkit-speech="x-webkit-speech" disabled="disabled" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
-    </div>
-    <div class="modal-footer">
-    <select class="custom-select" id="voiceselection"></select>
-    <button type="button" class="btn btn-dark" id="read">Read</button>
-    <button type="button" class="btn btn-secondary" onclick="$('#resume').toggle();" id="pause">Pause</button>
-    <button type="button" class="btn btn-success" onclick="$('#resume').toggle();" id="resume" style="display: none;">Resume</button>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-  </form>
+    <form action="" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="url">Enter URL: </label>
+          <input id="url" type="text" class="form-control" name="url" x-webkit-speech="x-webkit-speech" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
+        </div>
+        <div class="custom-file">
+          <label class="custom-file-label" for="doc"><small>(or)</small> Upload File:</label>
+          <input type="file" class="custom-file-input" id="doc" name="doc" />
+        </div>
+      </div>
+      <div class="modal-body">
+        <textarea x-webkit-speech="x-webkit-speech" disabled="disabled" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
+      </div>
+      <div class="modal-footer">
+        <select class="custom-select mr-sm-2" id="voiceselection" data-live-search="true"></select>
+        <button type="button" class="btn btn-dark" id="read">Read</button>
+        <button type="button" class="btn btn-secondary" onclick="$('#resume').toggle();" id="pause">Pause</button>
+        <button type="button" class="btn btn-success" onclick="$('#resume').toggle();" id="resume" style="display: none;">Resume</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
   </div>
-  <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.0/umd/popper.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js" crossorigin="anonymous"></script>
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', () => {
       function doVoice() {
         let voicelist = $('#voiceselection');
-          if (voicelist.find('option').length == 0) {
-            speechSynthesis.getVoices().forEach((voice, index) => {
-            let option = $('<option>').val(index).html(voice.name + ' (' + voice.lang + ' )' + (voice.default ? ' (default)' : ''));
-            voicelist.append(option);
-            });
-            voicelist.find(":selected").val();
-          }
+        if (voicelist.find('option').length == 0) {
+          speechSynthesis.getVoices().forEach((voice, index) => {
+          let option = $('<option>').val(index).html(voice.name + ' (' + voice.lang + ' )' + (voice.default ? ' (default)' : ''));
+          voicelist.append(option);
+          });
+          voicelist.find(":selected").val();
+        }
       }
       if ('speechSynthesis' in window) {
         let msg = new SpeechSynthesisUtterance();
         speechSynthesis.cancel();
         if ('onvoiceschanged' in speechSynthesis) {
-          console.log('onvoiceschanged: true')
           speechSynthesis.addEventListener('voiceschanged', doVoice);
         } else {
-          console.log('onvoiceschanged: false')
           doVoice();
         }
         $('#read').click(() => {
