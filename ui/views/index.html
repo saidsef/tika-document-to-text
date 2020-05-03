@@ -34,54 +34,60 @@
     </div>
   </form>
   </div>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.0/umd/popper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', () => {
-      $(() => {
-        if ('speechSynthesis' in window) {
-          let synth   = window.speechSynthesis;
-          let voices  = synth.getVoices();
-          let msg     = new SpeechSynthesisUtterance();
-          synth.cancel();
-          synth.onvoiceschanged = () => {
-            let voicelist = $('#voiceselection');
-            if (voicelist.find('option').length == 0) {
-              voices.forEach((voice, index) => {
-              let option = $('<option>').val(index).html(voice.name + ' (' + voice.lang + ' )' + (voice.default ? ' (default)' : ''));
-              voicelist.append(option);
-              });
-              voicelist.find(":selected").val();
-            }
+      function doVoice() {
+        let voicelist = $('#voiceselection');
+          if (voicelist.find('option').length == 0) {
+            speechSynthesis.getVoices().forEach((voice, index) => {
+            let option = $('<option>').val(index).html(voice.name + ' (' + voice.lang + ' )' + (voice.default ? ' (default)' : ''));
+            voicelist.append(option);
+            });
+            voicelist.find(":selected").val();
           }
-          $('#read').click(() => {
-            synth.cancel();
-            msg.voice   = voices[$('#voiceselection').val()];
-            msg.rate    = 10/10;
-            msg.pitch   = 1;
-            msg.text    = $('#text').val();
-            msg.onpause = (e) => {
-              console.log('Speech paused after ' + e.elapsedTime + ' milliseconds.');
-            }
-            msg.onresume = (e) => {
-              console.log('Speech resumed after ' + e.elapsedTime + ' milliseconds.');
-            }
-            msg.onend = (e) => {
-              console.log('Speech finished after ' + e.elapsedTime + ' milliseconds.');
-            };
-            synth.speak(msg);
-          });
-          $('#pause').click(() => {
-            synth.pause();
-            msg.paused = true;
-          });
-          $('#resume').click(() => {
-            synth.resume();
-          });
+      }
+      if ('speechSynthesis' in window) {
+        let msg = new SpeechSynthesisUtterance();
+        speechSynthesis.cancel();
+        if ('onvoiceschanged' in speechSynthesis) {
+          console.log('onvoiceschanged: true')
+          speechSynthesis.addEventListener('voiceschanged', doVoice);
+        } else {
+          console.log('onvoiceschanged: false')
+          doVoice();
         }
-      });
-    });
+        $('#read').click(() => {
+          speechSynthesis.cancel();
+          msg.voice   = speechSynthesis.getVoices()[$('#voiceselection').val()];
+          msg.rate    = 10/10;
+          msg.pitch   = 1;
+          msg.text    = $('#text').val();
+          msg.onpause = (e) => {
+            console.log('Speech paused after ' + e.elapsedTime + ' milliseconds.');
+          }
+          msg.onresume = (e) => {
+            console.log('Speech resumed after ' + e.elapsedTime + ' milliseconds.');
+          }
+          msg.onend = (e) => {
+            console.log('Speech finished after ' + e.elapsedTime + ' milliseconds.');
+          };
+          speechSynthesis.speak(msg);
+        });
+        $('#pause').click(() => {
+          speechSynthesis.pause();
+          msg.paused = true;
+        });
+        $('#resume').click(() => {
+          speechSynthesis.resume();
+        });
+      }
+    }, false);
+    document.addEventListener('unload', () => {
+      window.speechSynthesis.cancel();
+    }, false);
   </script>
 </body>
 </html>
