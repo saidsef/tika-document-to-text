@@ -6,5 +6,6 @@ namespace: web
 
 resources:
 - deployment.yml
+- hpa.yml
 - service.yml
 - ingress.yml

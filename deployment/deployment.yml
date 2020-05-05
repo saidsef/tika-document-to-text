@@ -15,8 +15,8 @@ spec:
   template:
     metadata:
       annotations:
-        prometheus.io/scrape: "true"
-        filter.by.port.name: "true"
+        prometheus.io/scrape: 'true'
+        filter.by.port.name: 'true'
       labels:
         app: ui
     spec:
