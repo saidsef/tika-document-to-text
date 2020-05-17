@@ -1,4 +1,4 @@
-FROM node:13-alpine
+FROM node:12-alpine
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
