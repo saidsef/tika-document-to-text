@@ -9,6 +9,10 @@ metadata:
     tier: frontend
 spec:
   type: ClusterIP
+  sessionAffinity: ClientIP
+  topologyKeys:
+    - "kubernetes.io/hostname"
+    - "*"
   selector:
     app: ui
   ports:
