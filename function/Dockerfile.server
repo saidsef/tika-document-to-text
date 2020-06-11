@@ -16,7 +16,7 @@ COPY prometheus-jmx-config.yaml /opt/tika
 # https://mvnrepository.com/artifact/org.apache.tika
 RUN mkdir -p /opt/tika/libs && \
     apk add -U --no-cache curl tesseract-ocr tesseract-ocr-data-enm tesseract-ocr-data-ara && \
-    curl -vSL http://www.mirrorservice.org/sites/ftp.apache.org/tika/tika-server-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-server.jar && \
+    curl -vSL https://apache.mirrors.nublue.co.uk/tika/tika-server-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-server.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-xmp/${APACHE_TIKA_VERSION}/tika-xmp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-xmp.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-serialization/${APACHE_TIKA_VERSION}/tika-serialization-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-serialization.jar && \
