@@ -72,6 +72,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       port: HOST_PORT,
       path: '/tika',
       method: 'PUT',
+      timeout: 3600,
       encoding: null
     };
     if (req.file) {
