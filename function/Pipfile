@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 prometheus-flask-exporter = "==0.13.0"
-Flask = "==1.1.1"
+Flask = "==1.1.2"
 
 [requires]
-python_version = "3.8"
+python_version = "3.7"
