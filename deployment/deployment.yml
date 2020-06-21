@@ -36,8 +36,8 @@ spec:
               cpu: 100m
               memory: 512Mi
             limits:
-              cpu: 200m
-              memory: 1024Mi
+              cpu: 300m
+              memory: 2048i
           livenessProbe:
             exec:
               command:
@@ -80,11 +80,11 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 50m
-              memory: 128Mi
-            limits:
               cpu: 100m
               memory: 512Mi
+            limits:
+              cpu: 200m
+              memory: 1024Mi
           livenessProbe:
             exec:
               command:
