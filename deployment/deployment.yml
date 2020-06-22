@@ -66,6 +66,7 @@ spec:
                 - ALL
               add:
                 - NET_BIND_SERVICE
+                - SYS_TIME
         - name: ui
           image: saidsef/tika-convert-to-text:ui-latest
           imagePullPolicy: Always
@@ -115,3 +116,4 @@ spec:
                 - ALL
               add:
                 - NET_BIND_SERVICE
+                - SYS_TIME
