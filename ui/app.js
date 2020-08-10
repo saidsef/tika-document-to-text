@@ -39,18 +39,16 @@ app.use(helmet({
       imgSrc: ["'self'", 'data:'],
       objectSrc: ["'self'"],
       sandbox: ['allow-forms', 'allow-scripts'],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "'unsafe-hashes'", 'code.jquery.com', 'stackpath.bootstrapcdn.com'],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-hashes'", 'code.jquery.com', 'stackpath.bootstrapcdn.com'],
       styleSrc: ["'self'", "'unsafe-inline'", 'stackpath.bootstrapcdn.com'],
-      upgradeInsecureRequests: true,
+      upgradeInsecureRequests: [],
     },
   },
   referrerPolicy: { policy: 'same-origin' },
   featurePolicy: {
     features: {
       fullscreen: ["'self'"],
-      vibrate: ["'self'"],
       geolocation: ["'self'"],
-      wakeLock: ["'self'"],
     },
   },
 }));
