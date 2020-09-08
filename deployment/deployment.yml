@@ -61,6 +61,8 @@ spec:
             # user/group: nobody
             runAsGroup: 65534
             runAsUser: 65534
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -111,6 +113,8 @@ spec:
             # user/group: nobody
             runAsGroup: 65534
             runAsUser: 65534
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
