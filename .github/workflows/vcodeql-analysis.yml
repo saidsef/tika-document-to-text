@@ -2,9 +2,14 @@ name: "CodeQL"
 
 on:
   push:
+    paths:
+      - 'function/**'
+      - 'ui/**'
     branches: [master]
   pull_request:
-    # The branches below must be a subset of the branches above
+    paths:
+      - 'function/**'
+      - 'ui/**'
     branches: [master]
   schedule:
     - cron: '0 7 * * 1'
@@ -17,10 +22,7 @@ jobs:
       matrix:
         # Override automatic language detection by changing the below list
         # Supported options are ['csharp', 'cpp', 'go', 'java', 'javascript', 'python']
-        language: ['javascript', 'python', 'go']
-        # Learn more...
-        # https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#overriding-automatic-language-detection
-
+        language: ['javascript', 'python']
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
