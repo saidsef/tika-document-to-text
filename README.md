@@ -43,7 +43,7 @@ curl -d @test/url.json http://localhost:7071/tika -H 'Content-Type: application/
 > This assumes that you've already [deployed OpenFaas](https://docs.openfaas.com/deployment/) and installed the [OpenFaas CLI](https://github.com/openfaas/faas-cli)
 
 ```shell
-faas-cli deploy -f https://raw.githubusercontent.com/saidsef/faas-convert-to-text/master/deployment/convert-to-text-faas.yml
+faas-cli deploy -f https://raw.githubusercontent.com/saidsef/faas-convert-to-text/master/deployment/faas-deployment.yml
 ```
 
 FaaS - Take it for a test drive:
