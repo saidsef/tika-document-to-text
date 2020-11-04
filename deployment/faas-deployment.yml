@@ -6,7 +6,7 @@ functions:
   convert-to-text:
     lang: dockerfile
     handler: ./function
-    image: aidsef/tika-convert-to-text:openfaas-latest
+    image: saidsef/tika-convert-to-text:openfaas-latest
     fprocess: "python3 index.py"
     environment:
       exec_timeout: 0
