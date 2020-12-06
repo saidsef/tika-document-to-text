@@ -26,10 +26,10 @@ spec:
           image: saidsef/tika-convert-to-text:server-latest
           imagePullPolicy: Always
           ports:
-          - name: server
+          - name: tcp-server
             containerPort: 7071
             protocol: TCP
-          - name: monitoring
+          - name: http-monitoring
             containerPort: 7072
             protocol: TCP
           resources:
@@ -63,7 +63,7 @@ spec:
             runAsGroup: 65534
             runAsUser: 65534
             runAsNonRoot: true
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: false
             capabilities:
               drop:
                 - ALL
@@ -79,7 +79,7 @@ spec:
           - name: HOST_PORT
             value: "7071"
           ports:
-            - name: ui
+            - name: http-ui
               containerPort: 8080
               protocol: TCP
           resources:
@@ -115,7 +115,7 @@ spec:
             runAsGroup: 65534
             runAsUser: 65534
             runAsNonRoot: true
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: false
             capabilities:
               drop:
                 - ALL
