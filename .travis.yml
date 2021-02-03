@@ -23,10 +23,10 @@ script:
    else
      export TAG=$TRAVIS_BRANCH
    fi
-  - docker buildx build --platform linux/amd64,linux/arm64 -t saidsef/tika-convert-to-text:$TAG --push .
+  - docker buildx build --platform linux/amd64 -t saidsef/tika-convert-to-text:$TAG --push .
   - docker buildx build --platform linux/amd64 -t saidsef/tika-convert-to-text:server-$TAG -f Dockerfile.server --push .
   # - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t saidsef/tika-convert-to-text:openfaas-$TAG -f Dockerfile.faas --push .
-  - cd ../ui/ && docker buildx build --platform linux/amd64,linux/arm64 -t saidsef/tika-convert-to-text:ui-$TAG -f Dockerfile --push .
+  - cd ../ui/ && docker buildx build --platform linux/amd64 -t saidsef/tika-convert-to-text:ui-$TAG -f Dockerfile --push .
 after_script:
   - docker images
 notifications:
