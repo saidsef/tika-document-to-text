@@ -2,7 +2,7 @@ FROM openjdk:8-jre-alpine
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
-ENV APACHE_TIKA_VERSION 1.24.1
+ENV APACHE_TIKA_VERSION 1.25
 ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
 ENV SQLITE_JDBC 3.32.3
 ENV JBIG2_IMAGEIO 3.0.3
