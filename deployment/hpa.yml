@@ -2,24 +2,29 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: tika-ui-hpa
+  name: tika-ui
 spec:
-  maxReplicas: 10
-  minReplicas: 1
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: tika-ui
+  maxReplicas: 10
+  minReplicas: 1
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 60
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        targetAverageValue: 1024Mi
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 70
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+    scaleUp:
+      stabilizationWindowSeconds: 30
