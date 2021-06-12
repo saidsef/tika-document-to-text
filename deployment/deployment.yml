@@ -34,11 +34,11 @@ spec:
             protocol: TCP
           resources:
             requests:
-              cpu: 100m
-              memory: 512Mi
-            limits:
               cpu: 300m
-              memory: 2048Mi
+              memory: 1G1
+            limits:
+              cpu: 500m
+              memory: 2Gi
           livenessProbe:
             exec:
               command:
@@ -84,11 +84,11 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 512Mi
             limits:
-              cpu: 200m
-              memory: 1024Mi
+              cpu: 100m
+              memory: 1Gi
           livenessProbe:
             exec:
               command:
