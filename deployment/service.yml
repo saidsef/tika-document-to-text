@@ -12,7 +12,6 @@ spec:
   sessionAffinity: ClientIP
   topologyKeys:
     - "kubernetes.io/hostname"
-    - "*"
   selector:
     app: ui
   ports:
