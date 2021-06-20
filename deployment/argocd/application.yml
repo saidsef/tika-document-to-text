@@ -1,17 +1,23 @@
-project: default
-source:
-  repoURL: 'https://github.com/saidsef/faas-convert-to-text.git'
-  path: deployment/k8s
-  targetRevision: master
-  directory:
-    jsonnet:
-      extVars:
-        - name: HOST
-          value: $(HOST)
-destination:
-  server: 'https://kubernetes.default.svc'
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tika-ui
   namespace: web
-syncPolicy:
-  automated:
-    prune: true
-    selfHeal: true
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/saidsef/faas-convert-to-text.git'
+    path: deployment/k8s
+    targetRevision: master
+    directory:
+      jsonnet:
+        extVars:
+          - name: HOST
+            value: $(HOST)
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: web
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
