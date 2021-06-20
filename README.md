@@ -17,7 +17,7 @@ The Apache Tika™ toolkit detects and extracts metadata and text from over a th
 > Assuming you've checked out this repo
 
 ```shell
-kubectl apply -k ./deployment
+kubectl apply -k ./deployment/k8s
 ```
 
 Kubernetes - Take it for a test drive:
