@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: web
 
 resources:
-- deployment.yml
-- hpa.yml
-- service.yml
-- ingress.yml
+- k8s/deployment.yml
+- k8s/hpa.yml
+- k8s/service.yml
+- k8s/ingress.yml
