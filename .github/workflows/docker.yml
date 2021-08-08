@@ -16,6 +16,7 @@ jobs:
         echo "TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
     - name: Build docker image
       run: |
+        cd function/
         docker build -t docker.io/saidsef/tika-convert-to-text:${{ env.TAG == 'master' && 'latest' || env.TAG }} .
         docker build -t docker.io/saidsef/tika-convert-to-text:server-${{ env.TAG == 'master' && 'latest' || env.TAG }} -f Dockerfile.server .
         cd ../ui/ && docker build -t docker.io/saidsef/tika-convert-to-text:ui-${{ env.TAG == 'master' && 'latest' || env.TAG }} -f Dockerfile .
