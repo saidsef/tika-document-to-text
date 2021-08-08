@@ -20,6 +20,10 @@ jobs:
         docker build -t docker.io/saidsef/tika-convert-to-text:${{ env.TAG == 'master' && 'latest' || env.TAG }} .
         docker build -t docker.io/saidsef/tika-convert-to-text:server-${{ env.TAG == 'master' && 'latest' || env.TAG }} -f Dockerfile.server .
         cd ../ui/ && docker build -t docker.io/saidsef/tika-convert-to-text:ui-${{ env.TAG == 'master' && 'latest' || env.TAG }} -f Dockerfile .
+  scan:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
     - name: Run Trivy vulnerability scanner - Server
       uses: aquasecurity/trivy-action@master
       with:
@@ -31,6 +35,9 @@ jobs:
       uses: github/codeql-action/upload-sarif@v1
       with:
         sarif_file: 'trivy-results.sarif'
+  push:
+    runs-on: ubuntu-latest
+    needs: [build, scan]
     - name: Login to DockerHub
       uses: docker/login-action@v1
       with:
