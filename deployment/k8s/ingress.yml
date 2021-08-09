@@ -16,7 +16,7 @@ metadata:
       server_tokens off;
 spec:
   rules:
-  - host: $(HOST)
+  - host: tika.hostname.tld
     http:
       paths:
       - path: /
