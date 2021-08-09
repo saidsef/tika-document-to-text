@@ -17,7 +17,7 @@ COPY . /app
 
 RUN apk add --update --no-cache curl && \
     rm -rf /var/cache/apk/* && \
-    yarn install && \
+    yarn install --prod && \
     yarn check && \
     yarn autoclean --init && \
     yarn autoclean --force && \
