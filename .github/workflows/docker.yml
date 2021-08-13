@@ -41,6 +41,27 @@ jobs:
         docker push docker.io/saidsef/tika-convert-to-text:${{ env.TAG == 'master' && 'latest' || env.TAG }}
         docker push docker.io/saidsef/tika-convert-to-text:server-${{ env.TAG == 'master' && 'latest' || env.TAG }}
         docker push docker.io/saidsef/tika-convert-to-text:ui-${{ env.TAG == 'master' && 'latest' || env.TAG }}
+  tagging:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set Tag Value
+        run: |
+          echo "DATE=v$(echo `date +'%Y.%m'`)" >> $GITHUB_ENV
+      - name: Create tag
+        uses: actions/github-script@v3
+        if: contains(github.ref, 'master')
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/${{ env.DATE }}",
+              sha: context.sha
+            })
   test:
     runs-on: ubuntu-latest
     needs: [build]
