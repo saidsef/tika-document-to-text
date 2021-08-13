@@ -4,9 +4,9 @@ LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
 ENV APACHE_TIKA_VERSION 1.27
 ENV CLASSPATH "/opt/tika/tika-app.jar:/opt/tika/libs"
-ENV SQLITE_JDBC 3.32.3
+ENV SQLITE_JDBC 3.8.9
 ENV JBIG2_IMAGEIO 3.0.3
-ENV JAI_IMAGEIO_JPEG2000 1.3.0
+ENV JAI_IMAGEIO_JPEG2000 1.4.0
 ENV PYTHONIOENCODING utf8
 ENV TIKA_SERVER_JAR /opt/tika/tika-app.jar
 ENV PORT ${PORT:-7070}
