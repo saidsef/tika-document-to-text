@@ -10,6 +10,7 @@ ENV JAI_IMAGEIO_JPEG2000 1.4.0
 ENV PYTHONIOENCODING utf8
 ENV TIKA_SERVER_JAR /opt/tika/tika-app.jar
 ENV PORT ${PORT:-7070}
+ENV MS 180000
 
 WORKDIR /opt/tika
 
@@ -18,7 +19,7 @@ COPY . /opt/tika
 RUN apt-get update && \
     mkdir -p /usr/share/man/man1 /opt/tika/libs && \
     apt-get install -yy openjdk-8-jre-headless curl && \
-    curl -vSL https://mirrors.ukfast.co.uk/sites/ftp.apache.org/tika/${APACHE_TIKA_VERSION}/tika-app-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-app.jar && \
+    curl -vSL https://archive.apache.org/dist/tika/${APACHE_TIKA_VERSION}/tika-app-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-app.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-xmp/${APACHE_TIKA_VERSION}/tika-xmp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-xmp.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-serialization/${APACHE_TIKA_VERSION}/tika-serialization-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-serialization.jar && \
