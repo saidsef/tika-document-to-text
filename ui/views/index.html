@@ -57,11 +57,12 @@
           doVoice();
         }
         $('#read').click(() => {
+          let text = $('#text');
           speechSynthesis.cancel();
           msg.voice   = speechSynthesis.getVoices()[$('#voiceselection').val()];
           msg.rate    = 10/10;
           msg.pitch   = 1;
-          msg.text    = $('#text').val();
+          msg.text    = text.val();
           msg.onpause = (e) => {
             console.log('Speech paused after ' + e.elapsedTime + ' milliseconds.');
           }
@@ -71,11 +72,14 @@
           msg.onend = (e) => {
             console.log('Speech finished after ' + e.elapsedTime + ' milliseconds.');
           };
+          msg.onboundary = (e) => {
+            text.focus().prop({'selectionStart': e.charIndex, 'selectionEnd': e.charIndex+e.charLength, 'color': 'ff00cc', 'selectionDirection': 'forward'});
+          }
           speechSynthesis.speak(msg);
         });
         $('#pause').click(() => {
-          speechSynthesis.pause();
           msg.paused = true;
+          speechSynthesis.pause();
         });
         $('#resume').click(() => {
           speechSynthesis.resume();
