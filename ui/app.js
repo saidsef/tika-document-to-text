@@ -55,6 +55,11 @@ app.use(helmet({
 app.use(cors());
 app.options('*', cors());
 
+app.use((req, res, next) => {
+  req.setTimeout(500000);
+  next();
+});
+
 app.get('/', (req, res, next) => {
   res.render('index', {
     url: req.body.url,
@@ -70,7 +75,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       port: HOST_PORT,
       path: '/tika',
       method: 'PUT',
-      timeout: 3600,
+      timeout: 180000,
       encoding: null
     };
     if (req.file) {
