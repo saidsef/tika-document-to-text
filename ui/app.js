@@ -14,6 +14,7 @@ const app     = express();
 const storage = multer.memoryStorage();
 const uploads = multer({ storage: storage});
 
+const TIMEOUT   = 180000; //Milliseconds
 const PORT      = process.env.PORT || 8080;
 const HOST      = process.env.HOST || 'server';
 const HOST_PORT = process.env.HOST_PORT || 7071;
@@ -53,7 +54,6 @@ app.use(helmet({
   },
 }));
 app.use(cors());
-app.options('*', cors());
 
 app.use((req, res, next) => {
   req.setTimeout(500000);
@@ -75,7 +75,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       port: HOST_PORT,
       path: '/tika',
       method: 'PUT',
-      timeout: 180000,
+      timeout: TIMEOUT,
       encoding: null
     };
     if (req.file) {
@@ -87,7 +87,9 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
     if (req.body.url && req.body.url.length > 5) {
       payload = req.body.url;
       options['headers'] = {
-        'fileUrl': req.body.url
+        'fileUrl': req.body.url,
+        'X-Tika-OCRmaxFileSizeToOcr': 0,
+        'X-Tika-OCRtimeout': TIMEOUT
       };
     }
     let post = protocol.request(options, (response) => {
@@ -98,7 +100,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       });
       response.on("end", () => {
         res.render('index', {
-          text: body
+          text: body.toString().replace(/<[^>]*>?/gm, '').trim()
         });
       });
       response.on("error", (error) => {
