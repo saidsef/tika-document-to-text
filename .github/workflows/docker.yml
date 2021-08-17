@@ -57,12 +57,23 @@ jobs:
         with:
           github-token: ${{ github.token }}
           script: |
-            github.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: "refs/tags/${{ env.DATE }}",
-              sha: context.sha
-            })
+            try {
+              await github.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "refs/tags/${{ env.DATE }}"
+              })
+            } catch (e) {
+              console.log("The tag doesn't exist yet: " + e)
+            } finally {
+              await github.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "refs/tags/${{ env.DATE }}",
+                sha: context.sha
+              })
+            }
+
   test:
     runs-on: ubuntu-latest
     if: ${{ ! contains(github.ref, 'master') }}
