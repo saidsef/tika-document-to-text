@@ -53,7 +53,7 @@ jobs:
         run: |
           echo "DATE=v$(echo `date +'%Y.%m'`)" >> $GITHUB_ENV
       - name: Create tag
-        uses: actions/github-script@v3
+        uses: actions/github-script@v4
         with:
           github-token: ${{ github.token }}
           script: |
