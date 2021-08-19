@@ -8,7 +8,6 @@ jobs:
   tagging:
     runs-on: ubuntu-latest
     if: ${{ contains(github.ref, 'master') }}
-    needs: [build]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
