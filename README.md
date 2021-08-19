@@ -1,4 +1,4 @@
-# Apache Tika Implementation [![Build Status](https://github.com/saidsef/faas-convert-to-text/actions/workflows/docker.yml/badge.svg]
+# Apache Tika Implementation [![Build Status](https://github.com/saidsef/faas-convert-to-text/actions/workflows/docker.yml/badge.svg)](#deployment)
 
 The Apache Tika™ toolkit detects and extracts metadata and text from over a thousand different file types (such as PPT, XLS, and PDF). All of these file types can be parsed through a single interface, making Tika useful for search engine indexing, content analysis, translation, and much more.
 
