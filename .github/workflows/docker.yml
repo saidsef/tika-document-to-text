@@ -64,5 +64,5 @@ jobs:
           kubectl cluster-info
           NS=`cat deployment/kustomization.yml  | grep namespace | awk '{ print $2 }'`
           kubectl create namespace $NS
-          kubectl apply -k deployment/
+          kubectl kustomize deployment/ | kubectl apply -f 
           kubectl get all -n $NS
