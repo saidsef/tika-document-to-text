@@ -30,7 +30,7 @@ Take it for a test drive:
 
 Via CLI:
 
-> You'll need to forward service via `kubectl port-forward -n web svc/server 7071`
+> You'll need to forward service via `kubectl port-forward -n web svc/tika-ui 7071`
 
 ```shell
 curl -d @test/url.json http://localhost:7071/tika -H 'Content-Type: application/json'
@@ -38,7 +38,7 @@ curl -d @test/url.json http://localhost:7071/tika -H 'Content-Type: application/
 
 Or, via Web UI:
 
-> You'll need to forward service via `kubectl port-forward -n web svc/server 8080`
+> You'll need to forward service via `kubectl port-forward -n web svc/tika-ui 8080`
 
 Using a browser visit:
 
