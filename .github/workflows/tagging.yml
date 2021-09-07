@@ -10,6 +10,9 @@ on:
       - completed
   workflow_dispatch:
 
+env:
+  COMMIT_MSG: ${{ github.event.head_commit.message }}
+
 jobs:
   tagging:
     runs-on: ubuntu-latest
@@ -20,6 +23,7 @@ jobs:
       - name: Set Tag Value
         run: |
           echo "DATE=v$(echo `date +'%Y.%m'`)" >> $GITHUB_ENV
+          echo "CHANGELOG=`git log --oneline $(git describe --tags --abbrev=0 @^)..@`" >> $GITHUB_ENV
       - name: Create Tag
         uses: actions/github-script@v4
         if: ${{ env.DATE }}
@@ -32,6 +36,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 ref: "refs/tags/${{ env.DATE }}",
+                message: "${{ env.CHANGELOG }}",
                 sha: context.sha
               });
             } catch (e) {
@@ -44,6 +49,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 ref: "tags/${{ env.DATE }}",
+                message: "${{ env.CHANGELOG }}",
                 sha: context.sha
               });
             }
