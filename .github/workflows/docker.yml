@@ -71,7 +71,7 @@ jobs:
         file: ./function/Dockerfile
         platforms: linux/amd64,linux/arm64
         pull: true
-        push: false
+        push: true
         tags: docker.io/saidsef/tika-convert-to-text:${{ env.TAG == 'master' && 'latest' || env.TAG }}
     - name: Build and push Docker image - (Server)
       uses: docker/build-push-action@v2
@@ -83,7 +83,7 @@ jobs:
         file: ./function/Dockerfile.server
         platforms: linux/amd64,linux/arm64
         pull: true
-        push: false
+        push: true
         tags: docker.io/saidsef/tika-convert-to-text:server-${{ env.TAG == 'master' && 'latest' || env.TAG }}
     - name: Build and push Docker image - (UI)
       uses: docker/build-push-action@v2
@@ -95,7 +95,7 @@ jobs:
         file: ./ui/Dockerfile
         platforms: linux/amd64,linux/arm64
         pull: true
-        push: false
+        push: true
         tags: docker.io/saidsef/tika-convert-to-text:ui-${{ env.TAG == 'master' && 'latest' || env.TAG }}
     - name: Run Trivy vulnerability scanner - (Server)
       uses: aquasecurity/trivy-action@master
