@@ -4,7 +4,7 @@ The Apache Tika™ toolkit detects and extracts metadata and text from over a th
 
 ## Prerequisite
 
-- [Kubernetes Cluster](https://kubernetes.io/docs/tutorials/) [and]
+- [Kubernetes Cluster](https://kubernetes.io/docs/tutorials/)
 - [ArgoCD](https://argoproj.github.io/argo-cd/)
 
 ## Deployment
@@ -24,8 +24,9 @@ Or, to deploy via argocd:
 kubectl apply -f deployment/argocd/application.yml
 ```
 
-> **NOTE:** Remeber to update `Ingress` hostname
-Kubernetes - Take it for a test drive:
+> *NOTE:* Remeber to update `Ingress` hostname
+
+Take it for a test drive:
 
 Via CLI:
 
@@ -33,4 +34,14 @@ Via CLI:
 
 ```shell
 curl -d @test/url.json http://localhost:7071/tika -H 'Content-Type: application/json'
+```
+
+Or, via Web UI:
+
+> You'll need to forward service via `kubectl port-forward -n web svc/server 8080`
+
+Using a browser visit:
+
+```shell
+http://loclahost:8080/
 ```
