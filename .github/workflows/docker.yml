@@ -34,7 +34,6 @@ jobs:
         pip install -r requirements.txt
         pip install flake8
         flake8 . --count --show-source --statistics --ignore=E111,E501 --exit-zero --output-file=flake8tmp.txt
-        cat flake8tmp.txt| grep ^[0-9]
 
   build:
     runs-on: ubuntu-latest
