@@ -1,11 +1,11 @@
-# Apache Tika Implementation [![Build Status](https://github.com/saidsef/faas-convert-to-text/actions/workflows/docker.yml/badge.svg)](#deployment) [![Build Status](https://github.com/saidsef/faas-convert-to-text/actions/workflows/tagging.yml/badge.svg)](#deployment)
+# Apache Tika Implementation [![CI](https://github.com/saidsef/faas-convert-to-text/actions/workflows/docker.yml/badge.svg)](#deployment) [![Tagging](https://github.com/saidsef/faas-convert-to-text/actions/workflows/tagging.yml/badge.svg)](#deployment) [![Release](https://github.com/saidsef/faas-convert-to-text/actions/workflows/release.yml/badge.svg)](#deployment)
 
 The Apache Tika™ toolkit detects and extracts metadata and text from over a thousand different file types (such as PPT, XLS, and PDF). All of these file types can be parsed through a single interface, making Tika useful for search engine indexing, content analysis, translation, and much more.
 
 ## Prerequisite
 
 - [Kubernetes Cluster](https://kubernetes.io/docs/tutorials/) [and]
-- [Kubeless](https://kubeless.io/)
+- [ArgoCD](https://argoproj.github.io/argo-cd/)
 
 ## Deployment
 
@@ -15,16 +15,17 @@ The Apache Tika™ toolkit detects and extracts metadata and text from over a th
 > Assuming you've checked out this repo
 
 ```shell
-kubectl apply -k ./deployment/k8s
+kubectl kustomize deployment/ | kubectl apply -f -
 ```
 
+Or, to deploy via argocd:
+
+```bash
+kubectl apply -f deployment/argocd/application.yml
+```
+
+> **NOTE:** Remeber to update `Ingress` hostname
 Kubernetes - Take it for a test drive:
-
-You can visit the UI via:
-
-```shell
-http(s)://tika-ui.hostname.tld
-```
 
 Via CLI:
 
