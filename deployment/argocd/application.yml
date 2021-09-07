@@ -4,6 +4,13 @@ kind: Application
 metadata:
   name: tika-ui
   namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: server=docker.io/saidsef/tika-convert-to-text,ui=docker.io/saidsef/tika-convert-to-text
+    argocd-image-updater.argoproj.io/server.force-update: "true"
+    argocd-image-updater.argoproj.io/server.update-strategy: server-latest
+    argocd-image-updater.argoproj.io/ui.force-update: "true"
+    argocd-image-updater.argoproj.io/ui.update-strategy: ui-latest
+    argocd-image-updater.argoproj.io/write-back-method: argocd
 spec:
   destination:
     namespace: web
