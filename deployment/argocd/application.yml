@@ -5,11 +5,7 @@ metadata:
   name: tika-ui
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: server=docker.io/saidsef/tika-convert-to-text,ui=docker.io/saidsef/tika-convert-to-text
-    argocd-image-updater.argoproj.io/server.force-update: "true"
-    argocd-image-updater.argoproj.io/server.update-strategy: server-latest
-    argocd-image-updater.argoproj.io/ui.force-update: "true"
-    argocd-image-updater.argoproj.io/ui.update-strategy: ui-latest
+    argocd-image-updater.argoproj.io/image-list: server=docker.io/saidsef/tika-convert-to-text:server-latest, ui=docker.io/saidsef/tika-convert-to-text:ui-latest
     argocd-image-updater.argoproj.io/write-back-method: argocd
 spec:
   destination:
@@ -19,7 +15,7 @@ spec:
   source:
     path: deployment
     repoURL: https://github.com/saidsef/faas-convert-to-text.git
-    targetRevision: HEAD
+    targetRevision: v2021.08
   syncPolicy:
     automated:
       prune: true
