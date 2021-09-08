@@ -1,4 +1,3 @@
----
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -11,16 +10,17 @@ resources:
 - k8s/ingress.yml
 
 images:
-  - name: server
-    newName: docker.io/saidsef/tika-convert-to-text
-    newTag: server-latest
-  - name: ui
-    newName: docker.io/saidsef/tika-convert-to-text
-    newTag: ui-latest
+- name: server
+  newName: docker.io/saidsef/tika-convert-to-text
+  newTag: server-latest
+- name: ui
+  newName: docker.io/saidsef/tika-convert-to-text
+  newTag: ui-latest
 
 vars:
-  - name: HOST
-    objref:
-      name: tika-ui
-      kind: Ingress
-      apiVersion: networking.k8s.io/v1
+- fieldref: {}
+  name: HOST
+  objref:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    name: tika-ui
