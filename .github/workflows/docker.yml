@@ -100,7 +100,7 @@ jobs:
         push: true
         tags: docker.io/saidsef/tika-convert-to-text:ui-${{ env.TAG == 'main' && 'latest' || env.TAG }}
     - name: Run Trivy vulnerability scanner - (Server)
-      uses: aquasecurity/trivy-action@v0.0.20
+      uses: aquasecurity/trivy-action@master
       if: success()
       with:
         image-ref: docker.io/saidsef/tika-convert-to-text:server-${{ env.TAG == 'main' && 'latest' || env.TAG }}
