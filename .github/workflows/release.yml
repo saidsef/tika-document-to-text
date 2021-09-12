@@ -10,6 +10,8 @@ on:
       - Tagging
     types:
       - completed
+    branch:
+      - main
   workflow_dispatch:
 
 jobs:
