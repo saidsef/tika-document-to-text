@@ -75,7 +75,7 @@ spec:
           imagePullPolicy: Always
           env:
           - name: HOST
-            value: "ui"
+            value: "localhost"
           - name: HOST_PORT
             value: "7071"
           ports:
