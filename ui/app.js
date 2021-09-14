@@ -39,7 +39,7 @@ app.use(helmet({
       frameAncestors: ["'self'"],
       imgSrc: ["'self'", 'data:'],
       objectSrc: ["'self'"],
-      sandbox: ['allow-forms', 'allow-scripts'],
+      sandbox: ['allow-forms', 'allow-scripts', 'allow-downloads'],
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-hashes'", 'code.jquery.com', 'stackpath.bootstrapcdn.com'],
       styleSrc: ["'self'", "'unsafe-inline'", 'stackpath.bootstrapcdn.com'],
       upgradeInsecureRequests: [],
