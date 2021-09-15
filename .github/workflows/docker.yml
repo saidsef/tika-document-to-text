@@ -16,6 +16,10 @@ on:
       - "ui/**"
       - "test/**"
       - ".github/workflows/docker.yml"
+
+env:
+  OWNER: ${{ github.repository_owner }}
+  REPO_NAME: ${{ github.event.repository.name }}
 jobs:
   python-test:
     runs-on: ubuntu-latest
