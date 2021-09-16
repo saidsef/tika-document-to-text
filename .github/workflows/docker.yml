@@ -41,14 +41,14 @@ jobs:
         pip install -r requirements.txt
         pip install flake8
         flake8 . --count --show-source --statistics --ignore=E111,E501 --exit-zero --output-file=flake8tmp.txt
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: python
-        setup-python-dependencies: false
-        queries: security-and-quality
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+    # - name: Initialize CodeQL
+    #   uses: github/codeql-action/init@v1
+    #   with:
+    #     languages: python
+    #     setup-python-dependencies: false
+    #     queries: security-and-quality
+    # - name: Perform CodeQL Analysis
+    #   uses: github/codeql-action/analyze@v1
 
   build:
     runs-on: ubuntu-latest
