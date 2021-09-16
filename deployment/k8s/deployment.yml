@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: docker.io/saidsef/tika-convert-to-text:server-latest
+          image: ghcr.io/saidsef/tika-convert-to-text:server-latest
           imagePullPolicy: Always
           ports:
           - name: tcp-server
@@ -35,7 +35,7 @@ spec:
           resources:
             requests:
               cpu: 300m
-              memory: 1Gi
+              memory: 2Gi
             limits:
               cpu: 500m
               memory: 2Gi
