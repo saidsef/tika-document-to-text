@@ -42,4 +42,4 @@ EXPOSE ${PORT} 7072
 
 HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
-CMD ["sh", "-c","/usr/bin/java -Xms1g -Xmx2g -XX:MaxMetaspaceSize=512M -Xss2048K -XX:MaxDirectMemorySize=512M -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=7072:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h '*' -p $PORT"]
+CMD ["sh", "-c","/usr/bin/java -Xms2g -Xmx2g -XX:MaxMetaspaceSize=512M -Xss2048K -XX:MaxDirectMemorySize=512M -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=7072:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h '*' -p $PORT"]
