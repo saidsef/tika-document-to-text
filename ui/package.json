@@ -1,5 +1,5 @@
 {
-  "name": "faas-convert-to-text",
+  "name": "tika-document-to-text",
   "version": "0.2.0",
   "description": "FaaS Conver to Text Using Apache Tika",
   "main": "app.js",
@@ -15,11 +15,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/saidsef/faas-convert-to-text.git",
+    "url": "git+https://github.com/saidsef/tika-document-to-text.git",
     "directory": "ui/"
   },
   "bugs": {
-    "url": "https://github.com/saidsef/faas-convert-to-text/issues",
+    "url": "https://github.com/saidsef/tika-document-to-text/issues",
     "email": "saidsef@gmail.com"
   },
   "keywords": [
@@ -54,6 +54,6 @@
     "prom-client": "^12.0.0",
     "template-literal": "^1.0.4"
   },
-  "homepage": "https://github.com/saidsef/faas-convert-to-text#readme",
+  "homepage": "https://github.com/saidsef/tika-document-to-text#readme",
   "devDependencies": {}
 }
