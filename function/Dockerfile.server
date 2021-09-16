@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:18-alpine
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
