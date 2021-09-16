@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: ghcr.io/saidsef/tika-convert-to-text:server-latest
+          image: ghcr.io/saidsef/tika-document-to-text:server-latest
           imagePullPolicy: Always
           ports:
           - name: tcp-server
@@ -71,7 +71,7 @@ spec:
                 - NET_BIND_SERVICE
                 - SYS_TIME
         - name: ui
-          image: docker.io/saidsef/tika-convert-to-text:ui-latest
+          image: ghcr.io/saidsef/tika-document-to-text:ui-latest
           imagePullPolicy: Always
           env:
           - name: HOST
