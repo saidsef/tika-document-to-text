@@ -42,11 +42,11 @@ spec:
           livenessProbe:
             tcpSocket:
               port: 7071
-            initialDelaySeconds: 5
+            initialDelaySeconds: 10
             periodSeconds: 5
             successThreshold: 1
-            failureThreshold: 2
-            timeoutSeconds: 3
+            failureThreshold: 3
+            timeoutSeconds: 5
           readinessProbe:
             tcpSocket:
               port: 7071
@@ -54,7 +54,7 @@ spec:
             periodSeconds: 5
             successThreshold: 1
             failureThreshold: 3
-            timeoutSeconds: 3
+            timeoutSeconds: 5
           securityContext:
             allowPrivilegeEscalation: false
             # user/group: nobody
