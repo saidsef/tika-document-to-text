@@ -60,7 +60,7 @@
           let text = $('#text');
           speechSynthesis.cancel();
           msg.voice   = speechSynthesis.getVoices()[$('#voiceselection').val()];
-          msg.rate    = 1.5;
+          msg.rate    = 1;
           msg.pitch   = 1;
           msg.text    = text.val();
           msg.onpause = (e) => {
