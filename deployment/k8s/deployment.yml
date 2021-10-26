@@ -21,6 +21,23 @@ spec:
       labels:
         app: ui
     spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 90
+              preference:
+                matchExpressions:
+                - key: kubernetes.io/arch
+                  operator: In
+                  values:
+                  - amd64
+            - weight: 10
+              preference:
+                matchExpressions:
+                - key: kubernetes.io/arch
+                  operator: In
+                  values:
+                  - arm64
       containers:
         - name: server
           image: ghcr.io/saidsef/tika-document-to-text:server-latest
@@ -41,7 +58,7 @@ spec:
               memory: 2Gi
           livenessProbe:
             tcpSocket:
-              port: 7071
+              port: tcp-server
             initialDelaySeconds: 10
             periodSeconds: 5
             successThreshold: 1
@@ -49,7 +66,7 @@ spec:
             timeoutSeconds: 5
           readinessProbe:
             tcpSocket:
-              port: 7071
+              port: tcp-server
             initialDelaySeconds: 10
             periodSeconds: 5
             successThreshold: 1
@@ -89,7 +106,7 @@ spec:
               memory: 1Gi
           livenessProbe:
             tcpSocket:
-              port: 8080
+              port: http-ui
             initialDelaySeconds: 5
             periodSeconds: 5
             successThreshold: 1
@@ -97,7 +114,7 @@ spec:
             timeoutSeconds: 3
           readinessProbe:
             httpGet:
-              port: 8080
+              port: http-ui
               path: /healthz
               scheme: "HTTP"
             initialDelaySeconds: 5
