@@ -121,6 +121,11 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
   }
 });
 
+app.get('/metrics', (req, res, next) => {
+  res.setHeader('Content-Type', metrics.contentType)
+  res.end(metrics.metrics())
+});
+
 app.get('/healthz', (req, res, next) => {
   res.json({'status': 'healthy'});
 });
