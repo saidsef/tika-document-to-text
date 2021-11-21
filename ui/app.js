@@ -22,10 +22,7 @@ const protocol  = (process.env.PROTOCOL == 'https') ? require('https') : require
 
 const metrics = new prom.Registry()
 
-metrics.setDefaultLabels({
-  app: "tika-ui"
-});
-
+metrics.setDefaultLabels({ app: "tika-ui" });
 prom.collectDefaultMetrics({ metrics });
 
 app.enable('trust proxy');
@@ -67,7 +64,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res, next) => {
+app.get('/', async (req, res, next) => {
   res.render('index', {
     url: req.body.url,
     text: ''
@@ -121,12 +118,12 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
   }
 });
 
-app.get('/metrics', (req, res, next) => {
+app.get('/metrics', async (req, res, next) => {
   res.setHeader('Content-Type', metrics.contentType)
-  res.end(metrics.metrics())
+  res.end(await metrics.metrics())
 });
 
-app.get('/healthz', (req, res, next) => {
+app.get('/healthz', async (req, res, next) => {
   res.json({'status': 'healthy'});
 });
 
