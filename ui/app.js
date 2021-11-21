@@ -6,7 +6,7 @@ const morgan       = require('morgan');
 const multer       = require('multer');
 const cors         = require('cors');
 const compression  = require('compression');
-const promMid      = require('express-prometheus-middleware');
+const prom         = require('prom-client');
 const tl           = require('./libs/render');
 const errorHandler = require('./libs/express-error');
 
@@ -20,11 +20,18 @@ const HOST      = process.env.HOST || 'server';
 const HOST_PORT = process.env.HOST_PORT || 7071;
 const protocol  = (process.env.PROTOCOL == 'https') ? require('https') : require('http');
 
+const metrics = new prom.Registry()
+
+metrics.setDefaultLabels({
+  app: "tika-ui"
+});
+
+prom.collectDefaultMetrics({ metrics });
+
 app.enable('trust proxy');
 app.set('view engine', 'html');
 app.set('views', './views');
 app.engine('html', tl);
-app.use(promMid({metricsPath: '/metrics', collectDefaultMetrics: true, requestDurationBuckets: [0.1, 0.5, 1, 1.5]}));
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: true, limit: '50mb'})); 
 app.use(express.json({limit: '50mb'}));
