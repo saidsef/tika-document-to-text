@@ -6,7 +6,7 @@ const morgan       = require('morgan');
 const multer       = require('multer');
 const cors         = require('cors');
 const compression  = require('compression');
-const prom         = require('prom-client');
+const Prometheus   = require('prom-client');
 const tl           = require('./libs/render');
 const errorHandler = require('./libs/express-error');
 
@@ -20,10 +20,8 @@ const HOST      = process.env.HOST || 'server';
 const HOST_PORT = process.env.HOST_PORT || 7071;
 const protocol  = (process.env.PROTOCOL == 'https') ? require('https') : require('http');
 
-const metrics = new prom.Registry()
-
-metrics.setDefaultLabels({ app: "tika-ui" });
-prom.collectDefaultMetrics({ metrics });
+const metrics = new Prometheus.Registry();
+Prometheus.collectDefaultMetrics({ metrics });
 
 app.enable('trust proxy');
 app.set('view engine', 'html');
@@ -64,7 +62,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', async (req, res, next) => {
+app.get('/', (req, res, next) => {
   res.render('index', {
     url: req.body.url,
     text: ''
@@ -120,10 +118,10 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
 
 app.get('/metrics', async (req, res, next) => {
   res.setHeader('Content-Type', metrics.contentType)
-  res.end(await metrics.metrics())
+  res.send(await metrics.metrics())
 });
 
-app.get('/healthz', async (req, res, next) => {
+app.get('/healthz', (req, res, next) => {
   res.json({'status': 'healthy'});
 });
 
