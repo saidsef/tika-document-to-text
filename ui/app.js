@@ -3,6 +3,7 @@
 const express      = require('express');
 const helmet       = require('helmet');
 const morgan       = require('morgan');
+const crypto       = require('crypto').randomBytes(16).toString("hex");
 const multer       = require('multer');
 const cors         = require('cors');
 const compression  = require('compression');
@@ -42,7 +43,7 @@ app.use(helmet({
       imgSrc: ["'self'", 'data:'],
       objectSrc: ["'self'"],
       sandbox: ['allow-forms', 'allow-scripts', 'allow-downloads'],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-hashes'", 'cdn.jsdelivr.net'],
+      scriptSrc: ["'self'", "'unsafe-inline'", `'nonce-${crypto}'`, "'unsafe-hashes'", 'cdn.jsdelivr.net'],
       styleSrc: ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
       upgradeInsecureRequests: [],
     },
@@ -56,6 +57,11 @@ app.use(helmet({
   },
 }));
 app.use(cors());
+
+app.use((req,res, next) => {
+  res.locals.nonce = crypto;
+  next();
+})
 
 app.use((req, res, next) => {
   req.setTimeout(500000);
