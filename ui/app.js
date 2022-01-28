@@ -33,6 +33,12 @@ app.use(express.urlencoded({extended: true, limit: '50mb'}));
 app.use(express.json({limit: '50mb'}));
 app.use(compression());
 app.use(morgan('combined'));
+app.use((req, res, next) => {
+  req.setTimeout((30 * 1000) + 1); // set request timeout to 30s
+  res.locals.nonce = crypto;
+  res.locals.req   = req;
+  next();
+});
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -43,9 +49,9 @@ app.use(helmet({
       imgSrc: ["'self'", 'data:'],
       objectSrc: ["'self'"],
       sandbox: ['allow-forms', 'allow-scripts', 'allow-downloads'],
-      scriptSrc: ["'self'", "'unsafe-inline'", `'nonce-${crypto}'`, "'unsafe-hashes'", 'cdn.jsdelivr.net'],
-      scriptSrcAttr: [`'nonce-${crypto}'`],
-      styleSrc: ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-hashes'", 'cdn.jsdelivr.net'],
+      scriptSrcAttr: ["'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-hashes'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
       upgradeInsecureRequests: [],
     },
   },
@@ -58,16 +64,6 @@ app.use(helmet({
   },
 }));
 app.use(cors());
-
-app.use((req,res, next) => {
-  res.locals.nonce = crypto;
-  next();
-})
-
-app.use((req, res, next) => {
-  req.setTimeout(500000);
-  next();
-});
 
 app.get('/', (req, res, next) => {
   res.render('index', {
