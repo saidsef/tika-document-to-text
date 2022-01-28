@@ -44,6 +44,7 @@ app.use(helmet({
       objectSrc: ["'self'"],
       sandbox: ['allow-forms', 'allow-scripts', 'allow-downloads'],
       scriptSrc: ["'self'", "'unsafe-inline'", `'nonce-${crypto}'`, "'unsafe-hashes'", 'cdn.jsdelivr.net'],
+      scriptSrcAttr: [`'nonce-${crypto}'`],
       styleSrc: ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
       upgradeInsecureRequests: [],
     },
