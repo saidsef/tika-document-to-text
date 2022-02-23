@@ -57,12 +57,12 @@
           doVoice();
         }
         $('#read').click(() => {
-          let text = $('#text');
+          let text = document.getSelection().toString().length ? document.getSelection().toString().toString() : $('#text');
           speechSynthesis.cancel();
           msg.voice   = speechSynthesis.getVoices()[$('#voiceselection').val()];
           msg.rate    = 1;
           msg.pitch   = 1;
-          msg.text    = text.val();
+          msg.text    = typeof(text) === 'object' ? text.val() : text;
           msg.onpause = (e) => {
             console.log('Speech paused after ' + e.elapsedTime + ' milliseconds.');
           }
@@ -73,7 +73,8 @@
             console.log('Speech finished after ' + e.elapsedTime + ' milliseconds.');
           };
           msg.onboundary = (e) => {
-            text.focus().prop({'selectionStart': e.charIndex, 'selectionEnd': e.charIndex+e.charLength, 'color': 'ff00cc', 'selectionDirection': 'forward'});
+            if (typeof(text) === 'object')
+              text.focus().prop({'selectionStart': e.charIndex, 'selectionEnd': e.charIndex+e.charLength, 'color': 'ff00cc', 'selectionDirection': 'forward'});
           }
           speechSynthesis.speak(msg);
         });
