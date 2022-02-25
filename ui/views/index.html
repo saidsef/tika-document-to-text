@@ -31,68 +31,15 @@
         <button type="button" class="btn btn-dark" id="read">Read</button>
         <button type="button" class="btn btn-secondary" onclick="$('#resume').toggle();" id="pause">Pause</button>
         <button type="button" class="btn btn-success" onclick="$('#resume').toggle();" id="resume" style="display: none;">Resume</button>
+        <a class="btn btn-info" href="#download" role="button" id="download">Download</a>
       </div>
     </form>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
-  <script type="text/javascript" nonce="${d.nonce}">
-    document.addEventListener('DOMContentLoaded', () => {
-      function doVoice() {
-        let voicelist = $('#voiceselection');
-        if (voicelist.find('option').length == 0) {
-          speechSynthesis.getVoices().forEach((voice, index) => {
-          let option = $('<option>').val(index).html(voice.name + ' (' + voice.lang + ' )' + (voice.default ? ' (default)' : ''));
-          voicelist.append(option);
-          });
-          voicelist.find(":selected").val();
-        }
-      }
-      if ('speechSynthesis' in window) {
-        let msg = new SpeechSynthesisUtterance();
-        speechSynthesis.cancel();
-        if ('onvoiceschanged' in speechSynthesis) {
-          speechSynthesis.addEventListener('voiceschanged', doVoice);
-        } else {
-          doVoice();
-        }
-        $('#read').click(() => {
-          let text = document.getSelection().toString().length ? document.getSelection().toString().toString() : $('#text');
-          speechSynthesis.cancel();
-          msg.voice   = speechSynthesis.getVoices()[$('#voiceselection').val()];
-          msg.rate    = 1;
-          msg.pitch   = 1;
-          msg.text    = typeof(text) === 'object' ? text.val() : text;
-          msg.onpause = (e) => {
-            console.log('Speech paused after ' + e.elapsedTime + ' milliseconds.');
-          }
-          msg.onresume = (e) => {
-            console.log('Speech resumed after ' + e.elapsedTime + ' milliseconds.');
-          }
-          msg.onend = (e) => {
-            console.log('Speech finished after ' + e.elapsedTime + ' milliseconds.');
-          };
-          msg.onboundary = (e) => {
-            if (typeof(text) === 'object')
-              text.focus().prop({'selectionStart': e.charIndex, 'selectionEnd': e.charIndex+e.charLength, 'color': 'ff00cc', 'selectionDirection': 'forward'});
-          }
-          speechSynthesis.speak(msg);
-        });
-        $('#pause').click(() => {
-          msg.paused = true;
-          speechSynthesis.pause();
-        });
-        $('#resume').click(() => {
-          speechSynthesis.resume();
-        });
-      }
-    }, false);
-    document.addEventListener('unload', () => {
-      window.speechSynthesis.cancel();
-    }, false);
-  </script>
+  <script src="/js/speach.js" nonce="${d.nonce}"></script>
   <footer class="card-footer">
-    <p class="text-center text-muted small">&copy; Copyright <script type="text/javascript">document.write(new Date().getFullYear())</script> saidsef. All Rights Reserved</p>
+    <p class="text-center text-muted small">&copy; Copyright ${d.copyright} saidsef. All Rights Reserved</p>
   </footer>
 </body>
 </html>
