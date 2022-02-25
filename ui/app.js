@@ -48,7 +48,7 @@ app.use(helmet({
       frameAncestors: ["'self'"],
       imgSrc: ["'self'", 'data:'],
       objectSrc: ["'self'"],
-      sandbox: ['allow-forms', 'allow-scripts', 'allow-downloads'],
+      sandbox: ['allow-forms', 'allow-scripts', 'allow-downloads', 'allow-same-origin'],
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-hashes'", 'cdn.jsdelivr.net'],
       scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-hashes'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
@@ -68,6 +68,7 @@ app.use(cors());
 app.get('/', (req, res, next) => {
   res.render('index', {
     url: req.body.url,
+    copyright: new Date().getFullYear().toString(),
     text: ''
   });
 });
@@ -93,6 +94,8 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       payload = req.body.url;
       options['headers'] = {
         'fileUrl': req.body.url,
+        'X-Tika-PDFextractInlineImages': true,
+        'X-Tika-PDFocrStrategy': "OCR_ONLY",
         'X-Tika-OCRmaxFileSizeToOcr': 0,
         'X-Tika-OCRtimeout': TIMEOUT
       };
@@ -105,7 +108,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       });
       response.on("end", () => {
         res.render('index', {
-          text: body.toString().replace(/<[^>]*>?/gm, '').trim()
+          text: body.toString().replace(/<[^>]+>?/gmi, '').replace(/\n?\s{3,}/gmi, '\n\n').trim()
         });
       });
       response.on("error", (error) => {
