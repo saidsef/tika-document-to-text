@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     function download(text) {
-      const blob = new Blob([text.val()], {type: 'plain/txt'});
-      const fileUrl = URL.createObjectURL(blob);
-      return [fileUrl, 'download.txt'];
+      const fileUrl = URL.createObjectURL(new Blob([text.val()], {type: 'plain/txt'}));
+      return [fileUrl, `download-${new Date().getMilliseconds().toString()}.txt`];
     }
     function doVoice() {
       const voicelist = $('#voiceselection');
