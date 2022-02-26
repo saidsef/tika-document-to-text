@@ -15,7 +15,7 @@ const app     = express();
 const storage = multer.memoryStorage();
 const uploads = multer({ storage: storage});
 
-const TIMEOUT   = 180000; //Milliseconds
+const TIMEOUT   = 500000; // Milliseconds
 const PORT      = process.env.PORT || 8080;
 const HOST      = process.env.HOST || 'server';
 const HOST_PORT = process.env.HOST_PORT || 7071;
@@ -34,7 +34,7 @@ app.use(express.json({limit: '50mb'}));
 app.use(compression());
 app.use(morgan('combined'));
 app.use((req, res, next) => {
-  req.setTimeout((30 * 1000) + 1); // set request timeout to 30s
+  req.setTimeout(TIMEOUT + 1); // set request timeout to 30s
   res.locals.nonce = crypto;
   res.locals.req   = req;
   next();
