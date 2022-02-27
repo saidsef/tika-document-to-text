@@ -95,12 +95,12 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       options['headers'] = {
         'fileUrl': req.body.url,
         'X-Tika-PDFextractInlineImages': true,
-        'X-Tika-PDFocrStrategy': "OCR_ONLY",
+        'X-Tika-PDFocrStrategy': "ocr_and_text_extraction",
         'X-Tika-OCRmaxFileSizeToOcr': 0,
         'X-Tika-OCRtimeout': TIMEOUT
       };
     }
-    let post = protocol.request(options, (response) => {
+    const post = protocol.request(options, (response) => {
       response.setEncoding("utf8");
       let body = '';
       response.on("data", (data) => {
@@ -108,7 +108,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       });
       response.on("end", () => {
         res.render('index', {
-          text: body.toString().replace(/<[^>]+>?/gmi, '').replace(/\n?\s{3,}/gmi, '\n\n').trim()
+          text: Buffer.from(body, 'utf-8').toString().replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim()
         });
       });
       response.on("error", (error) => {
