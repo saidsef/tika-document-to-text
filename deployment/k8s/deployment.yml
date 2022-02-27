@@ -60,7 +60,7 @@ spec:
             tcpSocket:
               port: tcp-server
             initialDelaySeconds: 10
-            periodSeconds: 5
+            periodSeconds: 7
             successThreshold: 1
             failureThreshold: 3
             timeoutSeconds: 5
@@ -100,7 +100,7 @@ spec:
           resources:
             requests:
               cpu: 50m
-              memory: 512Mi
+              memory: 624Mi
             limits:
               cpu: 100m
               memory: 1Gi
