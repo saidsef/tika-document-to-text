@@ -7,7 +7,7 @@ from json import dumps, loads
 from flask import Flask, request, jsonify, Response
 from prometheus_flask_exporter import PrometheusMetrics
 
-PORT = os.environ.get("PORT")
+PORT = os.environ.get("PORT", "7070")
 app = Flask(__name__)
 
 PrometheusMetrics(app, group_by='url_rule')
@@ -25,10 +25,10 @@ def index():
 def transform():
   if request.method == 'POST':
     j = loads(request.get_data())
-    url = j['url']
+    url = j['fileUrl']
     data = handler.handle(url)
     return Response(dumps(
-        {'url': url, 'data': data}
+        {'fileUrl': url, 'data': data}
     ), mimetype='application/json')
   else:
     return Response(dumps(
