@@ -3,13 +3,12 @@ FROM python:3-slim-stretch
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
 ENV APACHE_TIKA_VERSION 1.28.1
-ENV CLASSPATH "/opt/tika/tika-app.jar:/opt/tika/libs"
-ENV SQLITE_JDBC 3.8.9
+ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
+ENV SQLITE_JDBC 3.36.0.3
 ENV JBIG2_IMAGEIO 3.0.3
 ENV JAI_IMAGEIO_JPEG2000 1.4.0
-ENV PYTHONIOENCODING utf8
-ENV TIKA_SERVER_JAR /opt/tika/tika-app.jar
 ENV PORT ${PORT:-7070}
+ENV PYTHONIOENCODING utf8
 ENV MS 180000
 
 WORKDIR /opt/tika
