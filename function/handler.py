@@ -25,7 +25,7 @@ def handle(req):
     env = environ.copy()
     p = Popen([
         "java", "-cp",
-        "/opt/tika/tika-app.jar:/opt/tika/libs",
+        "{}".format(env['CLASSPATH']),
         "org.apache.tika.cli.TikaCLI",
         "-J", "-t",
         "{}".format(req)], stdout=PIPE, stderr=PIPE, env=env)
