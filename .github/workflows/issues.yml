@@ -7,13 +7,27 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v4
+      - uses: actions/github-script@v6
+        name: welcome
         with:
           script: |
-            github.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '👋 Welcome and Thanks for Reporting!',
+              body: '👋 Thanks for Reporting!',
               labels: ['Triage']
-            })
+            });
+            const labels = github.rest.issues.listLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number: context.issue.number
+            });
+            if (labels.length <= 0) {
+              github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['Triage']
+              });
+            }
