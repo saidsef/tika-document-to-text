@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const fileUrl = URL.createObjectURL(new Blob([text.val()], {type: 'plain/txt'}));
       return [fileUrl, `download-${new Date().getMilliseconds().toString()}.txt`];
     }
-    function doVoice() {
+    function doVoices() {
       const voicelist = $('#voiceselection');
       if (voicelist.find('option').length == 0) {
         speechSynthesis.getVoices().sort((a,b) => { return a.lang.localeCompare(a.lang); }).forEach((voice, index) => {
@@ -15,13 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if ('speechSynthesis' in window) {
       const msg = new SpeechSynthesisUtterance();
-      const d = $('#download');
-      d.hide();
-      speechSynthesis.cancel();
+      const d = $('#download'); d.hide();
+      doVoices();
       if ('onvoiceschanged' in speechSynthesis) {
-        speechSynthesis.addEventListener('voiceschanged', doVoice);
-      } else {
-        doVoice();
+        speechSynthesis.addEventListener('voiceschanged', doVoices);
       }
       $('#read').click(() => {
         const text = document.getSelection().toString().length ? document.getSelection().toString().toString() : $('#text');
@@ -31,17 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
         msg.pitch   = 1;
         msg.text    = typeof(text) === 'object' ? text.val() : text;
         msg.onpause = (e) => {
-          console.log('Speech paused after ' + e.elapsedTime + ' milliseconds.');
+          console.log(`Speech paused after ${e.elapsedTime} milliseconds.`);
         }
         msg.onresume = (e) => {
-          console.log('Speech resumed after ' + e.elapsedTime + ' milliseconds.');
+          console.log(`Speech resumed after ${e.elapsedTime} milliseconds.`);
         }
         msg.onend = (e) => {
-          console.log('Speech finished after ' + e.elapsedTime + ' milliseconds.');
+          console.log(`Speech finished after ${e.elapsedTime} milliseconds.`);
         };
         msg.onboundary = (e) => {
           if (typeof(text) === 'object')
-            text.focus().prop({'selectionStart': e.charIndex, 'selectionEnd': e.charIndex+e.charLength, 'color': 'ff00cc', 'selectionDirection': 'forward'});
+            text.focus().prop({'selectionStart': e.charIndex, 'selectionEnd': (e.charIndex+e.charLength+1), 'color': 'ff00cc', 'selectionDirection': 'forward'});
         }
         speechSynthesis.speak(msg);
 
