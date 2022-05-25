@@ -27,12 +27,12 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Python ${{ matrix.python-version }} setup
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: pip install
@@ -42,7 +42,7 @@ jobs:
         pip install flake8
         flake8 . --count --show-source --statistics --ignore=E111,E501 --exit-zero --output-file=flake8tmp.txt
     # - name: Initialize CodeQL
-    #   uses: github/codeql-action/init@v1
+    #   uses: github/codeql-action/init@v2
     #   with:
     #     languages: python
     #     setup-python-dependencies: false
@@ -55,7 +55,7 @@ jobs:
     needs: [python-test]
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Set Tag Name
       run: |
         echo "TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
@@ -122,10 +122,11 @@ jobs:
         template: '@/contrib/sarif.tpl'
         output: 'trivy-results.sarif'
     - name: Upload Trivy scan results to GitHub Security tab - Server
-      uses: github/codeql-action/upload-sarif@v1
+      uses: github/codeql-action/upload-sarif@v2
       if: success()
       with:
         sarif_file: 'trivy-results.sarif'
+        category: 'Trivy'
 
   k8s-test:
     runs-on: ubuntu-latest
@@ -135,7 +136,7 @@ jobs:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.2.0
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run K8s test
         run: |
           kubectl cluster-info
@@ -153,7 +154,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - uses: hmarr/auto-approve-action@v2
       with:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
