@@ -15,7 +15,12 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"dbaeumer.vscode-eslint"
+		"dbaeumer.vscode-eslint",
+		"GitHub.vscode-pull-request-github",
+		"GitHub.codespaces",
+		"GitHub.copilot",
+		"ms-vscode.remote-repositories",
+		"MS-vsliveshare.vsliveshare"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -29,6 +34,7 @@
 	"features": {
 		"kubectl-helm-minikube": "1.21",
 		"git": "latest",
+		"github-cli": "latest",
 		"python": "3.9"
 	}
 }
