@@ -11,7 +11,17 @@
 	},
 
 	// Set *default* container specific settings.json values on container create.
-	"settings": {},
+	"settings": {
+		"extensions.ignoreRecommendations": true,
+		"extensions.closeExtensionDetailsOnViewChange": true
+	},
+
+	"containerEnv": {
+		"AWS_DEFAULT_REGION": "${localEnv:AWS_DEFAULT_REGION}",
+		"AWS_ACCESS_KEY_ID": "${localEnv:AWS_ACCESS_KEY_ID}",
+		"AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}",
+		"AWS_SESSION_TOKEN": "${localEnv:AWS_SESSION_TOKEN}"
+	},
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
@@ -20,7 +30,10 @@
 		"GitHub.codespaces",
 		"GitHub.copilot",
 		"ms-vscode.remote-repositories",
-		"MS-vsliveshare.vsliveshare"
+		"MS-vsliveshare.vsliveshare",
+		"ms-azuretools.vscode-docker",
+		"redhat.vscode-yaml",
+		"ms-kubernetes-tools.vscode-kubernetes-tools"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
