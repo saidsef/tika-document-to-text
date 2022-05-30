@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/java/jre:17-zulu-alpine
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
-ENV APACHE_TIKA_VERSION 1.28.2
+ENV APACHE_TIKA_VERSION 1.28.3
 ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
 ENV SQLITE_JDBC 3.36.0.3
 ENV JBIG2_IMAGEIO 3.0.4
@@ -12,6 +12,8 @@ ENV PROMETHEUS_JMX_JAR_VERSION 0.16.1
 ENV PORT ${PORT:-7071}
 ENV PORT_METRICS ${PORT_METRICS:-7072}
 ENV MS 180000
+ENV XMS ${XMS:-2g}
+ENV XMX ${XMX:-2g}
 
 WORKDIR /opt/tika
 
@@ -42,4 +44,4 @@ EXPOSE ${PORT} 7072
 
 HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
-CMD ["sh", "-c","/usr/bin/java -Xms2g -Xmx2g -XX:MaxMetaspaceSize=512M -Xss2048K -XX:MaxDirectMemorySize=512M -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h '*' -p $PORT"]
+CMD ["sh", "-c","/usr/bin/java -Xms$XMS -Xmx$XMX -XX:MaxMetaspaceSize=512M -Xss2048K -XX:MaxDirectMemorySize=512M -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h '*' -p $PORT"]
