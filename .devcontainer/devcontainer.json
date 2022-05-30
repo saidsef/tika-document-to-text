@@ -12,8 +12,13 @@
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
+		"extensions.closeExtensionDetailsOnViewChange": true,
 		"extensions.ignoreRecommendations": true,
-		"extensions.closeExtensionDetailsOnViewChange": true
+		"javascript.autoClosingTags": true,
+		"javascript.format.enable": true,
+		"javascript.referencesCodeLens.enabled": true,
+		"javascript.suggest.enabled": true,
+		"javascript.validate.enable": true
 	},
 
 	"containerEnv": {
