@@ -18,7 +18,11 @@
 		"javascript.format.enable": true,
 		"javascript.referencesCodeLens.enabled": true,
 		"javascript.suggest.enabled": true,
-		"javascript.validate.enable": true
+		"javascript.validate.enable": true,
+		"html.autoClosingTags": true,
+		"html.format.enable": true,
+		"html.suggest.html5": true,
+		"redhat.telemetry.enabled": false
 	},
 
 	"containerEnv": {
@@ -42,16 +46,18 @@
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
+	"postCreateCommand": "cd ui && yarn install",
 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "node",
 	"features": {
-		"kubectl-helm-minikube": "1.21",
-		"git": "latest",
+		"kubectl-helm-minikube": {
+			"version": "1.21",
+			"helm": "none"
+		},
 		"github-cli": "latest",
 		"python": "3.9"
 	}
