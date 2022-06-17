@@ -2,6 +2,7 @@ name: New issues into Triage
 on:
   issues:
     types: [opened]
+  workflow_dispatch:
 
 jobs:
   comment:

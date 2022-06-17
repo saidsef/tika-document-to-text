@@ -59,13 +59,14 @@ spec:
           livenessProbe:
             tcpSocket:
               port: tcp-server
-            initialDelaySeconds: 10
+            initialDelaySeconds: 5
             periodSeconds: 7
             successThreshold: 1
             failureThreshold: 3
             timeoutSeconds: 5
           readinessProbe:
-            tcpSocket:
+            httpGet:
+              path: /
               port: tcp-server
             initialDelaySeconds: 10
             periodSeconds: 5
