@@ -115,7 +115,7 @@ jobs:
         push: true
         tags: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:ui-${{ env.TAG == 'main' && 'latest' || env.TAG }}
     - name: Run Trivy vulnerability scanner - (Server)
-      uses: aquasecurity/trivy-action@v0.3.0
+      uses: aquasecurity/trivy-action@master
       if: success()
       with:
         image-ref: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:server-${{ env.TAG == 'main' && 'latest' || env.TAG }}
