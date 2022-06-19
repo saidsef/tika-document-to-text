@@ -108,7 +108,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       });
       response.on("end", () => {
         res.render('index', {
-          text: Buffer.from(body, 'utf-8').toString().replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim()
+          text: Buffer.from(body, 'utf8').toString().replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').replace(/[^\x20-\x7E]/g, '').trim()
         });
       });
       response.on("error", (error) => {
