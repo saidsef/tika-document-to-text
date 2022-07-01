@@ -14,14 +14,16 @@
 	"settings": {
 		"extensions.closeExtensionDetailsOnViewChange": true,
 		"extensions.ignoreRecommendations": true,
+		"html.autoClosingTags": true,
+		"html.format.enable": true,
+		"html.suggest.html5": true,
 		"javascript.autoClosingTags": true,
 		"javascript.format.enable": true,
 		"javascript.referencesCodeLens.enabled": true,
 		"javascript.suggest.enabled": true,
 		"javascript.validate.enable": true,
-		"html.autoClosingTags": true,
-		"html.format.enable": true,
-		"html.suggest.html5": true,
+		"vscode-kubernetes.helm-path.linux": "/usr/local/bin/helm",
+		"vscode-kubernetes.kubectl-path.linux": "/usr/local/bin/kubectl",
 		"redhat.telemetry.enabled": false
 	},
 
@@ -31,33 +33,23 @@
 		"AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}",
 		"AWS_SESSION_TOKEN": "${localEnv:AWS_SESSION_TOKEN}"
 	},
-
-	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"dbaeumer.vscode-eslint",
 		"GitHub.vscode-pull-request-github",
 		"GitHub.codespaces",
-		"GitHub.copilot",
 		"ms-vscode.remote-repositories",
 		"MS-vsliveshare.vsliveshare",
-		"ms-azuretools.vscode-docker",
 		"redhat.vscode-yaml",
 		"ms-kubernetes-tools.vscode-kubernetes-tools"
 	],
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "cd ui && yarn install",
-
-	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "node",
 	"features": {
 		"kubectl-helm-minikube": {
-			"version": "1.21"
+			"version": "1.21",
+			"minikube": "none"
 		},
-		"github-cli": "latest",
 		"python": "3.9"
 	}
 }
