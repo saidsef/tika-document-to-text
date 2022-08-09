@@ -13,6 +13,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  contents: write
   id-token: write
   repository-projects: write
 
