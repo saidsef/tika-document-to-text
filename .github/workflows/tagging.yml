@@ -17,6 +17,10 @@ on:
 env:
   COMMIT_MSG: ${{ github.event.head_commit.message }}
 
+permissions:
+  id-token: write
+  repository-projects: write
+
 jobs:
   tagging:
     runs-on: ubuntu-latest
