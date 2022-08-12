@@ -33,7 +33,7 @@ jobs:
     - name: Check out repository code
       uses: actions/checkout@v3
     - name: Python ${{ matrix.python-version }} setup
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: pip install
@@ -119,7 +119,6 @@ jobs:
       with:
         sarif_file: 'trivy-results.sarif'
         category: 'Trivy'
-
   k8s-test:
     runs-on: ubuntu-latest
     needs: [build]
@@ -142,7 +141,6 @@ jobs:
           kubectl create namespace $NS
           kubectl kustomize deployment/ | kubectl apply -f -
           kubectl get all -n $NS
-
   auto-approve:
     runs-on: ubuntu-latest
     needs: [python-test, build, k8s-test]
