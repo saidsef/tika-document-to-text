@@ -1,0 +1,39 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../k8s/deployment.yml
+- ../k8s/hpa.yml
+- ../k8s/service.yml
+- ../k8s/ingress.yml
+
+patchesJSON6902:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: tika-ui
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/image
+      value: ghcr.io/saidsef/tika-document-to-text:server-merge
+    - op: replace
+      path: /spec/template/spec/containers/1/image
+      value: ghcr.io/saidsef/tika-document-to-text:ui-merge
+
+vars:
+- fieldref: {}
+  name: HOST
+  objref:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    name: tika-ui
+
+patches:
+- target:
+    kind: Ingress
+    name: tika-ui
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: merge.saidsef.co.uk
