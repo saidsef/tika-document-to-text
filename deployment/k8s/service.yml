@@ -3,7 +3,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tika-ui
-  namespace: web
   labels:
     app: ui
     tier: frontend

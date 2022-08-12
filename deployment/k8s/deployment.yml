@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tika-ui
-  namespace: web
   labels:
     name: tika-ui
     app: ui
