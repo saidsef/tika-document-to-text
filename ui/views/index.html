@@ -12,34 +12,37 @@
 <body class="container-fluid" itemscope itemtype="https://schema.org/WebPage">
   <div class="container-fluid">
     <form action="" method="post" enctype="multipart/form-data">
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="url">Enter URL: </label>
-          <input id="url" type="text" class="form-control" name="url" x-webkit-speech="x-webkit-speech" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
-        </div>
-        <div class="custom-file">
-          <label class="custom-file-label" for="doc" lang="en-GB"><small>(or)</small> Upload File:</label>
-          <input type="file" class="custom-file-input" id="doc" name="doc" />
-        </div>
+      <div class="mb-3">
+        <label class="form-label" for="url">Enter URL: </label>
+        <input id="url" type="text" class="form-control" name="url" x-webkit-speech="x-webkit-speech" value="${(typeof d.url === 'undefined') ? '' : d.url}" placerholder="Object URL" />
       </div>
-      <div class="modal-body">
+      <div class="mb-3">
+        <label class="form-label" for="doc" lang="en-GB"><small>(or)</small> Upload File:</label>
+        <input type="file" class="form-control" id="doc" name="doc" />
+      </div>
+      <div class="mb-3">
         <textarea x-webkit-speech="x-webkit-speech" id="text" name="text" class="form-control" aria-label="With textarea" rows="20">${(typeof d.text === 'undefined') ? '' : d.text }</textarea>
       </div>
-      <div class="modal-footer">
-        <select class="custom-select mr-sm-2" id="voiceselection" data-live-search="true"></select>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-dark" id="read">Read</button>
-        <button type="button" class="btn btn-secondary" onclick="$('#resume').toggle();" id="pause">Pause</button>
-        <button type="button" class="btn btn-success" onclick="$('#resume').toggle();" id="resume" style="display: none;">Resume</button>
-        <a class="btn btn-info" href="#download" role="button" id="download">Download</a>
+      <hr class="bg-grey border-2 border-top border-grey">
+      <div class="mb-3">
+          <select class="form-select" id="voiceselection" data-live-search="true"></select>
+      </div>
+      <div class="mb-3">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="button" class="btn btn-dark" id="read">Read</button>
+          <button type="button" class="btn btn-secondary" onclick="$('#resume').toggle();" id="pause">Pause</button>
+          <button type="button" class="btn btn-success" onclick="$('#resume').toggle();" id="resume" style="display: none;">Resume</button>
+          <a class="btn btn-info" href="#download" role="button" id="download">Download</a>
+        </div>
       </div>
     </form>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   <script src="/js/speach.js" nonce="${d.nonce}"></script>
-  <footer class="card-footer">
-    <p class="text-center text-muted small">&copy; Copyright ${d.copyright} saidsef. All Rights Reserved</p>
-  </footer>
+  <div class="card-footer text-center">
+    <small class="text-muted">&copy; Copyright ${d.copyright} saidsef. All Rights Reserved</small>
+  </div>
 </body>
 </html>
