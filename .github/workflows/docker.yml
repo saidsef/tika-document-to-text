@@ -81,6 +81,8 @@ jobs:
         pull: true
         push: true
         tags: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:${{ env.TAG == 'main' && 'latest' || env.TAG }}
+        cache-from: type=registry,ref=ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:${{ env.TAG == 'main' && 'latest' || env.TAG }}
+        cache-to: type=inline
     - name: Build and push Docker image - (Server)
       uses: docker/build-push-action@v3
       if: success()
@@ -93,6 +95,8 @@ jobs:
         pull: true
         push: true
         tags: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:server-${{ env.TAG == 'main' && 'latest' || env.TAG }}
+        cache-from: type=registry,ref=ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:server-${{ env.TAG == 'main' && 'latest' || env.TAG }}
+        cache-to: type=inline
     - name: Build and push Docker image - (UI)
       uses: docker/build-push-action@v3
       if: success()
@@ -105,6 +109,8 @@ jobs:
         pull: true
         push: true
         tags: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:ui-${{ env.TAG == 'main' && 'latest' || env.TAG }}
+        cache-from: type=registry,ref=ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:ui-${{ env.TAG == 'main' && 'latest' || env.TAG }}
+        cache-to: type=inline
     - name: Run Trivy vulnerability scanner - (Server)
       uses: aquasecurity/trivy-action@master
       if: success()
@@ -140,7 +146,7 @@ jobs:
           fi
           kubectl create namespace $NS
           kubectl kustomize deployment/ | kubectl apply -f -
-          kubectl get all -n $NS
+          kubectl get all -A
 
   auto-approve:
     runs-on: ubuntu-latest
