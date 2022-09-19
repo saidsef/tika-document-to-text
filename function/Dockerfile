@@ -1,8 +1,8 @@
-FROM python:3-slim-stretch
+FROM docker.io/python:3.9-buster
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
-ENV APACHE_TIKA_VERSION 1.28.4
+ENV APACHE_TIKA_VERSION 1.28.5
 ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
 ENV SQLITE_JDBC 3.36.0.3
 ENV JBIG2_IMAGEIO 3.0.4
@@ -17,7 +17,7 @@ COPY . /opt/tika
 # https://mvnrepository.com/artifact/org.apache.tika
 RUN apt-get update && \
     mkdir -p /usr/share/man/man1 /opt/tika/libs && \
-    apt-get install -yy openjdk-8-jre-headless curl && \
+    apt-get install -yy openjdk-11-jre-headless curl && \
     curl -vSL https://archive.apache.org/dist/tika/${APACHE_TIKA_VERSION}/tika-app-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-app.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-xmp/${APACHE_TIKA_VERSION}/tika-xmp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-xmp.jar && \
