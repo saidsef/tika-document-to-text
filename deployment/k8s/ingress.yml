@@ -11,6 +11,10 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       server_tokens off;
+      location /metrics {
+        deny all;
+        return 301 /;
+      }
 spec:
   rules:
   - host: $(HOST)
