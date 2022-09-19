@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:18-alpine3.15
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
@@ -26,7 +26,7 @@ RUN apk add --update --no-cache curl && \
 USER nobody
 
 # Health check endpoint
-HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost:${PORT}/healthz || exit 1
+HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://localhost:${PORT}/healthz || exit 1
 
 EXPOSE ${PORT}
 
