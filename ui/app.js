@@ -21,8 +21,9 @@ const HOST      = process.env.HOST || 'server';
 const HOST_PORT = process.env.HOST_PORT || 7071;
 const protocol  = (process.env.PROTOCOL == 'https') ? require('https') : require('http');
 
-const metrics = new Prometheus.Registry();
-Prometheus.collectDefaultMetrics({ metrics });
+const collectDefaultMetrics = Prometheus.collectDefaultMetrics;
+collectDefaultMetrics()
+
 
 app.enable('trust proxy');
 app.set('view engine', 'html');
@@ -123,8 +124,8 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
 });
 
 app.get('/metrics', async (req, res, next) => {
-  res.setHeader('Content-Type', metrics.contentType)
-  res.send(await metrics.metrics())
+  res.setHeader('Content-Type', Prometheus.register.contentType)
+  res.send(await Prometheus.register.metrics())
 });
 
 app.get('/healthz', (req, res, next) => {
