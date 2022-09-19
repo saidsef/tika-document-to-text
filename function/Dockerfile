@@ -1,8 +1,8 @@
-FROM python:3-slim-stretch
+FROM python:3.9-buster
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
-ENV APACHE_TIKA_VERSION 1.28.4
+ENV APACHE_TIKA_VERSION 1.28.5
 ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
 ENV SQLITE_JDBC 3.36.0.3
 ENV JBIG2_IMAGEIO 3.0.4
