@@ -133,7 +133,7 @@ jobs:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.3.0
         with:
-          node_image: "kindest/node:v1.24.0"
+          node_image: "kindest/node:v1.24.4"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run K8s test
