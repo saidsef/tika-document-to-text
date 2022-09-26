@@ -1,4 +1,4 @@
-FROM docker.io/openjdk:20-jdk-slim-buster
+FROM docker.io/openjdk:18-jdk-slim-buster
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
@@ -44,4 +44,4 @@ EXPOSE ${PORT} ${PORT_METRICS}
 
 HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
-CMD ["sh", "-c","/usr/local/openjdk-20/bin/java -Xms$XMS -Xmx$XMX -XX:MaxMetaspaceSize=512M -Xss2048K -XX:MaxDirectMemorySize=512M -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h '*' -p $PORT"]
+CMD ["sh", "-c","/usr/local/openjdk-18/bin/java -Xms$XMS -Xmx$XMX -XX:MaxMetaspaceSize=512M -Xss2048K -XX:MaxDirectMemorySize=512M -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h '*' -p $PORT"]
