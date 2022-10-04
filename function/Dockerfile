@@ -4,7 +4,7 @@ LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
 ENV APACHE_TIKA_VERSION 1.28.5
 ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
-ENV SQLITE_JDBC 3.36.0.3
+ENV SQLITE_JDBC 3.39.3.0
 ENV JBIG2_IMAGEIO 3.0.4
 ENV JAI_IMAGEIO_JPEG2000 1.4.0
 ENV PORT ${PORT:-7070}
@@ -32,10 +32,13 @@ RUN apt-get update && \
     apt-get purge -yy curl && apt-get autoremove -yy && \
     rm -rf /var/cache/apt/* /tmp/* && \
     pip install --no-cache-dir -r requirements.txt && \
-    chmod a+x /opt/tika/index.py /opt/tika/handler.py
+    chmod a+x /opt/tika/index.py /opt/tika/handler.py && \
+    chown nobody -R /opt/tika
+
+USER nobody
 
 EXPOSE ${PORT}
 
-HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
+HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
 CMD ["python3", "index.py"]
