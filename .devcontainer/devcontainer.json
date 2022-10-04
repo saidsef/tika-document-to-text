@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.234.0/containers/javascript-node
 {
-	"name": "Node.js",
+	"name": "Dev",
 	"build": {
 		"dockerfile": "Dockerfile",
 		// Update 'VARIANT' to pick a Node version: 18, 16, 14.
@@ -50,6 +50,6 @@
 			"version": "1.23",
 			"minikube": "none"
 		},
-		"python": "3.9"
+		"python": "3.10"
 	}
 }
