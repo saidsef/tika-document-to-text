@@ -94,7 +94,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
     }
     if (req.body.url && req.body.url.length > 5) {
       payload = req.body.url;
-      if (typeof payload != 'string' || ! URL(payload)) {
+      if (typeof payload != 'string' || ! new URL(payload)) {
         throw new Error('Not a valid urls');
       }
 
