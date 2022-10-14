@@ -10,6 +10,7 @@ const compression  = require('compression');
 const Prometheus   = require('prom-client');
 const tl           = require('./libs/render');
 const errorHandler = require('./libs/express-error');
+const URL          = require('url').URL
 
 const app     = express();
 const storage = multer.memoryStorage();
@@ -93,8 +94,12 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
     }
     if (req.body.url && req.body.url.length > 5) {
       payload = req.body.url;
+      if (typeof payload != 'string' || ! URL(payload)) {
+        throw new Error('Not a valid urls');
+      }
+
       options['headers'] = {
-        'fileUrl': req.body.url,
+        'fileUrl': payload,
         'X-Tika-PDFextractInlineImages': true,
         'X-Tika-PDFocrStrategy': "ocr_and_text_extraction",
         'X-Tika-OCRmaxFileSizeToOcr': 0,
