@@ -7,6 +7,7 @@ const HOST_PORT = process.env.HOST_PORT || 7071;
 const protocol  = (process.env.PROTOCOL == 'https') ? require('https') : require('http');
 const FILES_DESTINATION = process.env.FILES_DESTINATION || '/app/storage';
 
+const fs           = require('fs');
 const express      = require('express');
 const helmet       = require('helmet');
 const morgan       = require('morgan');
@@ -92,10 +93,14 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       encoding: null
     };
     if (req.file) {
-      payload = req.file.buffer;
-      options['headers'] = {
-        'Content-Type': req.file.mimetype
-      };
+      fileBuffer = fs.readFileSync(req.file, { encoding: 'utf8' })
+      payload = fileBuffer;
+
+      if (req.file.mimetype) {
+        options['headers'] = {
+          'Content-Type': req.file.mimetype
+        };
+      }
     }
     if (req.body.url && req.body.url.length > 5) {
       payload = req.body.url;
