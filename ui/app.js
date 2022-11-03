@@ -13,8 +13,7 @@ const errorHandler = require('./libs/express-error');
 const URL          = require('url').URL
 
 const app     = express();
-const storage = multer.memoryStorage();
-const uploads = multer({ storage: storage});
+const uploads = multer({ storage: "/app/storage" });
 
 const TIMEOUT   = 500000; // Milliseconds
 const PORT      = process.env.PORT || 8080;
