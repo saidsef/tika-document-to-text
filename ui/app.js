@@ -93,7 +93,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       encoding: null
     };
     if (req.file) {
-      fileBuffer = fs.readFileSync(req.file, { encoding: 'utf8' })
+      fileBuffer = fs.readFileSync(req.file.path, { encoding: 'utf8' })
       payload = fileBuffer;
 
       if (req.file.mimetype) {
