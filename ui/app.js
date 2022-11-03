@@ -1,13 +1,5 @@
 'use strict';
 
-const TIMEOUT   = 500000; // Milliseconds
-const PORT      = process.env.PORT || 8080;
-const HOST      = process.env.HOST || 'server';
-const HOST_PORT = process.env.HOST_PORT || 7071;
-const protocol  = (process.env.PROTOCOL == 'https') ? require('https') : require('http');
-const FILES_DESTINATION = process.env.FILES_DESTINATION || '/app/storage';
-
-const fs           = require('fs');
 const express      = require('express');
 const helmet       = require('helmet');
 const morgan       = require('morgan');
@@ -21,12 +13,14 @@ const errorHandler = require('./libs/express-error');
 const URL          = require('url').URL
 
 const app     = express();
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, FILES_DESTINATION)
-  }
-});
-const uploads = multer({ storage: storage });
+const storage = multer.memoryStorage();
+const uploads = multer({ storage: storage});
+
+const TIMEOUT   = 500000; // Milliseconds
+const PORT      = process.env.PORT || 8080;
+const HOST      = process.env.HOST || 'server';
+const HOST_PORT = process.env.HOST_PORT || 7071;
+const protocol  = (process.env.PROTOCOL == 'https') ? require('https') : require('http');
 
 const collectDefaultMetrics = Prometheus.collectDefaultMetrics;
 collectDefaultMetrics()
@@ -93,14 +87,10 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       encoding: null
     };
     if (req.file) {
-      let fileBuffer = fs.readFileSync(req.file.path, { encoding: 'utf8' })
-      payload = fileBuffer;
-
-      if (req.file.mimetype) {
-        options['headers'] = {
-          'Content-Type': req.file.mimetype
-        };
-      }
+      payload = req.file.buffer;
+      options['headers'] = {
+        'Content-Type': req.file.mimetype
+      };
     }
     if (req.body.url && req.body.url.length > 5) {
       payload = req.body.url;
