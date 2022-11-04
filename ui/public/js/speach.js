@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const text = speech.getSelection($('#text'));
       speechSynthesis.cancel();
       msg.voice   = speechSynthesis.getVoices()[$('#voiceselection').find(":selected").val()];
-      msg.rate    = 0.8;
+      msg.rate    = 0.9;
       msg.pitch   = 1;
       msg.text    = typeof(text) === 'object' ? text.val() : text;
       msg.onpause = (e) => {
