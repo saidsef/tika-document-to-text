@@ -94,7 +94,7 @@ spec:
                 - NET_BIND_SERVICE
           volumeMounts:
             - name: data
-              mountPath: "/opt/tika/tmp"
+              mountPath: "/tmp"
               subPath: tmp
         - name: ui
           image: ghcr.io/saidsef/tika-document-to-text:ui-latest
