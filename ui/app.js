@@ -76,6 +76,9 @@ app.get('/', (req, res, next) => {
 });
 
 app.post('/', uploads.single('doc'), (req, res, next) => {
+  if (!req.body.csrf_token) {
+    return req.json({'status' : 'csrf token not included'});
+  }
   if (req.file || req.body.url) {
     let payload = '';
     let options = {
