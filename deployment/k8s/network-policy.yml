@@ -9,6 +9,11 @@ spec:
       app: ui
   policyTypes:
     - Egress
+    - Ingress
+  ingress:
+    - ports:
+       - protocol: TCP
+         port: 8080
   egress:
     - to:
        - podSelector:
