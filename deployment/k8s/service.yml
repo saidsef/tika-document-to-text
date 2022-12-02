@@ -12,10 +12,6 @@ spec:
   selector:
     app: ui
   ports:
-  - name: server-monitor
-    protocol: TCP
-    port: 7072
-    targetPort: 7072
   - name: server
     protocol: TCP
     port: 7071
