@@ -31,7 +31,7 @@ app.set('view engine', 'html');
 app.set('views', './views');
 app.engine('html', tl);
 app.use(express.static(__dirname + '/public'));
-app.use(express.urlencoded({extended: true, limit: '50mb'})); 
+app.use(express.urlencoded({extended: true, limit: '50mb'}));
 app.use(express.json({limit: '50mb'}));
 app.use(compression());
 app.use(morgan('combined'));

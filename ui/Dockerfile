@@ -22,11 +22,11 @@ RUN apk add --update --no-cache curl && \
     yarn autoclean --init && \
     yarn autoclean --force && \
     chown -R nobody .
-    
+
 USER nobody
 
 # Health check endpoint
-HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://localhost:${PORT}/healthz || exit 1
+HEALTHCHECK --interval=120s --timeout=10s CMD curl --fail http://localhost:${PORT}/healthz || exit 1
 
 EXPOSE ${PORT}
 
