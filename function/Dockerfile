@@ -32,6 +32,7 @@ RUN apt-get update && \
     apt-get purge -yy curl && apt-get autoremove -yy && \
     rm -rf /var/cache/apt/* /tmp/* && \
     pip install --no-cache-dir -r requirements.txt && \
+    fc-cache -f && \
     chmod a+x /opt/tika/index.py /opt/tika/handler.py && \
     chown nobody -R /opt/tika
 

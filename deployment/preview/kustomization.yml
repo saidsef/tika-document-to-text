@@ -9,7 +9,6 @@ resources:
 
 commonAnnotations:
   app.kubernetes.io/created-by: kustomizer
-  app.kubernetes.io/part-of: tika-ui-preview
   cluster-autoscaler.kubernetes.io/enable-ds-eviction: "false"
   cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
   endpointslice.kubernetes.io/managed-by: controller
