@@ -3,10 +3,12 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: ui-deny-backend-egress
+  labels:
+    app.kubernetes.io/name: tika-ui
 spec:
   podSelector:
     matchLabels:
-      app: ui
+      app.kubernetes.io/name: tika-ui
   policyTypes:
     - Egress
     - Ingress
@@ -18,4 +20,4 @@ spec:
     - to:
        - podSelector:
            matchLabels:
-             app: ui
+             app.kubernetes.io/name: tika-ui

@@ -4,8 +4,7 @@ kind: Deployment
 metadata:
   name: tika-ui
   labels:
-    name: tika-ui
-    app: ui
+    app.kubernetes.io/name: tika-ui
 spec:
   replicas: 1
   revisionHistoryLimit: 1
@@ -15,14 +14,14 @@ spec:
       maxSurge: 1
   selector:
     matchLabels:
-      app: ui
+      app.kubernetes.io/name: tika-ui
   template:
     metadata:
       annotations:
         prometheus.io/scrape: 'true'
         filter.by.port.name: 'true'
       labels:
-        app: ui
+        app.kubernetes.io/name: tika-ui
     spec:
       automountServiceAccountToken: false
       dnsPolicy: ClusterFirst
@@ -59,6 +58,11 @@ spec:
         - name: server
           image: ghcr.io/saidsef/tika-document-to-text:server-latest
           imagePullPolicy: Always
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
           ports:
           - name: tcp-server
             containerPort: 7071
@@ -68,18 +72,18 @@ spec:
             protocol: TCP
           resources:
             requests:
-              cpu: 250m
+              cpu: 300m
               memory: 2Gi
               ephemeral-storage: 1Gi
             limits:
-              cpu: 400m
+              cpu: 300m
               memory: 2Gi
               ephemeral-storage: 1Gi
           livenessProbe:
             tcpSocket:
               port: tcp-server
-            initialDelaySeconds: 10
-            periodSeconds: 5
+            initialDelaySeconds: 20
+            periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
             timeoutSeconds: 5
@@ -87,8 +91,8 @@ spec:
             httpGet:
               path: /
               port: tcp-server
-            initialDelaySeconds: 10
-            periodSeconds: 5
+            initialDelaySeconds: 20
+            periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
             timeoutSeconds: 5
@@ -109,7 +113,9 @@ spec:
           imagePullPolicy: Always
           env:
           - name: HOST
-            value: "127.0.0.1"
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
           - name: HOST_PORT
             value: "7071"
           ports:
@@ -122,7 +128,7 @@ spec:
               memory: 624Mi
               ephemeral-storage: 1Gi
             limits:
-              cpu: 100m
+              cpu: 50m
               memory: 1Gi
               ephemeral-storage: 1Gi
           livenessProbe:

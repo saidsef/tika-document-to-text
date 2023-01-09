@@ -15,7 +15,7 @@ spec:
   source:
     path: deployment
     repoURL: https://github.com/saidsef/faas-convert-to-text.git
-    targetRevision: v2022.01
+    targetRevision: v2023.01
   syncPolicy:
     automated:
       prune: true

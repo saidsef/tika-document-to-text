@@ -4,13 +4,17 @@ kind: Service
 metadata:
   name: tika-ui
   labels:
-    app: ui
-    tier: frontend
+    app.kubernetes.io/name: tika-ui
+    app.kubernetes.io/tier: frontend
 spec:
   type: ClusterIP
+  clusterIP: None
   sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 60
   selector:
-    app: ui
+    app.kubernetes.io/name: tika-ui
   ports:
   - name: server
     protocol: TCP

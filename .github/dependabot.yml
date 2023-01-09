@@ -6,13 +6,13 @@ updates:
       interval: "weekly"
     pull-request-branch-name:
       separator: "-"
-  - package-ecosystem: "pip"
-    directory: "/function"
+  - package-ecosystem: "docker"
+    directory: "/"
     schedule:
       interval: "weekly"
     pull-request-branch-name:
       separator: "-"
-  - package-ecosystem: "docker"
+  - package-ecosystem: "pip"
     directory: "/function"
     schedule:
       interval: "weekly"
