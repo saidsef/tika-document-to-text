@@ -3,26 +3,29 @@ FROM docker.io/openjdk:18-jdk-slim-buster
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
 ENV APACHE_TIKA_VERSION 1.28.5
-ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
-ENV SQLITE_JDBC 3.39.3.0
-ENV JBIG2_IMAGEIO 3.0.4
+ENV CLASSPATH "/opt/tika/libs:/opt/tika/tika-server.jar"
 ENV JAI_IMAGEIO_JPEG2000 1.4.0
-ENV TIKA_SERVER_JAR /opt/tika/tika-server.jar
-ENV PROMETHEUS_JMX_JAR_VERSION 0.17.2
+ENV JBIG2_IMAGEIO 3.0.4
+ENV MS 180000
+ENV POD_IP ${POD_IP:-0.0.0.0}
 ENV PORT ${PORT:-7071}
 ENV PORT_METRICS ${PORT_METRICS:-7072}
-ENV MS 180000
+ENV PROMETHEUS_JMX_JAR_VERSION 0.17.2
+ENV SQLITE_JDBC 3.40.0.0
+ENV TIKA_SERVER_JAR /opt/tika/tika-server.jar
 ENV XMS ${XMS:-2g}
 ENV XMX ${XMX:-2g}
 
 WORKDIR /opt/tika
 
-COPY prometheus-jmx-config.yaml /opt/tika
+COPY prometheus-jmx-config.yaml tika-config.xml /opt/tika/
 
 # https://mvnrepository.com/artifact/org.apache.tika
 RUN mkdir -p /opt/tika/libs && \
     apt-get update && \
-    apt-get install -yq curl tesseract-ocr tesseract-ocr-all && \
+    apt-get upgrade -y
+
+RUN apt-get install -yq curl tesseract-ocr tesseract-ocr-all && \
     curl -vSL https://archive.apache.org/dist/tika/${APACHE_TIKA_VERSION}/tika-server-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-server.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-xmp/${APACHE_TIKA_VERSION}/tika-xmp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-xmp.jar && \
@@ -43,6 +46,6 @@ USER nobody
 
 EXPOSE ${PORT} ${PORT_METRICS}
 
-HEALTHCHECK --interval=30s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
+HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
-CMD ["sh", "-c","/usr/local/openjdk-18/bin/java -Xms$XMS -Xmx$XMX -XX:MaxMetaspaceSize=512M -Xss2048K -XX:MaxDirectMemorySize=512M -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h '*' -p $PORT"]
+CMD ["sh", "-c","$JAVA_HOME/bin/java -Xms$XMS -Xmx$XMX -XX:+UseG1GC -Xlog:gc:/tmp/gc.log -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli --config tika-config.xml -status -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h $POD_IP -p $PORT"]

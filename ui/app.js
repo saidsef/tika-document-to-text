@@ -106,6 +106,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
         'X-Tika-PDFextractInlineImages': true,
         'X-Tika-PDFocrStrategy': "ocr_and_text_extraction",
         'X-Tika-OCRmaxFileSizeToOcr': 0,
+        'X-Tika-Skip-Embedded': true,
         'X-Tika-OCRtimeout': TIMEOUT
       };
     }
@@ -117,7 +118,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       });
       response.on("end", () => {
         res.render('index', {
-          text: Buffer.from(body, 'utf8').toString().replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim().substring(1)
+          text: Buffer.from(body, 'utf8').toString().replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim()
         });
       });
       response.on("error", (error) => {

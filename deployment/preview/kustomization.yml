@@ -45,4 +45,4 @@ patches:
   patch: |-
     - op: replace
       path: /spec/rules/0/host
-      value: merge.saidsef.co.uk
+      value: tika-ui-merge.saidsef.co.uk

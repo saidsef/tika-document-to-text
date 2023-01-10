@@ -3,6 +3,8 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: tika-ui
+  labels:
+    app.kubernetes.io/name: tika-ui
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
