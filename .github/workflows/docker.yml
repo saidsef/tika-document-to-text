@@ -73,20 +73,6 @@ jobs:
       uses: docker/setup-buildx-action@v2
       env:
         DOCKER_BUILDKIT: 1
-    # - name: Build and push Docker image - (MAIN)
-    #   uses: docker/build-push-action@v3
-    #   if: success()
-    #   env:
-    #     DOCKER_BUILDKIT: 1
-    #   with:
-    #     context: ./function
-    #     file: ./function/Dockerfile
-    #     platforms: linux/amd64,linux/arm64
-    #     pull: true
-    #     push: true
-    #     tags: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:${{ env.TAG == 'main' && 'latest' || env.TAG }}
-    #     cache-from: type=registry,ref=ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:${{ env.TAG == 'main' && 'latest' || env.TAG }}
-    #     cache-to: type=inline
     - name: Build and push Docker image - (Server)
       uses: docker/build-push-action@v3
       if: success()
@@ -127,8 +113,7 @@ jobs:
       if: success()
       with:
         image-ref: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:server-${{ env.TAG == 'main' && 'latest' || env.TAG }}
-        format: 'template'
-        template: '@/contrib/sarif.tpl'
+        format: 'sarif'
         output: 'trivy-results.sarif'
     - name: Upload Trivy scan results to GitHub Security tab - Server
       uses: github/codeql-action/upload-sarif@v2

@@ -48,4 +48,4 @@ EXPOSE ${PORT} ${PORT_METRICS}
 
 HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
-CMD ["sh", "-c","$JAVA_HOME/bin/java -Xms$XMS -Xmx$XMX -XX:+UseG1GC -Xlog:gc:/tmp/gc.log -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli --config tika-config.xml -status -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h $POD_IP -p $PORT"]
+CMD ["sh", "-c","$JAVA_HOME/bin/java -Xms$XMS -Xmx$XMX -XX:+UseG1GC -Xlog:gc:/tmp/gc.log -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -status -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h $POD_IP -p $PORT"]
