@@ -1,4 +1,5 @@
 # Apache Tika Implementation [![CI](https://github.com/saidsef/faas-convert-to-text/actions/workflows/docker.yml/badge.svg)](#deployment) [![Tagging](https://github.com/saidsef/faas-convert-to-text/actions/workflows/tagging.yml/badge.svg)](#deployment) [![Release](https://github.com/saidsef/faas-convert-to-text/actions/workflows/release.yml/badge.svg)](#deployment)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsaidsef%2Ftika-document-to-text.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsaidsef%2Ftika-document-to-text?ref=badge_shield)
 
 The Apache Tika™ toolkit detects and extracts metadata and text from over a thousand different file types (such as PPT, XLS, and PDF). All of these file types can be parsed through a single interface, making Tika useful for search engine indexing, content analysis, translation, and much more.
 
@@ -43,3 +44,7 @@ Using a browser visit:
 ```shell
 http://loclahost:8080/
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsaidsef%2Ftika-document-to-text.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsaidsef%2Ftika-document-to-text?ref=badge_large)
