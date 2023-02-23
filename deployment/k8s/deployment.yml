@@ -17,9 +17,6 @@ spec:
       app.kubernetes.io/name: tika-ui
   template:
     metadata:
-      annotations:
-        prometheus.io/scrape: 'true'
-        filter.by.port.name: 'true'
       labels:
         app.kubernetes.io/name: tika-ui
     spec:
