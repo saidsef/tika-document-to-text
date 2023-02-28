@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 flask = "==2.2.3"
-prometheus-flask-exporter = "==0.22.0"
+prometheus-flask-exporter = "==0.22.2"
 
 [dev-packages]
 
