@@ -11,7 +11,6 @@ metadata:
     app.kubernetes.io/tier: frontend
 spec:
   type: ClusterIP
-  clusterIP: None
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:

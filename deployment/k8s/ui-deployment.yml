@@ -57,9 +57,7 @@ spec:
           imagePullPolicy: Always
           env:
           - name: HOST
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
+            value: "tika-server"
           - name: HOST_PORT
             value: "7071"
           ports:
