@@ -5,13 +5,12 @@ metadata:
   name: tika-server
   annotations:
     prometheus.io/scrape: 'true'
-    filter.by.port.name: 'true'
+    prometheus.io/port: '7072'
   labels:
     app.kubernetes.io/name: tika-server
     app.kubernetes.io/tier: backend
 spec:
   type: ClusterIP
-  clusterIP: None
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
