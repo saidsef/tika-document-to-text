@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: tika-service
+  name: tika-ui
   annotations:
     prometheus.io/scrape: 'true'
     prometheus.io/port: 'true'
   labels:
-    app.kubernetes.io/name: tika-service
+    app.kubernetes.io/name: tika-ui
     app.kubernetes.io/tier: frontend
 spec:
   type: ClusterIP
@@ -17,7 +17,7 @@ spec:
     clientIP:
       timeoutSeconds: 60
   selector:
-    app.kubernetes.io/name: tika-service
+    app.kubernetes.io/name: tika-ui
   ports:
   - name: ui
     protocol: TCP

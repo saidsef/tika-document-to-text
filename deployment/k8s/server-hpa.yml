@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: tika-service
+  name: tika-server
   labels:
-    app.kubernetes.io/name: tika-service
+    app.kubernetes.io/name: tika-server
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: tika-service
+    name: tika-server
   maxReplicas: 10
   minReplicas: 1
   metrics:
