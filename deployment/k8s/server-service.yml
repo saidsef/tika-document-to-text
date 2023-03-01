@@ -3,13 +3,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tika-ui
-  labels:
-    app.kubernetes.io/name: tika-ui
-    app.kubernetes.io/tier: frontend
   annotations:
     prometheus.io/scrape: 'true'
-    prometheus.io/path: '/metrics'
     filter.by.port.name: 'true'
+  labels:
+    app.kubernetes.io/name: tika-ui
+    app.kubernetes.io/tier: backend
 spec:
   type: ClusterIP
   clusterIP: None
@@ -24,11 +23,7 @@ spec:
     protocol: TCP
     port: 7071
     targetPort: 7071
-  - name: prometheus
+  - name: metrics
     protocol: TCP
     port: 7072
     targetPort: 7072
-  - name: ui
-    protocol: TCP
-    port: 8080
-    targetPort: 8080

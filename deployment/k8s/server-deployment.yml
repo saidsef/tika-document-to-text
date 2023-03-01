@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tika-server
+  labels:
+    app.kubernetes.io/name: tika-server
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tika-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tika-server
+    spec:
+      automountServiceAccountToken: false
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: false
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      shareProcessNamespace: false
+      securityContext:
+        fsGroup: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 90
+              preference:
+                matchExpressions:
+                - key: kubernetes.io/arch
+                  operator: In
+                  values:
+                  - amd64
+            - weight: 10
+              preference:
+                matchExpressions:
+                - key: kubernetes.io/arch
+                  operator: In
+                  values:
+                  - arm64
+      containers:
+        - name: server
+          image: ghcr.io/saidsef/tika-document-to-text:server-latest
+          imagePullPolicy: Always
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+          - name: tcp-server
+            containerPort: 7071
+            protocol: TCP
+          - name: http-monitoring
+            containerPort: 7072
+            protocol: TCP
+          resources:
+            requests:
+              cpu: 300m
+              memory: 2Gi
+              ephemeral-storage: 1Gi
+            limits:
+              cpu: 300m
+              memory: 2Gi
+              ephemeral-storage: 1Gi
+          livenessProbe:
+            tcpSocket:
+              port: tcp-server
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: tcp-server
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+              - ALL
+          volumeMounts:
+            - name: data
+              mountPath: "/tmp"
+              subPath: tmp
+              readOnly: false
+      volumes:
+        - name: data
+          emptyDir:
+            sizeLimit: 2Gi

@@ -2,13 +2,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- k8s/deployment.yml
-- k8s/hpa.yml
-- k8s/service.yml
-- k8s/ingress.yml
+- k8s/
+
+commonLabels:
+  app.kubernetes.io/managed-by: kustomization
 
 commonAnnotations:
-  app.kubernetes.io/created-by: kustomizer
   cluster-autoscaler.kubernetes.io/enable-ds-eviction: "false"
   cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
   endpointslice.kubernetes.io/managed-by: controller
@@ -23,11 +22,3 @@ images:
 - name: ui
   newName: ghcr.io/saidsef/tika-document-to-text
   newTag: ui-latest
-
-vars:
-- fieldref: {}
-  name: HOST
-  objref:
-    apiVersion: networking.k8s.io/v1
-    kind: Ingress
-    name: tika-ui

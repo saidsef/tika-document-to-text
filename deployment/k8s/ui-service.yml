@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tika-service
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: 'true'
+  labels:
+    app.kubernetes.io/name: tika-service
+    app.kubernetes.io/tier: frontend
+spec:
+  type: ClusterIP
+  clusterIP: None
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 60
+  selector:
+    app.kubernetes.io/name: tika-service
+  ports:
+  - name: ui
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
