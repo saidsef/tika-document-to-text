@@ -19,7 +19,7 @@ metadata:
       }
 spec:
   rules:
-  - host: $(HOST)
+  - host: tika-ui
     http:
       paths:
       - path: /
