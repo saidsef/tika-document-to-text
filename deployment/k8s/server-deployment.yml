@@ -17,6 +17,9 @@ spec:
       app.kubernetes.io/name: tika-server
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: ${configmap.prometheus-annotations.scrape}
+        prometheus.io/port: ${configmap.prometheus-annotations.port}
       labels:
         app.kubernetes.io/name: tika-server
     spec:
