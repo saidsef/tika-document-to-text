@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-annotations
+data:
+  scrape: 'true'
+  port: '7072'
