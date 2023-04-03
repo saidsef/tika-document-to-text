@@ -3,10 +3,9 @@ kind: Kustomization
 
 resources:
 - ingress.yml
-- configmap.yml 
 - server-deployment.yml
-- server-hpa.yml
 - server-service.yml
+- server-hpa.yml
 - ui-deployment.yml
-- ui-hpa.yml
 - ui-service.yml
+- ui-hpa.yml
