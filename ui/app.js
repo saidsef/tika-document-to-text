@@ -32,8 +32,8 @@ app.engine('html', tl);
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
 app.use(express.json({limit: '50mb'}));
-app.use(compression());
 app.use(morgan('combined'));
+app.use(compression());
 app.use((req, res, next) => {
   req.setTimeout(TIMEOUT + 1); // set request timeout to 30s
   res.locals.nonce = crypto;
@@ -117,7 +117,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       });
       response.on("end", () => {
         res.render('index', {
-          text: Buffer.from(body, 'utf8').toString().replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim()
+          text: Buffer.from(body, 'utf8').toString('utf8').replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim()
         });
       });
       response.on("error", (error) => {
