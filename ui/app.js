@@ -8,9 +8,9 @@ const multer       = require('multer');
 const cors         = require('cors');
 const compression  = require('compression');
 const Prometheus   = require('prom-client');
-const tl           = require('./libs/render');
-const errorHandler = require('./libs/express-error');
+const { tpl }      = require('./libs/render');
 const URL          = require('url').URL
+const { errorHandler } = require('./libs/express-error');
 
 const app     = express();
 const storage = multer.memoryStorage();
@@ -28,7 +28,7 @@ prometheus.collectDefaultMetrics({ register: prometheus.defaultRegistry });
 app.enable('trust proxy');
 app.set('view engine', 'html');
 app.set('views', './views');
-app.engine('html', tl);
+app.engine('html', tpl);
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
 app.use(express.json({limit: '50mb'}));
@@ -66,7 +66,7 @@ app.use(helmet({
 }));
 app.use(cors());
 
-app.get('/', (req, res, next) => {
+app.get('/', async (req, res, next) => {
   res.render('index', {
     url: req.body.url,
     copyright: new Date().getFullYear().toString(),
@@ -80,7 +80,7 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
   }
   if (req.file || req.body.url) {
     let payload = '';
-    let options = {
+    const options = {
       host: HOST,
       port: HOST_PORT,
       path: '/tika',
@@ -136,7 +136,7 @@ app.get('/metrics', async (req, res, next) => {
   res.send(await prometheus.register.metrics())
 });
 
-app.get('/healthz', (req, res, next) => {
+app.get('/healthz', async (req, res, next) => {
   res.json({'status': 'healthy'});
 });
 

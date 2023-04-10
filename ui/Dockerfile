@@ -1,4 +1,4 @@
-FROM docker.io/node:19.1-alpine
+FROM docker.io/node:19.8-alpine
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
@@ -30,4 +30,4 @@ HEALTHCHECK --interval=120s --timeout=10s CMD curl --fail http://localhost:${POR
 
 EXPOSE ${PORT}
 
-CMD ["node", "app.js"]
+CMD ["npm", "run", "start"]
