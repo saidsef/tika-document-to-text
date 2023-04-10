@@ -1,4 +1,4 @@
-FROM docker.io/node:19.1-alpine
+FROM docker.io/node:19.8-alpine
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 
@@ -8,6 +8,7 @@ USER root
 ENV NODE_ENV production
 ENV NPM_CONFIG_FETCH_RETRIES 10
 ENV NPM_CONFIG_LOGLEVEL warn
+ENV NPM_CONFIG_CACHE /app
 ENV PORT ${POST:-8080}
 ENV PROTOCOL ${PROTOCOL:-'http'}
 
