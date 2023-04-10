@@ -8,6 +8,7 @@ USER root
 ENV NODE_ENV production
 ENV NPM_CONFIG_FETCH_RETRIES 10
 ENV NPM_CONFIG_LOGLEVEL warn
+ENV NPM_CONFIG_CACHE /app
 ENV PORT ${POST:-8080}
 ENV PROTOCOL ${PROTOCOL:-'http'}
 
@@ -30,4 +31,4 @@ HEALTHCHECK --interval=120s --timeout=10s CMD curl --fail http://localhost:${POR
 
 EXPOSE ${PORT}
 
-CMD ["npm", "run", "start"]
+CMD ["node", "app.js"]

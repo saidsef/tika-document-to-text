@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Debug: All looks good to me\" && exit 0",
-    "start": "npm install && node $NODE_OPTIONS app.js"
+    "start": "NODE_ENV=$NODE_ENV node $NODE_OPTIONS app.js"
   },
   "contributors": [
     "Said Sef <saidsef@gmail.com>"
