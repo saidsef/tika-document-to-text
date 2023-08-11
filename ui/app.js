@@ -2,7 +2,7 @@
 
 const express      = require('express');
 const helmet       = require('helmet');
-const morgan       = require('morgan');
+const logger       = require('pino-http')();
 const crypto       = require('crypto').randomBytes(16).toString("hex");
 const multer       = require('multer');
 const cors         = require('cors');
@@ -32,7 +32,7 @@ app.engine('html', tpl);
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
 app.use(express.json({limit: '50mb'}));
-app.use(morgan('combined'));
+app.use(logger);
 app.use(compression());
 app.use((req, res, next) => {
   req.setTimeout(TIMEOUT + 1); // set request timeout to 30s

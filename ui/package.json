@@ -1,11 +1,12 @@
 {
   "name": "tika-document-to-text",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "FaaS Conver to Text Using Apache Tika",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Debug: All looks good to me\" && exit 0",
-    "start": "NODE_ENV=$NODE_ENV node $NODE_OPTIONS app.js"
+    "start": "NODE_ENV=$NODE_ENV node $NODE_OPTIONS app.js",
+    "rebuild": "rm -rfv node_modules/ && NODE_ENV=production npm i"
   },
   "contributors": [
     "Said Sef <saidsef@gmail.com>"
@@ -37,11 +38,10 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "helmet": "^7.0.0",
-    "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
+    "pino-http": "^8.4.0",
     "prom-client": "^14.2.0",
     "template-literal": "^1.0.4"
   },
-  "homepage": "https://github.com/saidsef/tika-document-to-text#readme",
-  "devDependencies": {}
+  "homepage": "https://github.com/saidsef/tika-document-to-text#readme"
 }
