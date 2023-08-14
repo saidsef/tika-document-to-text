@@ -1,6 +1,8 @@
 FROM docker.io/node:20-alpine3.18
 
-LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
+LABEL maintainer "Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
+LABEL org.opencontainers.image.source "https://github.com/saidsef/tika-document-to-text"
+LABEL org.opencontainers.image.description "UI for Apache Tika"
 
 USER root
 
