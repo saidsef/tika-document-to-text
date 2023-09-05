@@ -35,7 +35,7 @@ jobs:
         python-version: ["3.9", "3.10", "3.11"]
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Python ${{ matrix.python-version }} setup
       uses: actions/setup-python@v4
       with:
@@ -51,7 +51,7 @@ jobs:
     needs: [python-test]
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Set Tag Name
       run: |
         echo "TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
@@ -129,7 +129,7 @@ jobs:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.8.0
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Run K8s test
         run: |
           kubectl cluster-info
