@@ -1,0 +1,34 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1beta1
+metadata:
+  name: tika-ui
+spec:
+  parentRefs:
+  - kind: Gateway
+    name: external-gw
+    sectionName: https
+  # hostnames:
+  # - "store.example.com"
+  rules:
+  - matches:
+    - path:
+        value: /
+    backendRefs:
+    - name: tika-ui
+      port: 8080
+---
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1beta1
+metadata:
+  name: redirect
+spec:
+  parentRefs:
+  - kind: Gateway
+    name: external-gw
+    sectionName: http
+  rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+        statusCode: 302
