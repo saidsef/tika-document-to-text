@@ -1,0 +1,18 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1beta1
+metadata:
+  name: tika-ui
+spec:
+  parentRefs:
+  - kind: Gateway
+    name: external-gw
+    sectionName: https
+  # hostnames:
+  # - "store.example.com"
+  rules:
+  - matches:
+    - path:
+        value: /
+    backendRefs:
+    - name: tika-ui
+      port: 8080

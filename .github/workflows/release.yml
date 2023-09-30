@@ -89,7 +89,7 @@ jobs:
             } catch (e) {
               console.log(e.status);
             } finally {
-              for (let file of await fs.readdir('./deployment/k8s')) {
+              for (let file of await fs.readdir('./deployment/k8s/*.yml')) {
                 await github.rest.repos.uploadReleaseAsset({
                   owner, repo,
                   release_id: ${{ steps.release.outputs.result }},
