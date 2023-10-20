@@ -6,6 +6,7 @@ spec:
   parentRefs:
   - kind: Gateway
     name: external-gw
+    namespace: gateway-ingress
     sectionName: https
   # hostnames:
   # - "store.example.com"
