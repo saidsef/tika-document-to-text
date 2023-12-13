@@ -47,9 +47,9 @@
 	"remoteUser": "node",
 	"features": {
 		"kubectl-helm-minikube": {
-			"version": "1.23",
+			"version": "1.27",
 			"minikube": "none"
 		},
-		"python": "3.10"
+		"python": "3.11"
 	}
 }
