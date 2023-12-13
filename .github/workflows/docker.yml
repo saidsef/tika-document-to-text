@@ -32,12 +32,12 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
     - name: Check out repository code
       uses: actions/checkout@v4
     - name: Python ${{ matrix.python-version }} setup
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: pip install
@@ -148,7 +148,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     steps:
     - name: Auto Approve PR
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
        script: |
         github.rest.pulls.createReview({
@@ -164,7 +164,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     steps:
     - name: Add Preview Label
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           github.rest.issues.addLabels({
