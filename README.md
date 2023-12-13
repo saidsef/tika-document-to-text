@@ -4,7 +4,7 @@ The Apache Tika™ toolkit detects and extracts metadata and text from over a th
 
 ## Prerequisite
 
-- [Kubernetes Cluster](https://kubernetes.io/docs/tutorials/) >= 1.23
+- [Kubernetes Cluster](https://kubernetes.io/docs/tutorials/) >= 1.26
 - [ArgoCD](https://argoproj.github.io/argo-cd/) (Optional)
 
 ## Deployment
