@@ -5,3 +5,5 @@ resources:
 - ../base
 - ingress.yml
 
+commonLabels:
+  app.kubernetes.io/managed-by: kustomization

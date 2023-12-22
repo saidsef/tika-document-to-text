@@ -4,3 +4,6 @@ kind: Kustomization
 resources:
 - ../base
 - route.yml
+
+commonLabels:
+  app.kubernetes.io/managed-by: kustomization
