@@ -72,11 +72,11 @@ spec:
             protocol: TCP
           resources:
             requests:
-              cpu: 300m
+              cpu: 200m
               memory: 2Gi
               ephemeral-storage: 1Gi
             limits:
-              cpu: 300m
+              cpu: 200m
               memory: 2Gi
               ephemeral-storage: 1Gi
           livenessProbe:
@@ -111,4 +111,4 @@ spec:
       volumes:
         - name: data
           emptyDir:
-            sizeLimit: 2Gi
+            sizeLimit: 1Gi
