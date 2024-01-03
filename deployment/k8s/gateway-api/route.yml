@@ -8,8 +8,6 @@ spec:
     name: external-gw
     namespace: gateway-ingress
     sectionName: https
-  # hostnames:
-  # - "store.example.com"
   rules:
   - matches:
     - path:
