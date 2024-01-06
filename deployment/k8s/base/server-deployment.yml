@@ -58,6 +58,11 @@ spec:
         - name: server
           image: ghcr.io/saidsef/tika-document-to-text:server-latest
           imagePullPolicy: Always
+          resizePolicy:
+          - resourceName: cpu
+            restartPolicy: NotRequired
+          - resourceName: memory
+            restartPolicy: RestartContainer
           env:
             - name: POD_IP
               valueFrom:
