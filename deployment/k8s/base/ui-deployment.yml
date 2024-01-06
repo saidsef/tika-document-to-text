@@ -79,7 +79,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: http-ui
-            initialDelaySeconds: 5
+            initialDelaySeconds: 8
             periodSeconds: 5
             successThreshold: 1
             failureThreshold: 2
@@ -89,7 +89,7 @@ spec:
               port: http-ui
               path: /healthz
               scheme: "HTTP"
-            initialDelaySeconds: 5
+            initialDelaySeconds: 8
             periodSeconds: 5
             successThreshold: 1
             failureThreshold: 2
