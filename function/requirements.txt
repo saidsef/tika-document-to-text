@@ -1,4 +1,4 @@
 -i https://pypi.org/simple
-flask==3.0.0
+flask==3.0.1
 prometheus-flask-exporter==0.23.0
 werkzeug>=3.0.1 # not directly required, pinned by Snyk to avoid a vulnerability
