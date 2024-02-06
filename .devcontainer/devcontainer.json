@@ -10,21 +10,34 @@
 		"args": { "VARIANT": "20" }
 	},
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": {
-		"extensions.closeExtensionDetailsOnViewChange": true,
-		"extensions.ignoreRecommendations": true,
-		"html.autoClosingTags": true,
-		"html.format.enable": true,
-		"html.suggest.html5": true,
-		"javascript.autoClosingTags": true,
-		"javascript.format.enable": true,
-		"javascript.referencesCodeLens.enabled": true,
-		"javascript.suggest.enabled": true,
-		"javascript.validate.enable": true,
-		"vscode-kubernetes.helm-path.linux": "/usr/local/bin/helm",
-		"vscode-kubernetes.kubectl-path.linux": "/usr/local/bin/kubectl",
-		"redhat.telemetry.enabled": false
+	"customizations": {
+    "vscode": {
+			// Set *default* container specific settings.json values on container create.
+			"settings": {
+				"extensions.closeExtensionDetailsOnViewChange": true,
+				"extensions.ignoreRecommendations": true,
+				"html.autoClosingTags": true,
+				"html.format.enable": true,
+				"html.suggest.html5": true,
+				"javascript.autoClosingTags": true,
+				"javascript.format.enable": true,
+				"javascript.referencesCodeLens.enabled": true,
+				"javascript.suggest.enabled": true,
+				"javascript.validate.enable": true,
+				"vscode-kubernetes.helm-path.linux": "/usr/local/bin/helm",
+				"vscode-kubernetes.kubectl-path.linux": "/usr/local/bin/kubectl",
+				"redhat.telemetry.enabled": false
+			},
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"GitHub.vscode-pull-request-github",
+				"GitHub.codespaces",
+				"ms-vscode.remote-repositories",
+				"MS-vsliveshare.vsliveshare",
+				"redhat.vscode-yaml",
+				"ms-kubernetes-tools.vscode-kubernetes-tools"
+			]
+		}
 	},
 
 	"containerEnv": {
@@ -33,15 +46,7 @@
 		"AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}",
 		"AWS_SESSION_TOKEN": "${localEnv:AWS_SESSION_TOKEN}"
 	},
-	"extensions": [
-		"dbaeumer.vscode-eslint",
-		"GitHub.vscode-pull-request-github",
-		"GitHub.codespaces",
-		"ms-vscode.remote-repositories",
-		"MS-vsliveshare.vsliveshare",
-		"redhat.vscode-yaml",
-		"ms-kubernetes-tools.vscode-kubernetes-tools"
-	],
+
 	"forwardPorts": [],
 	"postCreateCommand": "cd ui && yarn install",
 	"remoteUser": "node",
