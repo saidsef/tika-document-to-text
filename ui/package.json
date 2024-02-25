@@ -37,10 +37,10 @@
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "helmet": "^7.0.0",
+    "helmet": "^7.1.0",
     "multer": "1.4.5-lts.1",
     "pino-http": "^9.0.0",
-    "prom-client": "^15.0.0",
+    "prom-client": "^15.1.0",
     "template-literal": "^1.0.4"
   },
   "homepage": "https://github.com/saidsef/tika-document-to-text#readme"
