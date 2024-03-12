@@ -9,7 +9,7 @@ ENV CLASSPATH "/opt/tika/libs:/opt/tika/tika-server.jar"
 ENV JAI_IMAGEIO_JPEG2000 1.4.0
 ENV JBIG2_IMAGEIO 3.0.4
 ENV MS 180000
-ENV POD_IP ${POD_IP:-0.0.0.0}
+ENV POD_IP ${POD_IP:-127.0.0.1}
 ENV PORT ${PORT:-7071}
 ENV PORT_METRICS ${PORT_METRICS:-7072}
 ENV PROMETHEUS_JMX_JAR_VERSION 0.19.0
@@ -27,7 +27,8 @@ RUN mkdir -p /opt/tika/libs && \
     apt-get update && \
     apt-get upgrade -y
 
-RUN apt-get install -yq curl tesseract-ocr tesseract-ocr-all && \
+RUN apt-get install --no-install-recommends -yq curl tesseract-ocr tesseract-ocr-all && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
     curl -vSL https://archive.apache.org/dist/tika/${APACHE_TIKA_VERSION}/tika-server-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-server.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-xmp/${APACHE_TIKA_VERSION}/tika-xmp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-xmp.jar && \

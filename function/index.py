@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify, Response
 from prometheus_flask_exporter import PrometheusMetrics
 
 PORT = os.environ.get("PORT", "7070")
-HOST = os.environ.get("POD_IP", "0.0.0.0")
+HOST = os.environ.get("POD_IP", "127.0.0.1")
 app = Flask(__name__)
 
 PrometheusMetrics(app, group_by='url_rule')
