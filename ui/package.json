@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Debug: All looks good to me\" && exit 0",
-    "start": "NODE_ENV=$NODE_ENV node $NODE_OPTIONS app.js",
+    "start": "NODE_ENV=$NODE_ENV node $NODE_OPTIONS --experimental-modules app.js",
     "rebuild": "rm -rfv node_modules/ && NODE_ENV=production npm i"
   },
   "contributors": [
@@ -43,5 +43,6 @@
     "prom-client": "^15.1.0",
     "template-literal": "^1.0.4"
   },
-  "homepage": "https://github.com/saidsef/tika-document-to-text#readme"
+  "homepage": "https://github.com/saidsef/tika-document-to-text#readme",
+  "type": "module"
 }
