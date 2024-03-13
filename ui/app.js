@@ -40,7 +40,7 @@ app.use(logger);
 app.use(compression());
 app.use((req, res, next) => {
   req.setTimeout(TIMEOUT + 1); // set request timeout to 30s
-  res.locals.nonce = crypto;
+  res.locals.nonce = nonce;
   res.locals.req = req;
   next();
 });
