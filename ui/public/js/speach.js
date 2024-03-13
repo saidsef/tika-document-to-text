@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const Speech = {};
+  const Speech = function() {};
   Speech.prototype.getSelection = (e) => {
     console.log('getSelection prototype activate');
     if (window.getSelection) {
