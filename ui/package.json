@@ -43,5 +43,6 @@
     "prom-client": "^15.1.0",
     "template-literal": "^1.0.4"
   },
-  "homepage": "https://github.com/saidsef/tika-document-to-text#readme"
+  "homepage": "https://github.com/saidsef/tika-document-to-text#readme",
+  "type": "module"
 }
