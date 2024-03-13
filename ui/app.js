@@ -14,6 +14,8 @@ import { errorHandler } from './libs/express-error.js';
 import http from 'http';
 import https from 'https';
 
+const __dirname = new URL('.', import.meta.url).pathname;
+
 const logger = pinoHttp();
 const nonce = crypto.randomBytes(16).toString("hex");
 
@@ -33,7 +35,7 @@ app.enable('trust proxy');
 app.set('view engine', 'html');
 app.set('views', './views');
 app.engine('html', tpl);
-app.use(express.static('/public'));
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.json({ limit: '50mb' }));
 app.use(logger);
