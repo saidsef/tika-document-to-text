@@ -1,8 +1,9 @@
 FROM docker.io/node:21-alpine3.19
 
-LABEL maintainer "Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
+LABEL org.opencontainers.image.authors "Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 LABEL org.opencontainers.image.source "https://github.com/saidsef/tika-document-to-text"
 LABEL org.opencontainers.image.description "UI for Apache Tika"
+LABEL org.opencontainers.image.licenses "MIT"
 
 USER root
 
@@ -29,7 +30,7 @@ RUN apk add --update --no-cache curl && \
 USER nobody
 
 # Health check endpoint
-HEALTHCHECK --interval=120s --timeout=10s CMD curl --fail http://localhost:${PORT}/healthz || exit 1
+HEALTHCHECK --interval=120s --timeout=10s CMD curl --fail http://localhost:${PORT} || exit 1
 
 EXPOSE ${PORT}
 
