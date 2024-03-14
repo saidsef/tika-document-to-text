@@ -87,7 +87,7 @@ spec:
           readinessProbe:
             httpGet:
               port: http-ui
-              path: /healthz
+              path: /
               scheme: "HTTP"
             initialDelaySeconds: 8
             periodSeconds: 5
