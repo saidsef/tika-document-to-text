@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   function doVoices() {
     const voicelist = $('#voiceselection');
-    if (voicelist.find('option').length == 0) {
+    if (voicelist.find('option').length === 0) {
       speechSynthesis.getVoices().sort((a, b) => { return a.lang.localeCompare(a.lang); }).forEach((voice, index) => {
         const option = $('<option>').val(index).html(voice.name + ' (' + voice.lang + ')');
         if (voice.default) option.prop("selected");
