@@ -22,13 +22,9 @@ WORKDIR /opt/tika
 
 COPY prometheus-jmx-config.yaml tika-config.xml /opt/tika/
 
-# https://mvnrepository.com/artifact/org.apache.tika
-RUN mkdir -p /opt/tika/libs && \
-    apt-get update && \
-    apt-get upgrade -y
-
-RUN apt-get install --no-install-recommends -yq curl tesseract-ocr tesseract-ocr-all && \
+RUN apt-get update && apt-get install --no-install-recommends -yq curl tesseract-ocr tesseract-ocr-all && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /opt/tika/libs && \
     curl -vSL https://archive.apache.org/dist/tika/${APACHE_TIKA_VERSION}/tika-server-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-server.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-xmp/${APACHE_TIKA_VERSION}/tika-xmp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-xmp.jar && \
