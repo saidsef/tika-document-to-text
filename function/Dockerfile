@@ -32,9 +32,8 @@ RUN apt-get update && \
     curl -vSL https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/${SQLITE_JDBC}/sqlite-jdbc-${SQLITE_JDBC}.jar -o /opt/tika/libs/sqlite-jdbc.jar && \
     curl -vSL https://repo1.maven.org/maven2/org/apache/pdfbox/jbig2-imageio/${JBIG2_IMAGEIO}/jbig2-imageio-${JBIG2_IMAGEIO}.jar -o /opt/tika/libs/levigo-jbig2-imageio.jar && \
     curl -vSL https://repo1.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar && \
-    apt-get purge -yy curl && apt-get autoremove -yy && \
+    apt-get purge -yy curl && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/apt/* /tmp/* && \
     pip install --no-cache-dir -r requirements.txt && \
     fc-cache -f && \
     chmod a+x /opt/tika/index.py /opt/tika/handler.py && \
