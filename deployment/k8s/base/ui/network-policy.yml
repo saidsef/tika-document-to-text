@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ui-egress-to-server-only
+  labels:
+    app.kubernetes.io/name: tika-ui
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: tika-ui
+  policyTypes:
+    - Egress
+    - Ingress
+  ingress:
+    - ports:
+       - protocol: TCP
+         port: 8080
+  egress:
+    - to:
+       - podSelector:
+           matchLabels:
+             app.kubernetes.io/name: tika-server
