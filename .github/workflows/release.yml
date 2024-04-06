@@ -76,11 +76,11 @@ jobs:
             const fs = require('fs').promises;
 
             try {
-              let asset_ids = await github.rest.repos.listReleaseAssets({
+              const asset_ids = await github.rest.repos.listReleaseAssets({
                 owner, repo,
                 release_id: ${{ steps.release.outputs.result }}
               })
-              for (let asset of asset_ids.data) {
+              for (const asset of asset_ids.data) {
                 await github.rest.repos.deleteReleaseAsset({
                   owner, repo,
                   asset_id: asset.id
@@ -89,12 +89,12 @@ jobs:
             } catch (e) {
               console.log(e.status);
             } finally {
-              for (let file of await fs.readdir('./deployment/k8s/*.yml')) {
+              for (const file of await fs.readdir('./deployment/k8s/*/*.yml')) {
                 await github.rest.repos.uploadReleaseAsset({
                   owner, repo,
                   release_id: ${{ steps.release.outputs.result }},
                   name: file,
-                  data: await fs.readFile(`./deployment/k8s/${file}`)
+                  data: await fs.readFile(`./deployment/k8s/*/${file}`)
                 })
               }
             }
