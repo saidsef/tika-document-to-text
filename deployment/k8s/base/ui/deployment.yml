@@ -64,7 +64,7 @@ spec:
           - name: HOST_PORT
             value: "7071"
           ports:
-            - name: http-ui
+            - name: http
               containerPort: 8080
               protocol: TCP
           resources:
@@ -78,7 +78,7 @@ spec:
               ephemeral-storage: 1Gi
           livenessProbe:
             tcpSocket:
-              port: http-ui
+              port: http
             initialDelaySeconds: 8
             periodSeconds: 5
             successThreshold: 1
@@ -86,7 +86,7 @@ spec:
             timeoutSeconds: 3
           readinessProbe:
             httpGet:
-              port: http-ui
+              port: http
               path: /healthz
               scheme: "HTTP"
             initialDelaySeconds: 8

@@ -18,8 +18,8 @@ spec:
   - name: server
     protocol: TCP
     port: 7071
-    targetPort: 7071
+    targetPort: server
   - name: metrics
     protocol: TCP
     port: 7072
-    targetPort: 7072
+    targetPort: metrics

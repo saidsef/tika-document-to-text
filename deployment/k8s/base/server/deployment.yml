@@ -64,24 +64,24 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
           ports:
-          - name: tcp-server
+          - name: server
             containerPort: 7071
             protocol: TCP
-          - name: http-monitoring
+          - name: metrics
             containerPort: 7072
             protocol: TCP
           resources:
             requests:
               cpu: 200m
-              memory: 2Gi
+              memory: 1Gi
               ephemeral-storage: 1Gi
             limits:
               cpu: 200m
-              memory: 2Gi
+              memory: 1Gi
               ephemeral-storage: 1Gi
           livenessProbe:
             tcpSocket:
-              port: tcp-server
+              port: server
             initialDelaySeconds: 20
             periodSeconds: 10
             successThreshold: 1
@@ -90,7 +90,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: tcp-server
+              port: server
             initialDelaySeconds: 20
             periodSeconds: 10
             successThreshold: 1

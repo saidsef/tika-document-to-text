@@ -18,6 +18,6 @@ spec:
          port: 8080
   egress:
     - to:
-       - podSelector:
-           matchLabels:
-             app.kubernetes.io/name: tika-server
+      - podSelector:
+          matchLabels:
+            app.kubernetes.io/name: tika-server
