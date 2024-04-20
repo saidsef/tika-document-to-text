@@ -3,6 +3,5 @@ kind: Kustomization
 
 resources:
 - deployment.yml
-- network-policy.yml
 - service.yml
 - hpa.yml

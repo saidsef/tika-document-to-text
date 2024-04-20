@@ -91,21 +91,12 @@ app.post('/', uploads.single('doc'), async (req, res, next) => {
     };
     if (req.file) {
       payload = req.file.buffer;
-      options.headers['Content-Type'] = req.file.mimetype;
-    }
-    if (req.body.url && req.body.url.length > 5) {
-      try {
-        payload = new URL(req.body.url);
-        options.headers = {
-          'fileUrl': payload.href,
-          'X-Tika-PDFextractInlineImages': true,
-          'X-Tika-PDFocrStrategy': "ocr_and_text_extraction",
-          'X-Tika-OCRmaxFileSizeToOcr': 0,
-          'X-Tika-Skip-Embedded': true,
-          'X-Tika-OCRtimeout': TIMEOUT
-        };
-      } catch (error) {
-        return next(new Error('Not a valid URL'));
+      options.headers = {
+        'Content-Type': req.file.mimetype,
+        'X-Tika-PDFextractInlineImages': true,
+        'X-Tika-PDFocrStrategy': "ocr_and_text_extraction",
+        'X-Tika-OCRmaxFileSizeToOcr': 0,
+        'X-Tika-Skip-Embedded': true
       }
     }
     const post = protocol.request(options, (response) => {

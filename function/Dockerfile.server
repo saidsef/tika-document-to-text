@@ -1,22 +1,19 @@
-FROM docker.io/openjdk:18-jdk-slim-buster
+FROM docker.io/apache/tika:2.9.2.0-full
 
 LABEL maintainer "Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 LABEL org.opencontainers.image.source "https://github.com/saidsef/tika-document-to-text"
-LABEL org.opencontainers.image.description "Apache Tika API Server - JAVA"
+LABEL org.opencontainers.image.description "Apache Tika API Server"
 
-ENV APACHE_TIKA_VERSION 1.28.5
-ENV CLASSPATH "/opt/tika/libs:/opt/tika/tika-server.jar"
-ENV JAI_IMAGEIO_JPEG2000 1.4.0
-ENV JBIG2_IMAGEIO 3.0.4
-ENV MS 180000
-ENV POD_IP ${POD_IP:-127.0.0.1}
+ENV TIKA_VERSION 2.9.2
+ENV CLASSPATH "/tika-server-standard-${TIKA_VERSION}.jar:/tika-extras/*"
 ENV PORT ${PORT:-7071}
 ENV PORT_METRICS ${PORT_METRICS:-7072}
+ENV POD_IP ${POD_IP:-127.0.0.1}
 ENV PROMETHEUS_JMX_JAR_VERSION 0.20.0
-ENV SQLITE_JDBC 3.40.0.0
-ENV TIKA_SERVER_JAR /opt/tika/tika-server.jar
 ENV XMS ${XMS:-2g}
 ENV XMX ${XMX:-2g}
+
+USER root
 
 WORKDIR /opt/tika
 
@@ -25,26 +22,16 @@ COPY prometheus-jmx-config.yaml tika-config.xml /opt/tika/
 RUN apt-get update && apt-get install --no-install-recommends -yq curl tesseract-ocr tesseract-ocr-all && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     mkdir -p /opt/tika/libs && \
-    curl -vSL https://archive.apache.org/dist/tika/${APACHE_TIKA_VERSION}/tika-server-${APACHE_TIKA_VERSION}.jar -o /opt/tika/tika-server.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-core/${APACHE_TIKA_VERSION}/tika-core-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-core.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-xmp/${APACHE_TIKA_VERSION}/tika-xmp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-xmp.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-serialization/${APACHE_TIKA_VERSION}/tika-serialization-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-serialization.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-parsers/${APACHE_TIKA_VERSION}/tika-parsers-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-parsers.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-langdetect/${APACHE_TIKA_VERSION}/tika-langdetect-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-langdetect.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-translate/${APACHE_TIKA_VERSION}/tika-translate-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-translate.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-nlp/${APACHE_TIKA_VERSION}/tika-nlp-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-nlp.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/tika/tika-dl/${APACHE_TIKA_VERSION}/tika-dl-${APACHE_TIKA_VERSION}.jar -o /opt/tika/libs/tika-dl.jar && \
     curl -vSL https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/${PROMETHEUS_JMX_JAR_VERSION}/jmx_prometheus_javaagent-${PROMETHEUS_JMX_JAR_VERSION}.jar -o /opt/tika/jmx_prometheus_javaagent.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/${SQLITE_JDBC}/sqlite-jdbc-${SQLITE_JDBC}.jar -o /opt/tika/libs/sqlite-jdbc.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/pdfbox/jbig2-imageio/${JBIG2_IMAGEIO}/jbig2-imageio-${JBIG2_IMAGEIO}.jar -o /opt/tika/libs/levigo-jbig2-imageio.jar && \
-    curl -vSL https://repo1.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar && \
     fc-cache -f && \
     chown -R nobody /opt/tika
 
 USER nobody
 
-EXPOSE ${PORT} ${PORT_METRICS}
-
 HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
 
-CMD ["sh", "-c","$JAVA_HOME/bin/java -Xms$XMS -Xmx$XMX -XX:+UseG1GC -Xlog:gc:/tmp/gc.log -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp $CLASSPATH -Djava.awt.headless=true org.apache.tika.server.TikaServerCli -status -taskTimeoutMillis $MS -spawnChild -enableUnsecureFeatures -enableFileUrl --cors '*' -h $POD_IP -p $PORT"]
+EXPOSE ${PORT} ${PORT_METRICS}
+
+ENTRYPOINT ["sh", "-c","exec java -XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -XX:+UseG1GC -XX:+ShowMessageBoxOnError -XX:+UnlockExperimentalVMOptions -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp \"$CLASSPATH\" -Djava.awt.headless=true org.apache.tika.server.core.TikaServerCli -h $POD_IP -p $PORT"]
+
+CMD []
