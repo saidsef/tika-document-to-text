@@ -30,12 +30,12 @@ spec:
       stabilizationWindowSeconds: 300
       selectPolicy: Min
     scaleUp:
-      stabilizationWindowSeconds: 30
+      stabilizationWindowSeconds: 90
       policies:
       - type: Percent
         value: 100
-        periodSeconds: 15
+        periodSeconds: 60
       - type: Pods
         value: 4
-        periodSeconds: 15
+        periodSeconds: 60
       selectPolicy: Max

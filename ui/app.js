@@ -92,11 +92,7 @@ app.post('/', uploads.single('doc'), async (req, res, next) => {
     if (req.file) {
       payload = req.file.buffer;
       options.headers = {
-        'Content-Type': req.file.mimetype,
-        'X-Tika-PDFextractInlineImages': true,
-        'X-Tika-PDFocrStrategy': "ocr_and_text_extraction",
-        'X-Tika-OCRmaxFileSizeToOcr': 0,
-        'X-Tika-Skip-Embedded': true
+        'Content-Type': req.file.mimetype
       }
     }
     const post = protocol.request(options, (response) => {
