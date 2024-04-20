@@ -73,7 +73,7 @@ jobs:
       uses: docker/setup-buildx-action@v3
       env:
         DOCKER_BUILDKIT: 1
-    - name: Build and push Docker image - (Server)
+    - name: Build and push container image - (Server)
       uses: docker/build-push-action@v5
       if: success()
       env:
@@ -87,7 +87,7 @@ jobs:
         tags: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:server-${{ env.TAG == 'main' && 'latest' || env.TAG }}
         cache-from: type=registry,ref=ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:server-${{ env.TAG == 'main' && 'latest' || env.TAG }}
         cache-to: type=inline
-    - name: Build and push Docker image - (UI)
+    - name: Build and push container image - (UI)
       uses: docker/build-push-action@v5
       if: success()
       env:
@@ -101,6 +101,15 @@ jobs:
         tags: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:ui-${{ env.TAG == 'main' && 'latest' || env.TAG }}
         cache-from: type=registry,ref=ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:ui-${{ env.TAG == 'main' && 'latest' || env.TAG }}
         cache-to: type=inline
+    - name: Delete old container images
+      uses: actions/delete-package-versions@v5
+      with:
+        owner: "${{ env.OWNER }}"
+        package-name: "${{ env.REPO_NAME }}"
+        package-type: 'container'
+        min-versions-to-keep: 3
+        ignore-versions: '^ui-latest|server-latest$'
+        delete-only-untagged-versions: 'false'
     - name: Run Trivy config vulnerability
       uses: aquasecurity/trivy-action@master
       if: success()
