@@ -65,7 +65,7 @@ spec:
                   fieldPath: status.podIP
           ports:
           - name: server
-            containerPort: 7071
+            containerPort: 8070
             protocol: TCP
           - name: metrics
             containerPort: 7072
