@@ -62,7 +62,7 @@ spec:
           - name: HOST
             value: "tika-server"
           - name: HOST_PORT
-            value: "7071"
+            value: "8070"
           ports:
             - name: http
               containerPort: 8080

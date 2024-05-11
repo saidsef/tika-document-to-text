@@ -6,7 +6,7 @@ from json import loads
 from subprocess import Popen, PIPE
 
 logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG, handlers=[logging.StreamHandler()])
 
 
 def byte2json(b):

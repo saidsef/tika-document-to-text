@@ -26,7 +26,7 @@ const uploads = multer({ storage });
 const TIMEOUT = 500000; // Milliseconds
 const PORT = process.env.PORT || 8080;
 const HOST = process.env.HOST || 'server';
-const HOST_PORT = process.env.HOST_PORT || 7071;
+const HOST_PORT = process.env.HOST_PORT || 8070;
 const protocol = process.env.PROTOCOL === 'https' ? https : http;
 
 collectDefaultMetrics({ register: prometheusRegister });
@@ -92,7 +92,8 @@ app.post('/', uploads.single('doc'), async (req, res, next) => {
     if (req.file) {
       payload = req.file.buffer;
       options.headers = {
-        'Content-Type': req.file.mimetype
+        'Content-Type': req.file.mimetype,
+        'X-Tika-PDFocrStrategy': 'auto'
       }
     }
     const post = protocol.request(options, (response) => {
