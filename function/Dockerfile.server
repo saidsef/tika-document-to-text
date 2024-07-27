@@ -1,8 +1,8 @@
 FROM docker.io/apache/tika:2.9.2.0-full
 
-LABEL maintainer "Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
-LABEL org.opencontainers.image.source "https://github.com/saidsef/tika-document-to-text"
-LABEL org.opencontainers.image.description "Apache Tika API Server"
+LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
+LABEL org.opencontainers.image.source="https://github.com/saidsef/tika-document-to-text"
+LABEL org.opencontainers.image.description="Apache Tika API Server"
 
 ENV TIKA_VERSION 2.9.2
 ENV CLASSPATH "/tika-server-standard-${TIKA_VERSION}.jar:/tika-extras/*:/opt/tika/libs/*"
