@@ -22,11 +22,11 @@ COPY prometheus-jmx-config.yaml tika-config.xml /opt/tika/
 RUN apt-get update && apt-get install --no-install-recommends -yq curl tesseract-ocr-all && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     mkdir -p /opt/tika/libs && \
-    curl -vSL https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/${PROMETHEUS_JMX_JAR_VERSION}/jmx_prometheus_javaagent-${PROMETHEUS_JMX_JAR_VERSION}.jar -o /opt/tika/jmx_prometheus_javaagent.jar && \
-    curl -vSL https://repo1.maven.org/maven2/org/apache/pdfbox/jbig2-imageio/${JBIG2_IMAGEIO}/jbig2-imageio-${JBIG2_IMAGEIO}.jar -o /opt/tika/libs/levigo-jbig2-imageio.jar && \
-    curl -vSL https://repo1.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar && \
-    curl -vSL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-sqlite3-package-${TIKA_VERSION}.jar -o /opt/tika/libs/tika-parser-sqlite3-package-${TIKA_VERSION}.jar && \
-    curl -vSL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-nlp-package-${TIKA_VERSION}.jar -o /opt/tika/libs/tika-parser-nlp-package-${TIKA_VERSION}.jar && \
+    curl -SL https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/${PROMETHEUS_JMX_JAR_VERSION}/jmx_prometheus_javaagent-${PROMETHEUS_JMX_JAR_VERSION}.jar -o /opt/tika/jmx_prometheus_javaagent.jar && \
+    curl -SL https://repo1.maven.org/maven2/org/apache/pdfbox/jbig2-imageio/${JBIG2_IMAGEIO}/jbig2-imageio-${JBIG2_IMAGEIO}.jar -o /opt/tika/libs/levigo-jbig2-imageio.jar && \
+    curl -SL https://repo1.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar && \
+    curl -SL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-sqlite3-package-${TIKA_VERSION}.jar -o /opt/tika/libs/tika-parser-sqlite3-package-${TIKA_VERSION}.jar && \
+    curl -SL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-nlp-package-${TIKA_VERSION}.jar -o /opt/tika/libs/tika-parser-nlp-package-${TIKA_VERSION}.jar && \
     chown -R nobody /opt/tika
 
 USER nobody
