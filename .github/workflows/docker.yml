@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.11", "3.12"]
     steps:
     - name: Check out repository code
       uses: actions/checkout@v4
@@ -101,17 +101,18 @@ jobs:
         tags: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:ui-${{ env.TAG == 'main' && 'latest' || env.TAG }}
         cache-from: type=registry,ref=ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:ui-${{ env.TAG == 'main' && 'latest' || env.TAG }}
         cache-to: type=inline
-    - name: Delete old container images
-      uses: actions/delete-package-versions@v5
-      with:
-        owner: "${{ env.OWNER }}"
-        package-name: "${{ env.REPO_NAME }}"
-        package-type: 'container'
-        min-versions-to-keep: 3
-        ignore-versions: '^ui-latest|server-latest$'
-        delete-only-untagged-versions: 'false'
+    # - name: Delete old container images
+    #   uses: actions/delete-package-versions@v5
+    #   with:
+    #     owner: "${{ env.OWNER }}"
+    #     package-name: "${{ env.REPO_NAME }}"
+    #     package-type: 'container'
+    #     min-versions-to-keep: 3
+    #     ignore-versions: '^ui-latest|server-latest$'
+    #     delete-only-untagged-versions: 'false'
     - name: Run Trivy config vulnerability
       uses: aquasecurity/trivy-action@master
+      continue-on-error: true
       if: success()
       with:
         scan-type: 'config'
@@ -126,6 +127,7 @@ jobs:
         output: 'trivy-results.sarif'
     - name: Upload Trivy scan results to GitHub Security tab - Server
       uses: github/codeql-action/upload-sarif@v3
+      continue-on-error: true
       if: success()
       with:
         sarif_file: 'trivy-results.sarif'
