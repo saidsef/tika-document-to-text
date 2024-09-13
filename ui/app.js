@@ -38,7 +38,7 @@ app.engine('html', tpl);
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.json({ limit: '50mb' }));
-app.use(logger);
+// app.use(logger);
 app.use(compression());
 app.use((req, res, next) => {
   req.setTimeout(TIMEOUT + 1); // set request timeout to 30s
@@ -68,7 +68,7 @@ app.use(cors());
 
 app.get('/', async (req, res) => {
   res.render('index', {
-    url: req.body.url,
+    // url: req.body.url,
     copyright: new Date().getFullYear().toString(),
     text: ''
   });
