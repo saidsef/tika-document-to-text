@@ -25,9 +25,9 @@ RUN apk add --update --no-cache curl && \
     yarn check && \
     yarn autoclean --init && \
     yarn autoclean --force && \
-    chown -R nobody .
+    chown -R 10001:10001 .
 
-USER nobody
+USER 10001
 
 # Health check endpoint
 HEALTHCHECK --interval=120s --timeout=10s CMD curl --fail http://localhost:${PORT} || exit 1

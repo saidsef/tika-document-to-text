@@ -37,9 +37,9 @@ RUN apt-get update && \
     pip install --no-cache-dir -r requirements.txt && \
     fc-cache -f && \
     chmod a+x /opt/tika/index.py /opt/tika/handler.py && \
-    chown nobody -R /opt/tika
+    chown 10001:10001 -R /opt/tika
 
-USER nobody
+USER 10001
 
 EXPOSE ${PORT}
 
