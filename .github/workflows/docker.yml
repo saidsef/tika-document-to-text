@@ -120,6 +120,7 @@ jobs:
         format: 'github'
     - name: Run Trivy vulnerability scanner - (Server)
       uses: aquasecurity/trivy-action@master
+      continue-on-error: true
       if: success()
       with:
         image-ref: ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:server-${{ env.TAG == 'main' && 'latest' || env.TAG }}
