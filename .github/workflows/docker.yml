@@ -46,6 +46,9 @@ jobs:
         pip install -r requirements.txt
         pip install flake8
         flake8 . --count --show-source --statistics --ignore=E111,E501 --exit-zero --output-file=flake8tmp.txt
+  review:
+    uses: saidsef/saidsef/.github/workflows/dependency-review.yaml@main
+    if: ${{ github.event_name == 'pull_request' }}
   build:
     runs-on: ubuntu-latest
     needs: [python-test]
