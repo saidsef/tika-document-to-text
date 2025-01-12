@@ -5,3 +5,6 @@ resources:
 - deployment.yml
 - service.yml
 - hpa.yml
+
+commonLabels:
+  app.kubernetes.io/part-of: server

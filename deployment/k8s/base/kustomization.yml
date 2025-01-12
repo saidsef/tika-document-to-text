@@ -4,3 +4,6 @@ kind: Kustomization
 resources:
 - ./ui
 - ./server
+
+commonLabels:
+  app.kubernetes.io/part-of: ui
