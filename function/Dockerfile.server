@@ -4,14 +4,14 @@ LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 LABEL org.opencontainers.image.source="https://github.com/saidsef/tika-document-to-text"
 LABEL org.opencontainers.image.description="Apache Tika API Server"
 
-ENV TIKA_VERSION 2.9.2
-ENV CLASSPATH "/tika-server-standard-${TIKA_VERSION}.jar:/tika-extras/*:/opt/tika/libs/*"
-ENV PORT ${PORT:-8070}
-ENV PORT_METRICS ${PORT_METRICS:-7072}
-ENV POD_IP ${POD_IP:-127.0.0.1}
-ENV PROMETHEUS_JMX_JAR_VERSION 0.20.0
-ENV JAI_IMAGEIO_JPEG2000 1.4.0
-ENV JBIG2_IMAGEIO 3.0.4
+ENV TIKA_VERSION=2.9.2
+ENV CLASSPATH="/tika-server-standard-${TIKA_VERSION}.jar:/tika-extras/*:/opt/tika/libs/*"
+ENV PORT=${PORT:-8070}
+ENV PORT_METRICS=${PORT_METRICS:-7072}
+ENV POD_IP=${POD_IP:-127.0.0.1}
+ENV PROMETHEUS_JMX_JAR_VERSION=0.20.0
+ENV JAI_IMAGEIO_JPEG2000=1.4.0
+ENV JBIG2_IMAGEIO=3.0.4
 
 USER root
 
