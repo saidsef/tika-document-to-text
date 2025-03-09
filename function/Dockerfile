@@ -4,15 +4,15 @@ LABEL maintainer "Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 LABEL org.opencontainers.image.source "https://github.com/saidsef/tika-document-to-text"
 LABEL org.opencontainers.image.description "Apache Tika API Server - Python"
 
-ENV APACHE_TIKA_VERSION 1.28.5
-ENV CLASSPATH "/opt/tika/tika-server.jar:/opt/tika/libs"
-ENV JAI_IMAGEIO_JPEG2000 1.4.0
-ENV JBIG2_IMAGEIO 3.0.4
-ENV MS 180000
-ENV POD_IP ${POD_IP:-127.0.0.1}
-ENV PORT ${PORT:-8070}
-ENV PYTHONIOENCODING utf8
-ENV SQLITE_JDBC 3.40.0.0
+ENV APACHE_TIKA_VERSION=1.28.5
+ENV CLASSPATH="/opt/tika/tika-server.jar:/opt/tika/libs"
+ENV JAI_IMAGEIO_JPEG2000=1.4.0
+ENV JBIG2_IMAGEIO=3.0.4
+ENV MS=180000
+ENV POD_IP=${POD_IP:-127.0.0.1}
+ENV PORT=${PORT:-8070}
+ENV PYTHONIOENCODING=utf8
+ENV SQLITE_JDBC=3.40.0.0
 
 WORKDIR /opt/tika
 
