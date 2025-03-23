@@ -1,8 +1,8 @@
 FROM docker.io/python:3.11-buster
 
-LABEL maintainer "Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
-LABEL org.opencontainers.image.source "https://github.com/saidsef/tika-document-to-text"
-LABEL org.opencontainers.image.description "Apache Tika API Server - Python"
+LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
+LABEL org.opencontainers.image.source="https://github.com/saidsef/tika-document-to-text"
+LABEL org.opencontainers.image.description="Apache Tika API Server - Python"
 
 ARG PORT=''
 ARG POD_IP=''
