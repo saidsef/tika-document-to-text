@@ -11,7 +11,7 @@ logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG, handlers=[logging.StreamHandler()])
 
 
-def byte2json(b: Dict) -> str | Dict:
+def byte2json(b: bytes) -> str | Dict:
   """Convert bytes to JSON.
 
   Args:
@@ -19,7 +19,7 @@ def byte2json(b: Dict) -> str | Dict:
   """
 
   doc = loads(b.decode("utf-8", errors="replace").replace("'", '"'))
-  if doc[0]["X-TIKA:content"]:
+  if len(doc) > 0 and "X-TIKA:content" in doc[0]:
     return doc[0]["X-TIKA:content"]
   else:
     return doc
@@ -37,7 +37,6 @@ async def handle(req: str) -> str:
   ValueError: If the request is empty or invalid
   """
 
-  # Use a copy of the environment to avoid modifying the global state
   env = environ.copy()
 
   if not req or not isinstance(req, str):
