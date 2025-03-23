@@ -1,9 +1,5 @@
 FROM docker.io/apache/tika:2.9.2.1-full
 
-LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
-LABEL org.opencontainers.image.source="https://github.com/saidsef/tika-document-to-text"
-LABEL org.opencontainers.image.description="Apache Tika API Server"
-
 ARG PORT=''
 ARG PORT_METRICS=''
 ARG POD_IP=''
@@ -16,6 +12,10 @@ ENV POD_IP=${POD_IP:-127.0.0.1}
 ENV PROMETHEUS_JMX_JAR_VERSION=0.20.0
 ENV JAI_IMAGEIO_JPEG2000=1.4.0
 ENV JBIG2_IMAGEIO=3.0.4
+
+LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
+LABEL org.opencontainers.image.source="https://github.com/saidsef/tika-document-to-text"
+LABEL org.opencontainers.image.description="Apache Tika API Server v${TIKA_VERSION} with Prometheus JMX Exporter"
 
 USER root
 
@@ -39,6 +39,6 @@ HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://localhost:${PORT
 
 EXPOSE ${PORT} ${PORT_METRICS}
 
-ENTRYPOINT ["sh", "-c","exec java -XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -XX:+UseG1GC -XX:+ShowMessageBoxOnError -XX:+UnlockExperimentalVMOptions -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp \"$CLASSPATH\" -Djava.awt.headless=true org.apache.tika.server.core.TikaServerCli -h $POD_IP -p $PORT"]
+ENTRYPOINT ["sh", "-c","exec java -XX:+UseContainerSupport -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:+ShowMessageBoxOnError -XX:+UnlockExperimentalVMOptions -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp \"$CLASSPATH\" -Djava.awt.headless=true org.apache.tika.server.core.TikaServerCli -h $POD_IP -p $PORT"]
 
 CMD []
