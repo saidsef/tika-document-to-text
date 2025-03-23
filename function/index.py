@@ -23,11 +23,11 @@ def index():
 
 
 @app.route('/api/v1/url', methods=['GET', 'POST'])
-def transform():
+async def transform():
   if request.method == 'POST':
     j = loads(request.get_data())
     url = j['fileUrl']
-    data = handler.handle(url)
+    data = await handler.handle(url)
     return Response(dumps(
         {'fileUrl': url, 'data': data}
     ), mimetype='application/json')

@@ -17,7 +17,7 @@ def byte2json(b):
     return doc
 
 
-def handle(req):
+async def handle(req: str):
   """handle a request to the function
   Args:
     req (str): request body
@@ -29,7 +29,7 @@ def handle(req):
     "org.apache.tika.cli.TikaCLI",
     "-J", "-t",
     "{}".format(req)], stdout=PIPE, stderr=PIPE, env=env)
-  out, err = p.communicate()
+  out, err = await p.communicate()
   data = []
   if len(out) > 0:
     data.append(byte2json(out))
