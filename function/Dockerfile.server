@@ -1,10 +1,10 @@
-FROM docker.io/apache/tika:2.9.2.1-full
+FROM docker.io/apache/tika:3.2.1.0-full
 
 ARG PORT=''
 ARG PORT_METRICS=''
 ARG POD_IP=''
 
-ENV TIKA_VERSION=2.9.2
+ENV TIKA_VERSION=3.2.1
 ENV CLASSPATH="/tika-server-standard-${TIKA_VERSION}.jar:/tika-extras/*:/opt/tika/libs/*"
 ENV PORT=${PORT:-8070}
 ENV PORT_METRICS=${PORT_METRICS:-7072}
