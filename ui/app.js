@@ -93,7 +93,7 @@ app.post('/', uploads.single('doc'), async (req, res, next) => {
       payload = req.file.buffer;
       options.headers = {
         'Content-Type': req.file.mimetype,
-        'X-Tika-PDFocrStrategy': 'auto'
+        'X-Tika-PDFocrStrategy': 'auto',
       }
     }
     const post = protocol.request(options, (response) => {
