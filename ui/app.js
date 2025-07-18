@@ -93,7 +93,14 @@ app.post('/', uploads.single('doc'), async (req, res, next) => {
       payload = req.file.buffer;
       options.headers = {
         'Content-Type': req.file.mimetype,
-        'X-Tika-PDFocrStrategy': 'auto'
+        'X-Tika-PDFocrStrategy': 'auto',
+        'X-Tika-PDFextractor': 'scientific',
+        'X-Tika-PDFenableAutoSpace': 'true',
+        'X-Tika-PDFextractMarkedContent': 'true',
+        'X-Tika-PDFextractAcroFormContent': 'true',
+        'X-Tika-PDFcatchIntermediateIOExceptions': 'true',
+        'X-Tika-PDFocrRenderingStrategy': 'ALL',
+        'X-Tika-Skip-Embedded': 'true',
       }
     }
     const post = protocol.request(options, (response) => {
