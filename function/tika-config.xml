@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
-  <detectors>
-    <detector class="org.apache.tika.detect.FileCommandDetector"/>
-    <detector class="org.apache.tika.detect.OverrideDetector"/>
-    <detector class="org.apache.tika.mime.MimeTypes"/>
-  </detectors>
-  <parsers>
-    <!-- Default Parser for most things, except for 2 mime types, and never
-         use the Executable Parser -->
-    <parser class="org.apache.tika.parser.DefaultParser">
-      <mime-exclude>application/pdf</mime-exclude>
-      <parser-exclude class="org.apache.tika.parser.executable.ExecutableParser"/>
-    </parser>
-    <!-- Use a different parser for PDF -->
-    <parser class="com.lexpredict.tika.AlterPDFParser">
-      <mime>application/pdf</mime>
-    </parser>
-  </parsers>
+
+  <!-- Enable specific parser packages -->
+  <parser>
+    <include class="org.apache.tika.parser.DefaultParser"/>
+  </parser>
+
+  <!-- Enable OCR via Tesseract -->
+  <tesseractOCRConfig>
+    <language>eng</language> <!-- Change to 'eng+spa' for bilingual -->
+    <skipOcr>false</skipOcr>
+    <preserveInterwordSpacing>true</preserveInterwordSpacing>
+    <timeoutSeconds>120</timeoutSeconds>
+    <minFileSizeToOcr>0</minFileSizeToOcr>
+    <maxFileSizeToOcr>100000000</maxFileSizeToOcr> <!-- 100MB -->
+    <outputType>txt</outputType>
+    <pageSeparator>\n\n</pageSeparator>
+  </tesseractOCRConfig>
+
+  <!-- PDF OCR configuration -->
+  <pdf>
+    <ocrStrategy>ocr_and_text_extraction</ocrStrategy>
+    <ocrDPI>300</ocrDPI>
+    <extractInlineImages>true</extractInlineImages>
+    <extractMarkedContent>true</extractMarkedContent>
+    <extractAcroFormContent>true</extractAcroFormContent>
+    <catchIntermediateIOExceptions>true</catchIntermediateIOExceptions>
+  </pdf>
+
+  <!-- Language Detection -->
+  <langdetect>
+    <languageDetector class="org.apache.tika.language.detect.OptimaizeLangDetector"/>
+  </langdetect>
+
+  <!-- Include NLP and Scientific parsers explicitly -->
+  <service-loader>
+    <loadErrorHandler class="ignore"/>
+    <loaderClass>org.apache.tika.config.TikaServiceLoader</loaderClass>
+    <loadBuiltInParsers>true</loadBuiltInParsers>
+    <autoloadParserPackages>true</autoloadParserPackages>
+  </service-loader>
+
 </properties>

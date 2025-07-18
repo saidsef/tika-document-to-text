@@ -89,7 +89,7 @@ spec:
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              path: /
+              path: /version
               port: server
             initialDelaySeconds: 20
             periodSeconds: 10

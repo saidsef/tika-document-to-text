@@ -31,7 +31,6 @@ RUN apt-get update && apt-get install --no-install-recommends -yq curl tesseract
     curl -SL https://repo1.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar && \
     curl -SL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-sqlite3-package-${TIKA_VERSION}.jar -o /opt/tika/libs/tika-parser-sqlite3-package-${TIKA_VERSION}.jar && \
     curl -SL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-nlp-package-${TIKA_VERSION}.jar -o /opt/tika/libs/tika-parser-nlp-package-${TIKA_VERSION}.jar && \
-    # FIXED: Added missing $ for TIKA_VERSION variable here
     curl -SL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-scientific-package-${TIKA_VERSION}.jar -o /opt/tika/libs/tika-parser-scientific-package-${TIKA_VERSION}.jar && \
     chown -R 10001:10001 /opt/tika
 
@@ -41,6 +40,6 @@ HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://localhost:${PORT
 
 EXPOSE ${PORT} ${PORT_METRICS}
 
-ENTRYPOINT ["sh", "-c","exec java -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+UseContainerSupport -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:+ShowMessageBoxOnError -XX:+UnlockExperimentalVMOptions -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp \"$CLASSPATH\" -Djava.awt.headless=true org.apache.tika.server.core.TikaServerCli --max-form-keys=1000 -h $POD_IP -p $PORT"]
+ENTRYPOINT ["sh", "-c","exec java -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+UseContainerSupport -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:+ShowMessageBoxOnError -XX:+UnlockExperimentalVMOptions -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp \"$CLASSPATH\" -Djava.awt.headless=true org.apache.tika.server.core.TikaServerCli -h $POD_IP -p $PORT"]
 
 CMD []
