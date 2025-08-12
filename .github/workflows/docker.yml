@@ -35,7 +35,7 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Python ${{ matrix.python-version }} setup
       uses: actions/setup-python@v5
       with:
@@ -54,7 +54,7 @@ jobs:
     needs: [python-test]
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Set Tag Name
       run: |
         echo "TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
@@ -147,7 +147,7 @@ jobs:
           verbosity: "10"
           kubectl_version: "v1.29.3"
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run K8s test
         run: |
           kubectl version
