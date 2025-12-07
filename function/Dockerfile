@@ -1,4 +1,4 @@
-FROM docker.io/python:3.11-buster
+FROM docker.io/python:3.13-buster
 
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 LABEL org.opencontainers.image.source="https://github.com/saidsef/tika-document-to-text"
