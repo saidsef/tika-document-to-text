@@ -1,6 +1,6 @@
 {
   "name": "tika-document-to-text",
-  "version": "0.4.0",
+  "version": "0.4.5",
   "description": "FaaS Conver to Text Using Apache Tika",
   "main": "app.js",
   "scripts": {
