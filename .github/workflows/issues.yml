@@ -20,12 +20,12 @@ jobs:
               body: '👋 Thanks for Reporting!',
               labels: ['Triage']
             });
-            const labels = github.rest.issues.listLabels({
+            const labels = await github.rest.issues.listLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: issue_number: context.issue.number
+              issue_number: context.issue.number
             });
-            if (labels.length <= 0) {
+            if (labels.length === 0) {
               github.rest.issues.addLabels({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
