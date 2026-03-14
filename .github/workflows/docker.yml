@@ -77,7 +77,7 @@ jobs:
       env:
         DOCKER_BUILDKIT: 1
     - name: Build and push container image - (Server)
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       if: success()
       env:
         DOCKER_BUILDKIT: 1
@@ -91,7 +91,7 @@ jobs:
         cache-from: type=registry,ref=ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:server-${{ env.TAG == 'main' && 'latest' || env.TAG }}
         cache-to: type=inline
     - name: Build and push container image - (UI)
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       if: success()
       env:
         DOCKER_BUILDKIT: 1
