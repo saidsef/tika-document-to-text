@@ -93,15 +93,18 @@ app.post('/', uploads.single('doc'), async (req, res, next) => {
       payload = req.file.buffer;
       options.headers = {
         'Content-Type': req.file.mimetype,
-        'X-Tika-PDFocrStrategy': 'auto',
+        'Accept': 'text/plain',
+        'Content-Length': req.file.buffer.length,
+        ...(req.file.mimetype === 'application/pdf' && { 'X-Tika-PDFocrStrategy': 'ocr_and_text_extraction' }),
       }
     }
     const post = protocol.request(options, (response) => {
-      let body = '';
-      response.on("data", (data) => body += data);
+      const chunks = [];
+      response.on("data", (data) => chunks.push(Buffer.isBuffer(data) ? data : Buffer.from(data)));
       response.on("end", () => {
+        const body = Buffer.concat(chunks).toString('utf8');
         res.render('index', {
-          text: Buffer.from(body, 'utf8').toString('utf8').replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim()
+          text: body.replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim()
         });
       });
     }).on("error", next);
