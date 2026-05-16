@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
 
-  <!-- Enable specific parser packages -->
-  <parser>
-    <include class="org.apache.tika.parser.DefaultParser"/>
-  </parser>
+  <!-- Route image types to Tesseract OCR; exclude them from DefaultParser to prevent GDAL taking precedence -->
+  <parsers>
+    <parser class="org.apache.tika.parser.DefaultParser">
+      <mime-exclude>image/jpeg</mime-exclude>
+      <mime-exclude>image/png</mime-exclude>
+      <mime-exclude>image/tiff</mime-exclude>
+      <mime-exclude>image/gif</mime-exclude>
+      <mime-exclude>image/bmp</mime-exclude>
+      <mime-exclude>image/webp</mime-exclude>
+    </parser>
+    <parser class="org.apache.tika.parser.ocr.TesseractOCRParser">
+      <mime>image/jpeg</mime>
+      <mime>image/png</mime>
+      <mime>image/tiff</mime>
+      <mime>image/gif</mime>
+      <mime>image/bmp</mime>
+      <mime>image/webp</mime>
+    </parser>
+  </parsers>
 
   <!-- Enable OCR via Tesseract -->
   <tesseractOCRConfig>
