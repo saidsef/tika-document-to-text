@@ -68,9 +68,10 @@ app.use(cors());
 
 app.get('/', async (req, res) => {
   res.render('index', {
-    // url: req.body.url,
     copyright: new Date().getFullYear().toString(),
-    text: ''
+    text: '',
+    detectedType: '',
+    detectedLang: '',
   });
 });
 
@@ -104,7 +105,9 @@ app.post('/', uploads.single('doc'), async (req, res, next) => {
       response.on("end", () => {
         const body = Buffer.concat(chunks).toString('utf8');
         res.render('index', {
-          text: body.replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim()
+          text: body.replace(/<[^>]+>?/gmi, '').replace(/\n?\s{4,}/gmi, '\n\n').trim(),
+          detectedType: response.headers['content-type'] || '',
+          detectedLang: response.headers['x-tika-detected-language'] || '',
         });
       });
     }).on("error", next);

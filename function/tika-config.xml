@@ -31,6 +31,9 @@
     <maxFileSizeToOcr>100000000</maxFileSizeToOcr> <!-- 100MB -->
     <outputType>txt</outputType>
     <pageSeparator>\n\n</pageSeparator>
+    <ocrMode>1</ocrMode> <!-- LSTM-only engine: more accurate on modern document fonts -->
+    <pageSegMode>1</pageSegMode> <!-- Auto segmentation + OSD: handles rotated/tilted images -->
+    <enableImagePreprocessing>true</enableImagePreprocessing> <!-- GDAL grayscale+contrast pass before Tesseract -->
   </tesseractOCRConfig>
 
   <!-- PDF OCR configuration -->
