@@ -1,4 +1,4 @@
-FROM docker.io/node:23-alpine3.21
+FROM docker.io/node:24-alpine3.23
 
 LABEL org.opencontainers.image.authors="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 LABEL org.opencontainers.image.source="https://github.com/saidsef/tika-document-to-text"
