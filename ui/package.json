@@ -37,7 +37,7 @@
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "helmet": "^8.2.0",
+    "helmet": "^8.3.0",
     "multer": "2.2.0",
     "pino-http": "^11.0.0",
     "prom-client": "^15.1.3",
