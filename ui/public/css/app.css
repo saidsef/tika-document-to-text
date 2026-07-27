@@ -1,0 +1,21 @@
+/* The handful of rules Bootstrap does not cover. Kept in a file so the CSP needs no 'unsafe-inline'. */
+
+.preview {
+  max-height: 300px;
+}
+
+.extracted {
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Conversion can take minutes on scanned PDFs, so make the wait visible. */
+form.busy {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+form.busy .form-control,
+form.busy .btn {
+  pointer-events: none;
+}
