@@ -5,3 +5,4 @@ resources:
 - deployment.yml
 - service.yml
 - hpa.yml
+- network-policy.yml

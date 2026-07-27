@@ -23,7 +23,12 @@ WORKDIR /opt/tika
 
 COPY prometheus-jmx-config.yaml tika-config.xml /opt/tika/
 
-RUN apt-get update && apt-get install --no-install-recommends -yq curl tesseract-ocr-all && \
+# The base image ships packages with published security updates that install alone
+# never picks up, which is where most of the reported image CVEs come from.
+# --force-confold keeps existing config files, so the upgrade stays non-interactive.
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade -yq -o Dpkg::Options::=--force-confold && \
+    apt-get install --no-install-recommends -yq curl tesseract-ocr-all && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     mkdir -p /opt/tika/libs && \
     curl -SL https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/${PROMETHEUS_JMX_JAR_VERSION}/jmx_prometheus_javaagent-${PROMETHEUS_JMX_JAR_VERSION}.jar -o /opt/tika/jmx_prometheus_javaagent.jar && \
@@ -36,10 +41,15 @@ RUN apt-get update && apt-get install --no-install-recommends -yq curl tesseract
 
 USER 10001
 
-HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://localhost:${PORT}/ || exit 1
+# Tika binds $POD_IP, so localhost only answers when POD_IP is the loopback default.
+HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://${POD_IP}:${PORT}/version || exit 1
 
 EXPOSE ${PORT} ${PORT_METRICS}
 
-ENTRYPOINT ["sh", "-c","exec java -XX:ActiveProcessorCount=1 -XX:ConcGCThreads=1 -XX:ParallelGCThreads=2 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+UseContainerSupport -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -Xlog:gc*:file=/tmp/gc.log:time,uptime,level,tags -Djava.io.tmpdir=/tmp -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=$PORT_METRICS:prometheus-jmx-config.yaml -cp \"$CLASSPATH\" -Djava.awt.headless=true org.apache.tika.server.core.TikaServerCli -h $POD_IP -p $PORT --config /opt/tika/tika-config.xml"]
+# UseG1GC must stay explicit: the JVM sees one CPU from the 200m cgroup limit and its
+# ergonomics pick SerialGC below two, which UseStringDeduplication does not support.
+# GC logs go to stdout - a file here would share the 1Gi emptyDir with java.io.tmpdir
+# and grow unbounded, eventually breaking OCR temp writes or evicting the pod.
+ENTRYPOINT ["sh", "-c","exec java -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:MaxRAMPercentage=80 -XX:+ExitOnOutOfMemoryError -Xlog:gc*:stdout:time,uptime,level,tags -Djava.io.tmpdir=/tmp -Djava.awt.headless=true -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=\"$PORT_METRICS\":/opt/tika/prometheus-jmx-config.yaml -cp \"$CLASSPATH\" org.apache.tika.server.core.TikaServerCli -h \"$POD_IP\" -p \"$PORT\" --config /opt/tika/tika-config.xml"]
 
 CMD []

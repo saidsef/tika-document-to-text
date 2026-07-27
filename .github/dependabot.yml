@@ -6,14 +6,12 @@ updates:
       interval: "weekly"
     pull-request-branch-name:
       separator: "-"
+  # The Dockerfiles live in subdirectories; "/" matched nothing, so base images
+  # were never proposed for update.
   - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    pull-request-branch-name:
-      separator: "-"
-  - package-ecosystem: "pip"
-    directory: "/function"
+    directories:
+      - "/ui"
+      - "/function"
     schedule:
       interval: "weekly"
     pull-request-branch-name:
