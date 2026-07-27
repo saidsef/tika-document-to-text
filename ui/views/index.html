@@ -37,47 +37,53 @@
   }
   </script>
 </head>
-<body class="container-fluid">
-  <main class="row mt-3">
-    <h1 class="h4 mb-3">Document to Text</h1>
-    <p class="text-muted">Upload a PDF, Office document or image. Scanned pages are read with OCR and the language is detected automatically.</p>
+<body>
+  <main class="container page py-4 py-md-5">
+    <header class="mb-4">
+      <h1 class="h3 mb-2">Document to Text</h1>
+      <p class="text-body-secondary mb-0">Upload a PDF, Office document or image. Scanned pages are read with OCR and the language is detected automatically.</p>
+    </header>
 
     ${d.error ? `<div class="alert alert-danger" role="alert">${d.esc(d.error)}</div>` : ''}
 
-    <form action="/" method="post" enctype="multipart/form-data" id="convert">
-      <div class="input-group mb-3">
-        <label class="input-group-text" for="doc">Upload file</label>
-        <input type="file" class="form-control" id="doc" name="doc" required />
-      </div>
-      <div class="mb-3" id="image-preview-wrap" hidden>
-        <img id="image-preview" alt="Preview of the selected image" class="img-fluid rounded preview" />
-      </div>
-      <div class="mb-3">
-        <label for="text" class="form-label">Extracted text</label>
-        <textarea id="text" class="form-control extracted" rows="20">${d.esc(d.text)}</textarea>
-      </div>
-      ${(d.detectedType || d.detectedLang) ? `<p class="text-muted small mb-2">Detected: ${d.esc([d.detectedType, d.detectedLang].filter(Boolean).join(' · '))}</p>` : ''}
-      <hr />
-      <div class="input-group mb-3" id="voice-controls" hidden>
-        <label class="input-group-text" for="voiceselection">Voice</label>
-        <select class="form-select" id="voiceselection"></select>
-      </div>
-      <div class="mb-3">
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button type="submit" class="btn btn-primary" id="submit">Convert</button>
-          <button type="button" class="btn btn-dark" id="read" hidden>Read aloud</button>
-          <button type="button" class="btn btn-secondary" id="pause" hidden>Pause</button>
-          <button type="button" class="btn btn-success" id="resume" hidden>Resume</button>
-          <button type="button" class="btn btn-info" id="download">Download .txt</button>
-        </div>
-      </div>
-      <p class="visually-hidden" role="status" aria-live="polite" id="status"></p>
-    </form>
-  </main>
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <form action="/" method="post" enctype="multipart/form-data" id="convert">
+          <div class="input-group mb-4">
+            <label class="input-group-text" for="doc">Upload file</label>
+            <input type="file" class="form-control" id="doc" name="doc" required />
+          </div>
+          <div class="mb-4" id="image-preview-wrap" hidden>
+            <img id="image-preview" alt="Preview of the selected image" class="img-fluid rounded border preview" />
+          </div>
+          <div class="d-flex justify-content-between align-items-end mb-1 gap-3">
+            <label for="text" class="form-label mb-0">Extracted text</label>
+            ${(d.detectedType || d.detectedLang) ? `<span class="text-body-secondary small text-end">Detected: ${d.esc([d.detectedType, d.detectedLang].filter(Boolean).join(' · '))}</span>` : ''}
+          </div>
+          <textarea id="text" class="form-control extracted" rows="12">${d.esc(d.text)}</textarea>
 
-  <footer class="text-center mt-4">
-    <small class="text-muted">&copy; Copyright ${d.esc(d.copyright)} saidsef. All Rights Reserved</small>
-  </footer>
+          <hr class="my-4" />
+
+          <div class="input-group mb-3" id="voice-controls" hidden>
+            <label class="input-group-text" for="voiceselection">Voice</label>
+            <select class="form-select" id="voiceselection"></select>
+          </div>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-primary" id="submit">Convert</button>
+            <button type="button" class="btn btn-outline-primary" id="read" hidden>Read aloud</button>
+            <button type="button" class="btn btn-outline-secondary" id="pause" hidden>Pause</button>
+            <button type="button" class="btn btn-outline-success" id="resume" hidden>Resume</button>
+            <button type="button" class="btn btn-outline-primary" id="download">Download .txt</button>
+          </div>
+          <p class="visually-hidden" role="status" aria-live="polite" id="status"></p>
+        </form>
+      </div>
+    </div>
+
+    <footer class="text-center text-body-secondary small mt-4">
+      &copy; Copyright ${d.esc(d.copyright)} saidsef. All Rights Reserved
+    </footer>
+  </main>
 
   <script src="/js/app.js" nonce="${d.nonce}" defer></script>
 </body>

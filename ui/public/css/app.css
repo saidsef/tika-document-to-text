@@ -1,5 +1,11 @@
 /* The handful of rules Bootstrap does not cover. Kept in a file so the CSP needs no 'unsafe-inline'. */
 
+/* Narrower than Bootstrap's .container so the form stays readable on wide screens.
+   Loaded after Bootstrap, so this wins on equal specificity. */
+.page {
+  max-width: 900px;
+}
+
 .preview {
   max-height: 300px;
 }
