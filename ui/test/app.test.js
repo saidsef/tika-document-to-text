@@ -67,6 +67,13 @@ describe('GET /', () => {
     assert.match(csp, /script-src 'self' 'nonce-/);
   });
 
+  it('allows the stylesheet CDN to be reached for its sourcemap', async () => {
+    const csp = (await fetch(`${base}/`)).headers.get('content-security-policy');
+    // Sourcemap fetches fall back to default-src unless connect-src is set explicitly.
+    assert.match(csp, /connect-src 'self' cdn\.jsdelivr\.net/);
+    assert.doesNotMatch(csp, /connect-src[^;]*\*/, 'must not widen to a wildcard');
+  });
+
   it('renders the current year in the footer', async () => {
     const html = await (await fetch(`${base}/`)).text();
     assert.ok(html.includes(`Copyright ${new Date().getFullYear()} saidsef`));

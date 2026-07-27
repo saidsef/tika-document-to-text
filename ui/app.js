@@ -82,6 +82,9 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       formAction: ["'self'"],
       frameAncestors: ["'self'"],
+      // DevTools fetches bootstrap.min.css.map, and a sourcemap request is governed by
+      // connect-src, not style-src. Without this it falls back to default-src and is blocked.
+      connectSrc: ["'self'", 'cdn.jsdelivr.net'],
       imgSrc: ["'self'", 'data:', 'blob:'],
       objectSrc: ["'none'"],
       sandbox: ['allow-forms', 'allow-scripts', 'allow-downloads', 'allow-same-origin'],
