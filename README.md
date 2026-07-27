@@ -66,7 +66,7 @@ Or, via Web UI, visit <http://localhost:8080/>.
 | `PROTOCOL` | `http` | Scheme used for the outbound call to Tika. |
 | `TIKA_TIMEOUT_MS` | `500000` | Abort a conversion after this long. |
 | `MAX_UPLOAD_BYTES` | `52428800` | Reject uploads larger than this (50 MB). |
-| `CANONICAL_ORIGIN` | _(request host)_ | Absolute origin for canonical/Open Graph/sitemap URLs, e.g. `https://tika.example.com`. Set this when serving a public site. |
+| `CANONICAL_ORIGIN` | *(request host)* | Absolute origin for canonical/Open Graph/sitemap URLs, e.g. `https://tika.example.com`. Set this when serving a public site. |
 
 Endpoints: `/` (UI), `/healthz` (liveness/readiness), `/metrics` (Prometheus), `/robots.txt`, `/sitemap.xml`.
 

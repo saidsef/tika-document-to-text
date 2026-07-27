@@ -22,7 +22,8 @@ const tika = http.createServer((req, res) => {
     if (tikaBehaviour === 'hang') return;
     if (tikaBehaviour === 'unsupported') {
       res.writeHead(422);
-      return res.end('Unsupported Media Type');
+      res.end('Unsupported Media Type');
+      return;
     }
     res.writeHead(200, { 'Content-Type': 'text/plain', 'X-Tika-Detected-Language': 'en' });
     res.end(`extracted ${size} bytes <script>alert(1)</script>`);
@@ -68,7 +69,7 @@ describe('GET /', () => {
 
   it('renders the current year in the footer', async () => {
     const html = await (await fetch(`${base}/`)).text();
-    assert.match(html, new RegExp(`Copyright ${new Date().getFullYear()} saidsef`));
+    assert.ok(html.includes(`Copyright ${new Date().getFullYear()} saidsef`));
   });
 });
 
@@ -81,7 +82,7 @@ describe('POST /', () => {
     assert.equal(res.status, 200);
     assert.match(html, /extracted 5 bytes/);
     assert.match(html, /Detected: text\/plain · en/);
-    assert.match(html, new RegExp(`Copyright ${new Date().getFullYear()}`), 'footer must not read "undefined"');
+    assert.ok(html.includes(`Copyright ${new Date().getFullYear()}`), 'footer must not read "undefined"');
   });
 
   it('escapes markup coming back from Tika', async () => {
@@ -140,10 +141,10 @@ describe('operational endpoints', () => {
   it('serves robots.txt and sitemap.xml pointing at the request origin', async () => {
     const robots = await (await fetch(`${base}/robots.txt`)).text();
     assert.match(robots, /^User-agent: \*/);
-    assert.match(robots, new RegExp(`Sitemap: ${base}/sitemap.xml`));
+    assert.ok(robots.includes(`Sitemap: ${base}/sitemap.xml`));
 
     const sitemap = await (await fetch(`${base}/sitemap.xml`)).text();
-    assert.match(sitemap, new RegExp(`<loc>${base}/</loc>`));
+    assert.ok(sitemap.includes(`<loc>${base}/</loc>`));
   });
 
   it('does not reflect a hostile Host header into the page or the sitemap', async () => {
@@ -163,6 +164,10 @@ describe('operational endpoints', () => {
     const sitemap = await get('/sitemap.xml', 'evil.test</loc></url><url><loc>http://spam');
     assert.doesNotMatch(sitemap, /spam/);
     assert.doesNotMatch(sitemap, /<urlset/, 'no absolute origin means no sitemap at all');
+
+    // A path smuggled into the Host header makes it malformed, not merely odd.
+    const smuggled = await get('/', 'evil.test/../../etc');
+    assert.doesNotMatch(smuggled, /rel="canonical"/);
 
     // A legitimate host still produces the SEO tags.
     const good = await get('/', 'tika.example.com');

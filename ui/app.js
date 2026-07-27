@@ -25,17 +25,24 @@ const MAX_UPLOAD_BYTES = Number(process.env.MAX_UPLOAD_BYTES) || 50 * 1024 * 102
 const tika = process.env.PROTOCOL === 'https' ? https : http;
 
 const CANONICAL_ORIGIN = process.env.CANONICAL_ORIGIN || '';
-const SAFE_HOST = /^[a-z0-9.-]+(:\d{1,5})?$/i;
 
 /**
  * Absolute origin for canonical, Open Graph and sitemap URLs.
- * The Host header is client-controlled, so an unrecognised host yields no origin
+ * The Host header is client-controlled, so it is run through the URL parser:
+ * anything it rejects, or any path smuggled into the header, yields no origin
  * rather than being reflected into the page.
  */
 function originOf(req) {
   if (CANONICAL_ORIGIN) return CANONICAL_ORIGIN;
   const host = req.get('host') || '';
-  return SAFE_HOST.test(host) ? `${req.protocol}://${host}` : '';
+  try {
+    const url = new URL(`${req.protocol}://${host}`);
+    // Host is `uri-host [ ":" port ]` and nothing else, so anything the parser
+    // moved into a path or query means the header was malformed.
+    return url.host === host.toLowerCase() ? url.origin : '';
+  } catch {
+    return '';
+  }
 }
 
 const app = express();
@@ -89,11 +96,13 @@ app.use(helmet({
 }));
 app.use(express.static(PUBLIC_DIR, { maxAge: '1h' }));
 
+const HTML_ESCAPES = new Map([
+  ['&', '&amp;'], ['<', '&lt;'], ['>', '&gt;'], ['"', '&quot;'], ["'", '&#39;'],
+]);
+
 /** Escape a value for interpolation into HTML text or a double-quoted attribute. */
 function escapeHtml(value) {
-  return String(value ?? '').replace(/[&<>"']/g, (c) => (
-    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-  ));
+  return String(value ?? '').replace(/[&<>"']/g, (c) => HTML_ESCAPES.get(c));
 }
 
 app.get('/', (req, res) => res.render('index'));
