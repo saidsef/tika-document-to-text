@@ -17,7 +17,17 @@ spec:
        - protocol: TCP
          port: 8080
   egress:
+    # Without this the UI cannot resolve the tika-server Service name and every
+    # conversion fails, which is why this policy must ship with it.
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
     - to:
       - podSelector:
           matchLabels:
             app.kubernetes.io/name: tika-server
+      ports:
+        - protocol: TCP
+          port: 8070
