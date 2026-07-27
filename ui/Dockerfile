@@ -18,6 +18,9 @@ ENV PROTOCOL=${PROTOCOL:-'http'}
 
 WORKDIR /app
 
+# Alpine security updates published since the base image was tagged.
+RUN apk upgrade --no-cache
+
 # Manifests first so `npm ci` is only re-run when dependencies actually change.
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force

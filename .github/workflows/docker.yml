@@ -125,7 +125,9 @@ jobs:
       if: success()
       with:
         sarif_file: 'trivy-results.sarif'
-        category: 'Trivy-server'
+        # Keep this category stable: alerts are tracked per (tool, category, ref),
+        # so renaming it orphans every existing alert instead of resolving it.
+        category: 'Trivy'
     - name: Run Trivy vulnerability scanner - (UI)
       uses: aquasecurity/trivy-action@v0.36.0
       continue-on-error: true
