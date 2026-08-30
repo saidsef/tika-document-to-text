@@ -1,4 +1,4 @@
-FROM docker.io/apache/tika:3.3.1.0-full
+FROM docker.io/apache/tika:4.0.0-1-full
 
 ARG PORT=''
 ARG PORT_METRICS=''
