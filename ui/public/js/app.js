@@ -60,7 +60,10 @@ const showPreview = (file) => {
 
 const describeSelection = () => {
   const file = fileInput.files[0];
-  if (!file) return clearSelection();
+  if (!file) {
+    clearSelection();
+    return;
+  }
 
   if (MAX_BYTES && file.size > MAX_BYTES) {
     clearSelection();
