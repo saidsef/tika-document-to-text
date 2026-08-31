@@ -46,8 +46,10 @@ HEALTHCHECK --interval=60s --timeout=10s CMD curl --fail http://${POD_IP}:${PORT
 
 EXPOSE ${PORT} ${PORT_METRICS}
 
+# UseG1GC must stay explicit: the JVM sees one CPU from the 200m cgroup limit and its
+# ergonomics pick SerialGC below two, which full-GCs this heap during startup.
 # GC logs go to stdout - a file here would share the emptyDir with java.io.tmpdir
 # and grow unbounded, eventually breaking OCR temp writes or evicting the pod.
-ENTRYPOINT ["sh", "-c","exec java -Xmx160m -XX:+ExitOnOutOfMemoryError -Xlog:gc*:stdout:time,uptime,level,tags -Djava.io.tmpdir=/tmp -Djava.awt.headless=true -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=\"$PORT_METRICS\":/opt/tika/prometheus-jmx-config.yaml -cp \"$CLASSPATH\" org.apache.tika.server.core.TikaServerCli -h \"$POD_IP\" -p \"$PORT\" --config /opt/tika/tika-config.json"]
+ENTRYPOINT ["sh", "-c","exec java -Xmx256m -XX:+UseG1GC -XX:+ExitOnOutOfMemoryError -Xlog:gc*:stdout:time,uptime,level,tags -Djava.io.tmpdir=/tmp -Djava.awt.headless=true -javaagent:/opt/tika/jmx_prometheus_javaagent.jar=\"$PORT_METRICS\":/opt/tika/prometheus-jmx-config.yaml -cp \"$CLASSPATH\" org.apache.tika.server.core.TikaServerCli -h \"$POD_IP\" -p \"$PORT\" --config /opt/tika/tika-config.json"]
 
 CMD []
