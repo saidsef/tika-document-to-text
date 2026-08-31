@@ -215,8 +215,6 @@ export const server = app.listen(PORT, () => console.log(`Server running on port
 // Must exceed the ingress keep-alive so nginx never reuses a socket Node is closing (avoids 502s).
 server.keepAliveTimeout = 65000;
 server.headersTimeout = 66000;
-// Matches proxy-send-timeout at the ingress. Node's 300s default 408s a 50MB upload on a slow
-// link, and the ingress terminates every inbound connection, so it owns the slowloris defence.
 server.requestTimeout = 3600000;
 
 export default app;

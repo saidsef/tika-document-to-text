@@ -9,8 +9,6 @@ spec:
     namespace: gateway-ingress
     sectionName: https
   rules:
-  # OCR on a scanned PDF runs for minutes, well past the 15s most gateways
-  # default to. Matches the nginx overlay so both routes behave the same.
   - timeouts:
       request: 3600s
       backendRequest: 3600s

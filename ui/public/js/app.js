@@ -38,8 +38,6 @@ const formatBytes = (bytes) => {
   return `${value.toFixed(value < 10 ? 1 : 0)} ${units[unit]}`;
 };
 
-/* ---------- file selection ---------- */
-
 const clearSelection = () => {
   fileInput.value = '';
   fileMeta.hidden = true;
@@ -61,7 +59,6 @@ const describeSelection = () => {
   const file = fileInput.files[0];
   if (!file) return clearSelection();
 
-  // Catching this here saves the user a multi-megabyte upload that ends in a 413.
   if (MAX_BYTES && file.size > MAX_BYTES) {
     clearSelection();
     announce(`That file is ${formatBytes(file.size)}. The limit is ${formatBytes(MAX_BYTES)}.`, 'text-danger');
@@ -96,18 +93,14 @@ dropzone.addEventListener('drop', (event) => {
   const file = event.dataTransfer.files[0];
   if (!file) return;
 
-  // The form posts the input, not the drop, so the dropped file has to be moved onto it.
   const transfer = new DataTransfer();
   transfer.items.add(file);
   fileInput.files = transfer.files;
   describeSelection();
 });
 
-// A file dropped anywhere else would otherwise navigate away and lose the extracted text.
 window.addEventListener('dragover', (event) => event.preventDefault());
 window.addEventListener('drop', (event) => event.preventDefault());
-
-/* ---------- extracted text ---------- */
 
 const updateCounts = () => {
   const text = textArea.value;
@@ -149,7 +142,6 @@ copy.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(text);
   } catch {
-    // Clipboard access needs a secure context; selecting the text is the next best thing.
     textArea.focus();
     textArea.select();
     return announce('Copying was blocked. The text is selected, so press Ctrl or Cmd + C.', 'text-danger');
@@ -283,7 +275,6 @@ form.addEventListener('submit', (event) => {
   form.classList.add('busy');
   announce('Converting your document. Large scanned files can take a few minutes.');
 
-  // The upload is a plain form post, so elapsed time is the only honest progress there is.
   const started = Date.now();
   ticker = setInterval(() => {
     const seconds = Math.round((Date.now() - started) / 1000);
@@ -291,7 +282,6 @@ form.addEventListener('submit', (event) => {
   }, 1000);
 });
 
-// Ctrl or Cmd + Enter submits from anywhere on the page, including the textarea.
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' && (event.metaKey || event.ctrlKey) && !submit.disabled) form.requestSubmit();
 });
@@ -303,7 +293,6 @@ window.addEventListener('pageshow', (event) => {
   announce(HINT);
 });
 
-// The result is below the fold on a stacked layout, so take the user to it.
 if (textArea.value && !window.matchMedia('(min-width: 1200px)').matches) {
   textArea.closest('.card').scrollIntoView({ block: 'start', behavior: 'smooth' });
 }
