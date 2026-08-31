@@ -113,6 +113,13 @@ describe('GET /', () => {
     assert.doesNotMatch(csp, /connect-src[^;]*\*/, 'must not widen to a wildcard');
   });
 
+  it('states the real upload limit so the browser can reject oversized files first', async () => {
+    const html = await (await fetch(`${base}/`)).text();
+    // MAX_UPLOAD_BYTES is 1024 here, so a megabyte-only label would read "0 MB".
+    assert.match(html, /up to 1 kB</);
+    assert.match(html, /data-max-bytes="1024"/);
+  });
+
   it('renders the current year in the footer', async () => {
     const html = await (await fetch(`${base}/`)).text();
     assert.ok(html.includes(`Copyright ${new Date().getFullYear()} saidsef`));
@@ -257,6 +264,13 @@ describe('operational endpoints', () => {
     // A legitimate host still produces the SEO tags.
     const good = await get('/', 'tika.example.com');
     assert.match(good, /rel="canonical" href="http:\/\/tika\.example\.com\/"/);
+  });
+
+  it('holds a slow upload as long as the ingress will', () => {
+    // Node defaults requestTimeout to 300s, which 408s a large upload over a slow link.
+    assert.equal(server.requestTimeout, 3600000);
+    assert.ok(server.headersTimeout > server.keepAliveTimeout, 'a lower headers timeout reopens the 502 race');
+    assert.ok(server.headersTimeout < server.requestTimeout, 'Node needs headersTimeout below requestTimeout');
   });
 
   it('serves static assets with a cache policy', async () => {

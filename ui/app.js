@@ -68,6 +68,8 @@ app.use((req, res, next) => {
   res.locals.copyright = String(new Date().getFullYear());
   res.locals.origin = originOf(req);
   res.locals.esc = escapeHtml;
+  res.locals.maxUploadBytes = String(MAX_UPLOAD_BYTES);
+  res.locals.maxUploadLabel = formatBytes(MAX_UPLOAD_BYTES);
   res.locals.text = '';
   res.locals.detectedType = '';
   res.locals.detectedLang = '';
@@ -102,6 +104,15 @@ app.use(express.static(PUBLIC_DIR, { maxAge: '1h' }));
 const HTML_ESCAPES = new Map([
   ['&', '&amp;'], ['<', '&lt;'], ['>', '&gt;'], ['"', '&quot;'], ["'", '&#39;'],
 ]);
+
+/** Human-readable byte count for the upload hint. */
+function formatBytes(bytes) {
+  const units = ['B', 'kB', 'MB', 'GB'];
+  let value = bytes;
+  let unit = 0;
+  while (value >= 1024 && unit < units.length - 1) { value /= 1024; unit += 1; }
+  return `${Number.isInteger(value) ? value : value.toFixed(1)} ${units[unit]}`;
+}
 
 /** Escape a value for interpolation into HTML text or a double-quoted attribute. */
 function escapeHtml(value) {
@@ -204,5 +215,8 @@ export const server = app.listen(PORT, () => console.log(`Server running on port
 // Must exceed the ingress keep-alive so nginx never reuses a socket Node is closing (avoids 502s).
 server.keepAliveTimeout = 65000;
 server.headersTimeout = 66000;
+// Matches proxy-send-timeout at the ingress. Node's 300s default 408s a 50MB upload on a slow
+// link, and the ingress terminates every inbound connection, so it owns the slowloris defence.
+server.requestTimeout = 3600000;
 
 export default app;
