@@ -8,10 +8,12 @@ Two containers, both built and published by CI:
 
 | Component | Source | Image tag | Role |
 | --------- | ------ | --------- | ---- |
-| UI | `ui/` | `ghcr.io/saidsef/tika-document-to-text:ui-latest` | Express web app. Accepts an upload and proxies it to Tika as `PUT /tika`. |
+| UI | `ui/` | `ghcr.io/saidsef/tika-document-to-text:ui-latest` | Express web app. Accepts an upload and proxies it to Tika as `PUT /tika/json/body`. |
 | Server | `function/Dockerfile.server` | `ghcr.io/saidsef/tika-document-to-text:server-latest` | Apache Tika server with OCR (Tesseract) and a Prometheus JMX exporter. |
 
-Uploads are held in memory and forwarded, never written to disk. PDFs are sent with `X-Tika-PDFocrStrategy: ocr_and_text_extraction` so scanned pages are OCR'd.
+Uploads are held in memory and forwarded, never written to disk. OCR settings live in `function/tika-config.json`: scanned PDFs are read with the `OCR_AND_TEXT_EXTRACTION` strategy, and image types are routed to Tesseract.
+
+Tika 4 parses in forked JVMs, so a saturated server answers `429` with `Retry-After` and the UI reports it as a retryable busy state rather than an unreadable file.
 
 ## Prerequisite
 
@@ -82,5 +84,7 @@ HOST=127.0.0.1 HOST_PORT=9998 npm start   # against a Tika server on :9998
 A Tika server to develop against:
 
 ```shell
-docker run --rm -p 9998:9998 apache/tika:latest
+docker run --rm -p 9998:9998 \
+  -v "$PWD/function/tika-config.json:/tika-config.json:ro" \
+  apache/tika:4.0.0-1-full -c /tika-config.json
 ```

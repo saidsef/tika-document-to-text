@@ -15,18 +15,57 @@ process.env.MAX_UPLOAD_BYTES = '1024';
 /** Behaviour of the stub Tika for the current test. */
 let tikaBehaviour = 'ok';
 
+/** Path the app called, asserted below. */
+let tikaPath = '';
+
 const tika = http.createServer((req, res) => {
   let size = 0;
+  tikaPath = req.url;
   req.on('data', (chunk) => { size += chunk.length; });
   req.on('end', () => {
     if (tikaBehaviour === 'hang') return;
     if (tikaBehaviour === 'unsupported') {
       res.writeHead(422);
-      res.end('Unsupported Media Type');
+      res.end('');
       return;
     }
-    res.writeHead(200, { 'Content-Type': 'text/plain', 'X-Tika-Detected-Language': 'en' });
-    res.end(`extracted ${size} bytes <script>alert(1)</script>`);
+    if (tikaBehaviour === 'busy') {
+      res.writeHead(429, { 'Retry-After': '5' });
+      res.end(JSON.stringify({ status: 'CLIENT_UNAVAILABLE_WITHIN_MS' }));
+      return;
+    }
+    if (tikaBehaviour === 'crashed') {
+      res.writeHead(503, { 'Retry-After': '5' });
+      res.end(JSON.stringify({ status: 'OOM' }));
+      return;
+    }
+    if (tikaBehaviour === 'broken') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ 'tk:exception:container-exception': 'java.io.IOException: at Object.boom' }));
+      return;
+    }
+    if (tikaBehaviour === 'empty') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ 'Content-Type': 'image/png' }));
+      return;
+    }
+    if (tikaBehaviour === 'unsure-language') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        'tk:content': `extracted ${size} bytes`,
+        'Content-Type': 'text/plain',
+        'tk:detected-language': 'eng',
+        'tk:detected-language-confidence': 'LOW',
+      }));
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      'tk:content': `extracted ${size} bytes <script>alert(1)</script>`,
+      'Content-Type': 'text/plain',
+      'tk:detected-language': 'en',
+      'tk:detected-language-confidence': 'HIGH',
+    }));
   });
 });
 
@@ -89,6 +128,7 @@ describe('POST /', () => {
     assert.equal(res.status, 200);
     assert.match(html, /extracted 5 bytes/);
     assert.match(html, /Detected: text\/plain · en/);
+    assert.equal(tikaPath, '/tika/json/body', 'bare /tika returns Markdown in Tika 4');
     assert.ok(html.includes(`Copyright ${new Date().getFullYear()}`), 'footer must not read "undefined"');
   });
 
@@ -111,11 +151,49 @@ describe('POST /', () => {
     assert.match(await res.text(), /too large/);
   });
 
-  it('surfaces a Tika rejection as 502 rather than passing it off as text', async () => {
+  it('surfaces a Tika rejection rather than passing it off as text', async () => {
     tikaBehaviour = 'unsupported';
     const res = await upload('hello');
+    assert.equal(res.status, 422);
+    assert.match(await res.text(), /No text could be read/);
+  });
+
+  it('reports a saturated fork pool as retryable, not as an unreadable file', async () => {
+    tikaBehaviour = 'busy';
+    const res = await upload('hello');
+    assert.equal(res.status, 429);
+    assert.equal(res.headers.get('retry-after'), '5');
+    assert.match(await res.text(), /busy right now/);
+  });
+
+  it('reports a crashed fork as a converter failure', async () => {
+    tikaBehaviour = 'crashed';
+    const res = await upload('hello');
     assert.equal(res.status, 502);
-    assert.match(await res.text(), /Tika could not read this file \(HTTP 422\)/);
+    assert.match(await res.text(), /ran out of time or memory/);
+  });
+
+  it('treats a 200 carrying a container exception as a failure', async () => {
+    tikaBehaviour = 'broken';
+    const res = await upload('hello');
+    assert.equal(res.status, 502);
+    const html = await res.text();
+    assert.match(html, /Tika could not read this file/);
+    assert.doesNotMatch(html, /IOException|at Object\./, 'must not leak the stack trace');
+  });
+
+  it('distinguishes a document with no text from a failed parse', async () => {
+    tikaBehaviour = 'empty';
+    const res = await upload('hello');
+    assert.equal(res.status, 422);
+    assert.match(await res.text(), /No text could be read/);
+  });
+
+  it('hides a low-confidence language guess', async () => {
+    tikaBehaviour = 'unsure-language';
+    const html = await (await upload('hello')).text();
+    assert.match(html, /Detected: text\/plain/);
+    assert.doesNotMatch(html, /Detected:[^<]*eng/, 'a LOW confidence guess is worse than none');
   });
 
   it('aborts and reports 504 when Tika stops responding', async () => {
