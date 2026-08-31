@@ -31,11 +31,11 @@ const announce = (message, tone = 'text-body-secondary') => {
 
 const formatBytes = (bytes) => {
   if (bytes < 1024) return `${bytes} B`;
-  const units = ['kB', 'MB', 'GB'];
+  const units = ['GB', 'MB', 'kB'];
   let value = bytes / 1024;
-  let unit = 0;
-  while (value >= 1024 && unit < units.length - 1) { value /= 1024; unit += 1; }
-  return `${value.toFixed(value < 10 ? 1 : 0)} ${units[unit]}`;
+  let unit = units.pop();
+  while (value >= 1024 && units.length) { value /= 1024; unit = units.pop(); }
+  return `${value.toFixed(value < 10 ? 1 : 0)} ${unit}`;
 };
 
 const clearSelection = () => {

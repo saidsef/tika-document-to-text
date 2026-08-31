@@ -107,11 +107,11 @@ const HTML_ESCAPES = new Map([
 
 /** Human-readable byte count for the upload hint. */
 function formatBytes(bytes) {
-  const units = ['B', 'kB', 'MB', 'GB'];
+  const units = ['GB', 'MB', 'kB', 'B'];
   let value = bytes;
-  let unit = 0;
-  while (value >= 1024 && unit < units.length - 1) { value /= 1024; unit += 1; }
-  return `${Number.isInteger(value) ? value : value.toFixed(1)} ${units[unit]}`;
+  let unit = units.pop();
+  while (value >= 1024 && units.length) { value /= 1024; unit = units.pop(); }
+  return `${Number.isInteger(value) ? value : value.toFixed(1)} ${unit}`;
 }
 
 /** Escape a value for interpolation into HTML text or a double-quoted attribute. */

@@ -2,8 +2,11 @@
 
 (() => {
   const KEY = 'colour-theme';
-  const ORDER = ['auto', 'light', 'dark'];
-  const LABELS = { auto: 'System theme', light: 'Light theme', dark: 'Dark theme' };
+  const THEMES = [
+    { id: 'auto', label: 'System theme' },
+    { id: 'light', label: 'Light theme' },
+    { id: 'dark', label: 'Dark theme' },
+  ];
   const dark = window.matchMedia('(prefers-color-scheme: dark)');
 
   const read = () => {
@@ -23,14 +26,16 @@
     }
   };
 
-  let choice = ORDER.includes(read()) ? read() : 'auto';
+  const stored = read();
+  let current = THEMES.find((theme) => theme.id === stored) || THEMES[0];
 
   const apply = () => {
-    document.documentElement.dataset.bsTheme = choice === 'auto' ? (dark.matches ? 'dark' : 'light') : choice;
+    const preferred = dark.matches ? 'dark' : 'light';
+    document.documentElement.dataset.bsTheme = current.id === 'auto' ? preferred : current.id;
   };
 
   apply();
-  dark.addEventListener('change', () => { if (choice === 'auto') apply(); });
+  dark.addEventListener('change', () => { if (current.id === 'auto') apply(); });
 
   document.addEventListener('DOMContentLoaded', () => {
     const button = document.getElementById('theme');
@@ -38,14 +43,15 @@
 
     const label = document.getElementById('theme-label');
     const paint = () => {
-      button.dataset.theme = choice;
-      button.setAttribute('aria-label', `Colour theme: ${LABELS[choice].toLowerCase()}. Select to change.`);
-      if (label) label.textContent = LABELS[choice];
+      button.dataset.theme = current.id;
+      button.setAttribute('aria-label', `Colour theme: ${current.label.toLowerCase()}. Select to change.`);
+      if (label) label.textContent = current.label;
     };
 
     button.addEventListener('click', () => {
-      choice = ORDER[(ORDER.indexOf(choice) + 1) % ORDER.length];
-      persist(choice);
+      const rest = THEMES.slice(THEMES.indexOf(current) + 1);
+      current = rest.length ? rest[0] : THEMES[0];
+      persist(current.id);
       apply();
       paint();
     });
