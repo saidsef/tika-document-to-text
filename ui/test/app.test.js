@@ -12,6 +12,8 @@ process.env.PORT = '8170';
 process.env.TIKA_TIMEOUT_MS = '1500';
 process.env.MAX_UPLOAD_BYTES = '1024';
 
+const PLAIN_TEXT = 'text/plain';
+
 /** Behaviour of the stub Tika for the current test. */
 let tikaBehaviour = 'ok';
 
@@ -53,7 +55,7 @@ const tika = http.createServer((req, res) => {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
         'tk:content': `extracted ${size} bytes`,
-        'Content-Type': 'text/plain',
+        'Content-Type': PLAIN_TEXT,
         'tk:detected-language': 'eng',
         'tk:detected-language-confidence': 'LOW',
       }));
@@ -62,7 +64,7 @@ const tika = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       'tk:content': `extracted ${size} bytes <script>alert(1)</script>`,
-      'Content-Type': 'text/plain',
+      'Content-Type': PLAIN_TEXT,
       'tk:detected-language': 'en',
       'tk:detected-language-confidence': 'HIGH',
     }));
@@ -74,7 +76,7 @@ const base = `http://127.0.0.1:${process.env.PORT}`;
 
 const upload = async (bytes, filename = 'sample.txt') => {
   const body = new FormData();
-  body.append('doc', new Blob([bytes], { type: 'text/plain' }), filename);
+  body.append('doc', new Blob([bytes], { type: PLAIN_TEXT }), filename);
   return fetch(`${base}/`, { method: 'POST', body });
 };
 

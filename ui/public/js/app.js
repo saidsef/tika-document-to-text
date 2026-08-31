@@ -21,9 +21,12 @@ const elapsed = el('elapsed');
 const status = el('status');
 
 const MAX_BYTES = Number(form.dataset.maxBytes) || 0;
-const TONES = ['text-body-secondary', 'text-danger', 'text-success'];
+const MUTED = 'text-body-secondary';
+const DANGER = 'text-danger';
+const SUCCESS = 'text-success';
+const TONES = [MUTED, DANGER, SUCCESS];
 
-const announce = (message, tone = 'text-body-secondary') => {
+const announce = (message, tone = MUTED) => {
   status.classList.remove(...TONES);
   status.classList.add(tone);
   status.textContent = message;
@@ -35,7 +38,7 @@ const formatBytes = (bytes) => {
   let value = bytes / 1024;
   let unit = units.pop();
   while (value >= 1024 && units.length) { value /= 1024; unit = units.pop(); }
-  return `${value.toFixed(value < 10 ? 1 : 0)} ${unit}`;
+  return `${Number.isInteger(value) ? value : value.toFixed(1)} ${unit}`;
 };
 
 const clearSelection = () => {
@@ -61,7 +64,7 @@ const describeSelection = () => {
 
   if (MAX_BYTES && file.size > MAX_BYTES) {
     clearSelection();
-    announce(`That file is ${formatBytes(file.size)}. The limit is ${formatBytes(MAX_BYTES)}.`, 'text-danger');
+    announce(`That file is ${formatBytes(file.size)}. The limit is ${formatBytes(MAX_BYTES)}.`, DANGER);
     return;
   }
 
@@ -123,7 +126,7 @@ const downloadName = () => {
 
 el('download').addEventListener('click', () => {
   const text = textArea.value;
-  if (!text.trim()) return announce('There is no text to download yet.', 'text-danger');
+  if (!text.trim()) return announce('There is no text to download yet.', DANGER);
 
   const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
   const link = document.createElement('a');
@@ -131,25 +134,25 @@ el('download').addEventListener('click', () => {
   link.download = downloadName();
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  announce(`Saved as ${link.download}.`, 'text-success');
+  announce(`Saved as ${link.download}.`, SUCCESS);
 });
 
 const copy = el('copy');
 copy.addEventListener('click', async () => {
   const text = textArea.value;
-  if (!text.trim()) return announce('There is no text to copy yet.', 'text-danger');
+  if (!text.trim()) return announce('There is no text to copy yet.', DANGER);
 
   try {
     await navigator.clipboard.writeText(text);
   } catch {
     textArea.focus();
     textArea.select();
-    return announce('Copying was blocked. The text is selected, so press Ctrl or Cmd + C.', 'text-danger');
+    return announce('Copying was blocked. The text is selected, so press Ctrl or Cmd + C.', DANGER);
   }
 
   copy.textContent = 'Copied';
   setTimeout(() => { copy.textContent = 'Copy'; }, 1500);
-  announce('Text copied to the clipboard.', 'text-success');
+  announce('Text copied to the clipboard.', SUCCESS);
 });
 
 el('clear').addEventListener('click', () => {
@@ -200,7 +203,7 @@ if (synth) {
   read.addEventListener('click', () => {
     const selected = window.getSelection().toString().trim();
     const text = selected || textArea.value;
-    if (!text.trim()) return announce('There is no text to read yet.', 'text-danger');
+    if (!text.trim()) return announce('There is no text to read yet.', DANGER);
 
     synth.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -265,7 +268,7 @@ form.addEventListener('submit', (event) => {
   if (!fileInput.files.length) {
     event.preventDefault();
     fileInput.focus();
-    return announce('Choose a document to convert first.', 'text-danger');
+    return announce('Choose a document to convert first.', DANGER);
   }
 
   submit.disabled = true;
