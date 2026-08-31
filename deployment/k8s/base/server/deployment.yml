@@ -79,6 +79,13 @@ spec:
               cpu: 200m
               memory: 1Gi
               ephemeral-storage: 1Gi
+          startupProbe:
+            httpGet:
+              path: /version
+              port: server
+            periodSeconds: 10
+            failureThreshold: 18
+            timeoutSeconds: 5
           livenessProbe:
             tcpSocket:
               port: server

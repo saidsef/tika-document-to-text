@@ -1,0 +1,79 @@
+{
+  "parsers": [
+    {
+      "tesseract-ocr-parser": {
+        "_mime-include": [
+          "image/jpeg",
+          "image/png",
+          "image/tiff",
+          "image/gif",
+          "image/bmp",
+          "image/webp"
+        ],
+        "language": "eng",
+        "skipOcr": false,
+        "preserveInterwordSpacing": true,
+        "minFileSizeToOcr": 0,
+        "maxFileSizeToOcr": 100000000,
+        "outputType": "TXT",
+        "pageSeparator": "\n\n",
+        "pageSegMode": "1",
+        "enableImagePreprocessing": true,
+        "timeoutMillis": 120000
+      }
+    },
+    {
+      "pdf-parser": {
+        "extractInlineImages": true,
+        "extractMarkedContent": true,
+        "extractAcroFormContent": true,
+        "catchIntermediateIOExceptions": true,
+        "ocr": {
+          "strategy": "OCR_AND_TEXT_EXTRACTION",
+          "dpi": 300
+        }
+      }
+    },
+    {
+      "default-parser": {
+        "_mime-exclude": [
+          "image/jpeg",
+          "image/png",
+          "image/tiff",
+          "image/gif",
+          "image/bmp",
+          "image/webp"
+        ]
+      }
+    }
+  ],
+
+  "metadata-filters": [
+    "charsoup-metadata-filter"
+  ],
+
+  "parse-context": {
+    "timeout-limits": {
+      "totalTaskTimeoutMillis": 300000
+    }
+  },
+
+  "pipes": {
+    "numClients": 1,
+    "maxWaitForClientMillis": 30000,
+    "forkedJvmArgs": [
+      "-Xmx512m",
+      "-XX:+UseG1GC",
+      "-XX:+UseStringDeduplication",
+      "-XX:+ParallelRefProcEnabled",
+      "-XX:ActiveProcessorCount=1",
+      "-Djava.awt.headless=true"
+    ],
+    "tempDirectory": "/tmp/tika-forks"
+  },
+
+  "server": {
+    "maxRequestSizeBytes": 52428800,
+    "endpoints": ["tika", "detect", "parsers", "mime-types", "version", "status"]
+  }
+}

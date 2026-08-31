@@ -110,33 +110,61 @@ function escapeHtml(value) {
 
 app.get('/', (req, res) => res.render('index'));
 
+/** Map a Tika status onto a browser-facing error. */
+function tikaError(statusCode) {
+  switch (statusCode) {
+    case 429: return httpError(429, 'The converter is busy right now. Try again in a moment.');
+    case 503: return httpError(502, 'The converter ran out of time or memory on this file.');
+    case 413: return httpError(413, 'That file is too large to convert.');
+    case 422: return httpError(422, 'No text could be read from this file.');
+    default: return httpError(502, `Tika could not read this file (HTTP ${statusCode}).`);
+  }
+}
+
 app.post('/', uploads.single('doc'), (req, res, next) => {
   if (!req.file) return next(httpError(400, 'Choose a document to convert.'));
 
   const request = tika.request({
     host: HOST,
     port: HOST_PORT,
-    path: '/tika',
+    path: '/tika/json/body',
     method: 'PUT',
     timeout: TIMEOUT,
     headers: {
       'Content-Type': req.file.mimetype || 'application/octet-stream',
       'Content-Length': req.file.buffer.length,
-      'Accept': 'text/plain',
-      ...(req.file.mimetype === 'application/pdf' && { 'X-Tika-PDFocrStrategy': 'ocr_and_text_extraction' }),
     },
   }, (response) => {
     const chunks = [];
     response.on('data', (chunk) => chunks.push(chunk));
     response.on('error', next);
     response.on('end', () => {
-      if (response.statusCode < 200 || response.statusCode >= 300) {
-        return next(httpError(502, `Tika could not read this file (HTTP ${response.statusCode}).`));
+      if (response.statusCode !== 200) {
+        if (response.headers['retry-after']) res.set('Retry-After', response.headers['retry-after']);
+        return next(tikaError(response.statusCode));
       }
+
+      let meta;
+      try {
+        meta = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+      } catch {
+        return next(httpError(502, 'The converter returned a response this app could not read.'));
+      }
+
+      const text = String(meta['tk:content'] ?? '').replace(/\n?\s{4,}/g, '\n\n').trim();
+      if (!text) {
+        return next(meta['tk:exception:container-exception']
+          ? httpError(502, 'Tika could not read this file.')
+          : httpError(422, 'No text could be read from this file.'));
+      }
+
+      const confidence = meta['tk:detected-language-confidence'];
       res.render('index', {
-        text: Buffer.concat(chunks).toString('utf8').replace(/\n?\s{4,}/g, '\n\n').trim(),
-        detectedType: response.headers['content-type'] || '',
-        detectedLang: response.headers['x-tika-detected-language'] || '',
+        text,
+        detectedType: meta['Content-Type'] || '',
+        detectedLang: confidence === 'HIGH' || confidence === 'MEDIUM'
+          ? meta['tk:detected-language'] || ''
+          : '',
       });
     });
   });
