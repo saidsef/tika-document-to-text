@@ -68,6 +68,8 @@ app.use((req, res, next) => {
   res.locals.copyright = String(new Date().getFullYear());
   res.locals.origin = originOf(req);
   res.locals.esc = escapeHtml;
+  res.locals.maxUploadBytes = String(MAX_UPLOAD_BYTES);
+  res.locals.maxUploadLabel = formatBytes(MAX_UPLOAD_BYTES);
   res.locals.text = '';
   res.locals.detectedType = '';
   res.locals.detectedLang = '';
@@ -102,6 +104,15 @@ app.use(express.static(PUBLIC_DIR, { maxAge: '1h' }));
 const HTML_ESCAPES = new Map([
   ['&', '&amp;'], ['<', '&lt;'], ['>', '&gt;'], ['"', '&quot;'], ["'", '&#39;'],
 ]);
+
+/** Human-readable byte count for the upload hint. */
+function formatBytes(bytes) {
+  const units = ['GB', 'MB', 'kB', 'B'];
+  let value = bytes;
+  let unit = units.pop();
+  while (value >= 1024 && units.length) { value /= 1024; unit = units.pop(); }
+  return `${Number.isInteger(value) ? value : value.toFixed(1)} ${unit}`;
+}
 
 /** Escape a value for interpolation into HTML text or a double-quoted attribute. */
 function escapeHtml(value) {
@@ -204,5 +215,6 @@ export const server = app.listen(PORT, () => console.log(`Server running on port
 // Must exceed the ingress keep-alive so nginx never reuses a socket Node is closing (avoids 502s).
 server.keepAliveTimeout = 65000;
 server.headersTimeout = 66000;
+server.requestTimeout = 3600000;
 
 export default app;

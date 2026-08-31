@@ -9,7 +9,10 @@ spec:
     namespace: gateway-ingress
     sectionName: https
   rules:
-  - matches:
+  - timeouts:
+      request: 3600s
+      backendRequest: 3600s
+    matches:
     - path:
         value: /
     backendRefs:
