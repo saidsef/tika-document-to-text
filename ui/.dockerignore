@@ -3,3 +3,4 @@ npm-debug.log*
 test
 Dockerfile
 .dockerignore
+public/build

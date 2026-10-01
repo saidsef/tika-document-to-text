@@ -49,6 +49,8 @@ const app = express();
 const uploads = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_UPLOAD_BYTES, files: 1 },
+  // Browsers send the filename as UTF-8, and the page shows it back.
+  defParamCharset: 'utf8',
 });
 
 collectDefaultMetrics({ register: prometheusRegister });
@@ -71,8 +73,11 @@ app.use((req, res, next) => {
   res.locals.maxUploadBytes = String(MAX_UPLOAD_BYTES);
   res.locals.maxUploadLabel = formatBytes(MAX_UPLOAD_BYTES);
   res.locals.text = '';
+  res.locals.source = '';
   res.locals.detectedType = '';
+  res.locals.detectedMime = '';
   res.locals.detectedLang = '';
+  res.locals.detectedLangCode = '';
   res.locals.error = '';
   next();
 });
@@ -84,16 +89,13 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       formAction: ["'self'"],
       frameAncestors: ["'self'"],
-      // DevTools fetches bootstrap.min.css.map, and a sourcemap request is governed by
-      // connect-src, not style-src. Without this it falls back to default-src and is blocked.
-      connectSrc: ["'self'", 'cdn.jsdelivr.net'],
       imgSrc: ["'self'", 'data:', 'blob:'],
       objectSrc: ["'none'"],
       sandbox: ['allow-forms', 'allow-scripts', 'allow-downloads', 'allow-same-origin'],
       // No 'unsafe-inline' anywhere: every script is external and carries this nonce,
       // and every style lives in a stylesheet.
       scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.nonce}'`],
-      styleSrc: ["'self'", 'cdn.jsdelivr.net'],
+      styleSrc: ["'self'"],
       upgradeInsecureRequests: [],
     },
   },
@@ -112,6 +114,41 @@ function formatBytes(bytes) {
   let unit = units.pop();
   while (value >= 1024 && units.length) { value /= 1024; unit = units.pop(); }
   return `${Number.isInteger(value) ? value : value.toFixed(1)} ${unit}`;
+}
+
+const TYPE_NAMES = [
+  [/^application\/pdf$/, 'PDF'],
+  [/^application\/(msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.)/, 'Word document'],
+  [/^application\/(vnd\.ms-excel|vnd\.openxmlformats-officedocument\.spreadsheetml\.)/, 'Excel workbook'],
+  [/^application\/(vnd\.ms-powerpoint|vnd\.openxmlformats-officedocument\.presentationml\.)/, 'PowerPoint presentation'],
+  [/^application\/vnd\.oasis\.opendocument\.text/, 'OpenDocument text'],
+  [/^application\/vnd\.oasis\.opendocument\.spreadsheet/, 'OpenDocument spreadsheet'],
+  [/^application\/vnd\.oasis\.opendocument\.presentation/, 'OpenDocument presentation'],
+  [/^(application|text)\/rtf$/, 'Rich Text'],
+  [/^(text\/html|application\/xhtml\+xml)$/, 'HTML'],
+  [/^(message\/rfc822|application\/vnd\.ms-outlook)$/, 'E-mail'],
+  [/^text\/csv$/, 'CSV'],
+  [/^text\/plain$/, 'Plain text'],
+];
+
+/** Readable name for a detected media type, since Office types run to 70 characters. */
+function describeType(mime) {
+  const type = String(mime).split(';')[0].trim().toLowerCase();
+  const known = TYPE_NAMES.find(([pattern]) => pattern.test(type));
+  if (known) return known[1];
+  if (type.startsWith('image/')) return `${type.slice(6).split('+')[0].toUpperCase()} image`;
+  return type;
+}
+
+const LANGUAGE_NAMES = new Intl.DisplayNames(['en'], { type: 'language' });
+
+/** English name for a language tag, or the tag itself when Intl does not know it. */
+function describeLanguage(tag) {
+  try {
+    return LANGUAGE_NAMES.of(tag) || tag;
+  } catch {
+    return tag;
+  }
 }
 
 /** Escape a value for interpolation into HTML text or a double-quoted attribute. */
@@ -170,12 +207,15 @@ app.post('/', uploads.single('doc'), (req, res, next) => {
       }
 
       const confidence = meta['tk:detected-language-confidence'];
+      const mime = meta['Content-Type'] || '';
+      const lang = confidence === 'HIGH' || confidence === 'MEDIUM' ? meta['tk:detected-language'] || '' : '';
       res.render('index', {
         text,
-        detectedType: meta['Content-Type'] || '',
-        detectedLang: confidence === 'HIGH' || confidence === 'MEDIUM'
-          ? meta['tk:detected-language'] || ''
-          : '',
+        source: req.file.originalname || '',
+        detectedType: mime && describeType(mime),
+        detectedMime: mime,
+        detectedLang: lang && describeLanguage(lang),
+        detectedLangCode: lang,
       });
     });
   });

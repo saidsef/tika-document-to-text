@@ -81,6 +81,8 @@ npm test                                  # unit and integration tests
 HOST=127.0.0.1 HOST_PORT=9998 npm start   # against a Tika server on :9998
 ```
 
+The UI is styled with Tailwind CSS and uses Preline for the theme menu and tooltips. `npm start` and `npm test` compile `styles/app.css` and copy the Preline scripts into `public/build/`, which is not committed. After editing the stylesheet, or the class names in `views/` or `public/js/`, run `npm run build`.
+
 A Tika server to develop against:
 
 ```shell

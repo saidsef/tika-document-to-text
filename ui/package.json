@@ -4,7 +4,10 @@
   "description": "FaaS Conver to Text Using Apache Tika",
   "main": "app.js",
   "scripts": {
+    "build": "node scripts/build.js",
+    "prestart": "npm run build",
     "start": "node app.js",
+    "pretest": "npm run build",
     "test": "node --test test/*.test.js"
   },
   "contributors": [
@@ -41,5 +44,12 @@
     "template-literal": "^1.0.4"
   },
   "homepage": "https://github.com/saidsef/tika-document-to-text#readme",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@preline/dropdown": "^5.0.0",
+    "@preline/tooltip": "^5.0.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3"
+  }
 }
