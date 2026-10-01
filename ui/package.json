@@ -47,7 +47,6 @@
   "type": "module",
   "devDependencies": {
     "@preline/dropdown": "^5.0.0",
-    "@preline/tooltip": "^5.0.0",
     "@tailwindcss/postcss": "^4.3.3",
     "postcss": "^8.5.28",
     "tailwindcss": "^4.3.3"

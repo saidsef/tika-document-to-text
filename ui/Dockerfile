@@ -1,17 +1,9 @@
-# Tailwind CSS and Preline are build tools only, so they stay out of the runtime image.
-# The output is plain CSS and JavaScript, so it is built once on the native platform.
-FROM --platform=$BUILDPLATFORM docker.io/node:26-alpine3.24 AS assets
+# Tailwind CSS and Preline build public/build here and stay out of the runtime image.
+FROM docker.io/node:26-alpine3.24 AS assets
 
 WORKDIR /app
-
-COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
-
-COPY scripts ./scripts
-COPY styles ./styles
-COPY views ./views
-COPY public ./public
-RUN npm run build
+COPY . .
+RUN npm ci --ignore-scripts && npm run build
 
 FROM docker.io/node:26-alpine3.24
 

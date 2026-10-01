@@ -13,7 +13,6 @@ process.env.TIKA_TIMEOUT_MS = '1500';
 process.env.MAX_UPLOAD_BYTES = '1024';
 
 const PLAIN_TEXT = 'text/plain';
-const DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 /** Behaviour of the stub Tika for the current test. */
 let tikaBehaviour = 'ok';
@@ -50,16 +49,6 @@ const tika = http.createServer((req, res) => {
     if (tikaBehaviour === 'empty') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ 'Content-Type': 'image/png' }));
-      return;
-    }
-    if (tikaBehaviour === 'office') {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        'tk:content': 'quarterly report',
-        'Content-Type': DOCX,
-        'tk:detected-language': 'fr',
-        'tk:detected-language-confidence': 'MEDIUM',
-      }));
       return;
     }
     if (tikaBehaviour === 'unsure-language') {
@@ -128,10 +117,10 @@ describe('GET /', () => {
     assert.deepEqual(external.filter((tag) => !/rel="canonical"/.test(tag)), [], 'no stylesheet or script from a third party');
   });
 
-  it('serves the compiled stylesheet and the Preline scripts', async () => {
+  it('serves the compiled stylesheet and the Preline script', async () => {
     const html = await (await fetch(`${base}/`)).text();
     const assets = [...html.matchAll(/(?:href|src)="(\/build\/[^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(assets.sort(), ['/build/app.css', '/build/dropdown.js', '/build/tooltip.js']);
+    assert.deepEqual(assets.sort(), ['/build/app.css', '/build/dropdown.js']);
 
     for (const path of assets) {
       const res = await fetch(`${base}${path}`);
@@ -159,20 +148,11 @@ describe('POST /', () => {
 
     assert.equal(res.status, 200);
     assert.match(html, /extracted 5 bytes/);
-    assert.match(html, /Detected format: <\/span>Plain text/);
-    assert.match(html, /Detected language: <\/span>English/);
+    assert.match(html, /Detected: text\/plain · en/);
     assert.match(html, /<textarea[^>]* lang="en"/, 'screen readers need the language of the text');
-    assert.match(html, /Source file: <\/span><span[^>]*>sample\.txt</);
+    assert.match(html, />sample\.txt</);
     assert.equal(tikaPath, '/tika/json/body', 'bare /tika returns Markdown in Tika 4');
     assert.ok(html.includes(`Copyright ${new Date().getFullYear()}`), 'footer must not read "undefined"');
-  });
-
-  it('names Office formats rather than printing the media type', async () => {
-    tikaBehaviour = 'office';
-    const html = await (await upload('hello', 'report.docx')).text();
-    assert.match(html, /Detected format: <\/span>Word document/);
-    assert.ok(html.includes(`title="${DOCX}"`), 'the media type stays available on hover');
-    assert.match(html, /Detected language: <\/span>French/);
   });
 
   it('shows the uploaded file name as UTF-8 and escaped', async () => {
@@ -242,9 +222,8 @@ describe('POST /', () => {
   it('hides a low-confidence language guess', async () => {
     tikaBehaviour = 'unsure-language';
     const html = await (await upload('hello')).text();
-    assert.match(html, /Detected format: <\/span>Plain text/);
-    assert.doesNotMatch(html, /Detected language/, 'a LOW confidence guess is worse than none');
-    assert.doesNotMatch(html, /lang="eng"/);
+    assert.match(html, /Detected: text\/plain/);
+    assert.doesNotMatch(html, /Detected:[^<]*eng/, 'a LOW confidence guess is worse than none');
   });
 
   it('aborts and reports 504 when Tika stops responding', async () => {

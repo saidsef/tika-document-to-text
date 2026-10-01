@@ -3,38 +3,19 @@
 @import "tailwindcss" source(none);
 
 @source "../views";
-@source "../public/js/app.js";
-@source "../public/js/theme.js";
+@source "../public/js";
 @source "../node_modules/@preline/dropdown/index.js";
-@source "../node_modules/@preline/tooltip/index.js";
 
 @import "@preline/dropdown/variants.css";
-@import "@preline/tooltip/variants.css";
-/* Both plugins ship the same Preline theme, so one copy is enough. */
 @import "@preline/dropdown/theme.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
-
-@theme {
-  --animate-indeterminate: indeterminate 1.4s ease-in-out infinite;
-
-  @keyframes indeterminate {
-    0% { left: -35%; }
-    100% { left: 100%; }
-  }
-}
-
-:root {
-  color-scheme: light;
-}
 
 /* Preline's dark primary is blue-500, which white text fails WCAG AA on. */
 .dark {
   color-scheme: dark;
   --primary: var(--color-primary-600);
   --primary-hover: var(--color-primary-700);
-  --primary-focus: var(--color-primary-700);
-  --primary-active: var(--color-primary-700);
 }
 
 @layer components {
@@ -43,47 +24,19 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-x-1.5 rounded-lg border border-layer-line bg-layer px-2.5 py-1.5 text-xs font-medium text-layer-foreground shadow-2xs transition-colors;
-    @apply hover:bg-layer-hover focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 disabled:pointer-events-none disabled:opacity-50;
-  }
-
-  .btn-icon {
-    @apply inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-layer-line bg-layer text-layer-foreground shadow-2xs transition-colors;
-    @apply hover:bg-layer-hover focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40;
+    @apply rounded-lg border border-layer-line bg-layer px-2.5 py-1.5 text-xs font-medium text-layer-foreground hover:bg-layer-hover focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40;
   }
 
   .menu-item {
-    @apply flex w-full items-center gap-x-2.5 rounded-lg px-3 py-2 text-sm text-dropdown-item-foreground;
-    @apply hover:bg-dropdown-item-hover focus:bg-dropdown-item-focus focus:outline-hidden;
-  }
-
-  .chip {
-    @apply inline-flex items-center gap-x-1 rounded-full bg-surface px-2 py-0.5 text-xs font-medium text-surface-foreground;
-  }
-
-  .kbd {
-    @apply inline-flex h-5 shrink-0 items-center rounded border border-line-2 bg-layer px-1.5 font-sans text-[11px] font-medium whitespace-nowrap text-muted-foreground-2 shadow-2xs;
-  }
-
-  /* not-sr-only resets padding, so the link is hidden only while it lacks focus. */
-  .skip-link {
-    @apply fixed start-3 top-3 z-50 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground shadow-lg focus:outline-hidden focus-visible:ring-4 focus-visible:ring-primary/30;
-  }
-
-  .skip-link:not(:focus) {
-    @apply sr-only;
-  }
-
-  .tooltip {
-    @apply invisible absolute z-50 rounded-md bg-tooltip px-2 py-1 text-xs font-medium text-tooltip-foreground opacity-0 shadow-md transition-opacity hs-tooltip-shown:visible hs-tooltip-shown:opacity-100;
+    @apply block w-full rounded-md px-3 py-1.5 text-start text-sm text-dropdown-item-foreground hover:bg-dropdown-item-hover focus:bg-dropdown-item-focus focus:outline-hidden aria-checked:font-semibold;
   }
 
   /* Disabling the inputs would drop the file from the submission, so they are only made inert. */
-  form[data-busy] {
+  form.busy {
     cursor: progress;
   }
 
-  form[data-busy] :is(#dropzone, #file-meta, textarea, select, button:not([type="submit"])) {
+  form.busy :is(#dropzone, button:not([type="submit"]), textarea, select) {
     pointer-events: none;
     opacity: 0.6;
   }
