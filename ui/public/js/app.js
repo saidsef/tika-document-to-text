@@ -5,48 +5,30 @@ const el = (id) => document.getElementById(id);
 const form = el('convert');
 const fileInput = el('doc');
 const dropzone = el('dropzone');
-const dropzoneTitle = el('dropzone-title');
-const dropOverlay = el('drop-overlay');
 const fileMeta = el('file-meta');
-const fileExt = el('file-ext');
 const fileName = el('file-name');
 const fileSize = el('file-size');
 const fileClear = el('file-clear');
 const textArea = el('text');
-const resultMeta = el('result-meta');
 const counts = el('counts');
 const previewWrap = el('image-preview-wrap');
 const preview = el('image-preview');
 const submit = el('submit');
 const submitLabel = el('submit-label');
-const submitKbd = el('submit-kbd');
 const spinner = el('spinner');
 const progressWrap = el('progress-wrap');
 const elapsed = el('elapsed');
 const status = el('status');
-const undo = el('undo');
-const copy = el('copy');
-const copyLabel = el('copy-label');
-const download = el('download');
-const clear = el('clear');
 
 const MAX_BYTES = Number(form.dataset.maxBytes) || 0;
-const MUTED = ['text-muted-foreground-1'];
-const DANGER = ['text-red-600', 'dark:text-red-400'];
-const SUCCESS = ['text-teal-700', 'dark:text-teal-400'];
-const TONES = [...MUTED, ...DANGER, ...SUCCESS];
+const DANGER = 'danger';
+const SUCCESS = 'success';
 
-const IS_MAC = /mac|iphone|ipad/i.test(navigator.userAgentData?.platform || navigator.platform);
-const MOD = IS_MAC ? '⌘' : 'Ctrl';
-document.querySelectorAll('[data-mod]').forEach((node) => { node.textContent = MOD; });
-
-const announce = (message, tone = MUTED) => {
-  status.classList.remove(...TONES);
-  status.classList.add(...tone);
+// The tone picks the colour through data-[tone] classes on #status.
+const announce = (message, tone = '') => {
+  status.dataset.tone = tone;
   status.textContent = message;
 };
-
-const plural = (count, word) => `${count.toLocaleString()} ${word}${count === 1 ? '' : 's'}`;
 
 const formatBytes = (bytes) => {
   if (bytes < 1024) return `${bytes} B`;
@@ -57,22 +39,10 @@ const formatBytes = (bytes) => {
   return `${Number.isInteger(value) ? value : value.toFixed(1)} ${unit}`;
 };
 
-const alertDismiss = el('alert-dismiss');
-if (alertDismiss) {
-  alertDismiss.addEventListener('click', () => {
-    el('alert').remove();
-    fileInput.focus();
-  });
-}
-
-/* ---------- choosing a file ---------- */
-
-let busy = false;
-
-const setInvalid = (on) => {
-  if (on) dropzone.dataset.invalid = '';
-  else delete dropzone.dataset.invalid;
-  fileInput.setAttribute('aria-invalid', String(on));
+const clearSelection = () => {
+  fileInput.value = '';
+  fileMeta.hidden = true;
+  showPreview(null);
 };
 
 const showPreview = (file) => {
@@ -86,20 +56,7 @@ const showPreview = (file) => {
   }
 };
 
-const clearSelection = () => {
-  fileInput.value = '';
-  fileMeta.hidden = true;
-  dropzoneTitle.textContent = 'Drop a file here or';
-  showPreview(null);
-};
-
-const extensionOf = (file) => {
-  const dot = file.name.lastIndexOf('.');
-  const ext = dot > 0 ? file.name.slice(dot + 1) : file.type.split('/')[1] || 'file';
-  return ext.slice(0, 4);
-};
-
-const describeSelection = (how = 'chosen') => {
+const describeSelection = () => {
   const file = fileInput.files[0];
   if (!file) {
     clearSelection();
@@ -108,121 +65,59 @@ const describeSelection = (how = 'chosen') => {
 
   if (MAX_BYTES && file.size > MAX_BYTES) {
     clearSelection();
-    setInvalid(true);
-    announce(`${file.name} is ${formatBytes(file.size)}. The limit is ${formatBytes(MAX_BYTES)}.`, DANGER);
+    announce(`That file is ${formatBytes(file.size)}. The limit is ${formatBytes(MAX_BYTES)}.`, DANGER);
     return;
   }
 
-  setInvalid(false);
-  fileExt.textContent = extensionOf(file);
   fileName.textContent = file.name;
-  fileSize.textContent = `${formatBytes(file.size)} · ready to convert`;
+  fileSize.textContent = [formatBytes(file.size), file.type || 'unknown type'].join(' · ');
   fileMeta.hidden = false;
-  dropzoneTitle.textContent = 'Drop a different file or';
   showPreview(file);
-  announce(`${file.name} ${how === 'pasted' ? 'was pasted from the clipboard' : 'is ready'}. Select Convert to text, or press ${MOD} + Enter.`);
+  announce(`${file.name} is ready. Select Convert to extract its text.`);
 };
 
-const selectFile = (file, how) => {
-  const transfer = new DataTransfer();
-  transfer.items.add(file);
-  fileInput.files = transfer.files;
-  describeSelection(how);
-};
-
-// A file named .png that the browser cannot decode would otherwise show a broken image.
-preview.addEventListener('error', () => { previewWrap.hidden = true; });
-
-fileInput.addEventListener('change', () => describeSelection());
+fileInput.addEventListener('change', describeSelection);
 fileClear.addEventListener('click', () => {
   clearSelection();
   announce('Selection cleared.');
   fileInput.focus();
 });
 
-// Accept a file dropped anywhere on the page, not only on the drop zone.
-let dragDepth = 0;
-const carriesFiles = (event) => Array.from(event.dataTransfer?.types || []).includes('Files');
-const dragging = (on) => {
-  dropOverlay.hidden = !on;
-  if (on) dropzone.dataset.dragover = '';
-  else delete dropzone.dataset.dragover;
-};
-
-window.addEventListener('dragenter', (event) => {
-  if (!carriesFiles(event) || busy) return;
+['dragenter', 'dragover'].forEach((name) => dropzone.addEventListener(name, (event) => {
   event.preventDefault();
-  dragDepth += 1;
-  dragging(true);
-});
+  dropzone.toggleAttribute('data-dragover', true);
+}));
 
-window.addEventListener('dragover', (event) => {
-  if (!carriesFiles(event)) return;
+['dragleave', 'dragend', 'drop'].forEach((name) => dropzone.addEventListener(name, () => {
+  dropzone.toggleAttribute('data-dragover', false);
+}));
+
+dropzone.addEventListener('drop', (event) => {
   event.preventDefault();
-  event.dataTransfer.dropEffect = busy ? 'none' : 'copy';
+  const file = event.dataTransfer.files[0];
+  if (!file) return;
+
+  const transfer = new DataTransfer();
+  transfer.items.add(file);
+  fileInput.files = transfer.files;
+  describeSelection();
 });
 
-window.addEventListener('dragleave', (event) => {
-  if (!carriesFiles(event)) return;
-  dragDepth = Math.max(0, dragDepth - 1);
-  if (!dragDepth) dragging(false);
-});
+window.addEventListener('dragover', (event) => event.preventDefault());
+window.addEventListener('drop', (event) => event.preventDefault());
 
-window.addEventListener('drop', (event) => {
-  if (!carriesFiles(event)) return;
-  event.preventDefault();
-  dragDepth = 0;
-  dragging(false);
-  const [file, ...rest] = event.dataTransfer.files;
-  if (!file || busy) return;
-  selectFile(file);
-  if (rest.length) announce(`Only one file converts at a time, so ${file.name} was kept.`);
-});
-
-// A copied screenshot arrives as a file, which suits OCR.
-document.addEventListener('paste', (event) => {
-  const file = event.clipboardData?.files?.[0];
-  if (!file || busy) return;
-  // Office copies carry an image of the selection as well, but the user meant the text.
-  if (event.target === textArea && event.clipboardData.types.includes('text/plain')) return;
-  event.preventDefault();
-  selectFile(file, 'pasted');
-});
-
-/* ---------- the extracted text ---------- */
-
-let cleared = '';
-let undoTimer = null;
-
-const hideUndo = () => {
-  clearTimeout(undoTimer);
-  undo.hidden = true;
-  cleared = '';
-};
-
-const textChanged = () => {
+const updateCounts = () => {
   const text = textArea.value;
-  const empty = !text.trim();
-  const words = empty ? 0 : text.trim().split(/\s+/).length;
-  counts.textContent = text ? `${plural(words, 'word')} · ${plural(text.length, 'character')}` : '';
-  [copy, download, clear].forEach((button) => { button.disabled = empty; });
-  el('speak').disabled = empty;
-  // The chips describe the converted file, so they go when its text does.
-  if (resultMeta) resultMeta.hidden = empty;
+  if (!text) return counts.replaceChildren();
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  counts.textContent = `${words.toLocaleString()} words · ${text.length.toLocaleString()} characters`;
 };
 
-// Replaced below when the browser can speak.
-let stopReading = () => {};
+textArea.addEventListener('input', updateCounts);
+updateCounts();
 
-textArea.addEventListener('input', () => {
-  hideUndo();
-  textChanged();
-});
-textChanged();
-
-const HINT = window.matchMedia('(pointer: coarse)').matches
-  ? 'Choose a file, then select Convert to text.'
-  : `Drop or paste a file anywhere on the page, then press ${MOD} + Enter to convert.`;
+const HINT = 'Drop a file on the upload panel, or press Ctrl or Cmd + Enter to convert.';
+announce(HINT);
 
 const downloadName = () => {
   const source = (fileInput.files[0]?.name || textArea.dataset.source).replace(/\.[^.]+$/, '');
@@ -230,7 +125,7 @@ const downloadName = () => {
   return `${source || 'extracted'}-${stamp}.txt`;
 };
 
-download.addEventListener('click', () => {
+el('download').addEventListener('click', () => {
   const text = textArea.value;
   if (!text.trim()) return announce('There is no text to download yet.', DANGER);
 
@@ -243,6 +138,7 @@ download.addEventListener('click', () => {
   announce(`Saved as ${link.download}.`, SUCCESS);
 });
 
+const copy = el('copy');
 copy.addEventListener('click', async () => {
   const text = textArea.value;
   if (!text.trim()) return announce('There is no text to copy yet.', DANGER);
@@ -252,33 +148,19 @@ copy.addEventListener('click', async () => {
   } catch {
     textArea.focus();
     textArea.select();
-    return announce(`Copying was blocked. The text is selected, so press ${MOD} + C.`, DANGER);
+    return announce('Copying was blocked. The text is selected, so press Ctrl or Cmd + C.', DANGER);
   }
 
-  copyLabel.textContent = 'Copied';
-  setTimeout(() => { copyLabel.textContent = 'Copy'; }, 1500);
+  copy.textContent = 'Copied';
+  setTimeout(() => { copy.textContent = 'Copy'; }, 1500);
   announce('Text copied to the clipboard.', SUCCESS);
 });
 
-clear.addEventListener('click', () => {
+el('clear').addEventListener('click', () => {
   if (!textArea.value) return;
-  stopReading();
-  cleared = textArea.value;
   textArea.value = '';
-  textChanged();
+  updateCounts();
   announce('Text cleared.');
-  undo.hidden = false;
-  clearTimeout(undoTimer);
-  undoTimer = setTimeout(hideUndo, 10000);
-  textArea.focus();
-});
-
-undo.addEventListener('click', () => {
-  if (!cleared) return;
-  textArea.value = cleared;
-  hideUndo();
-  textChanged();
-  announce('Text restored.', SUCCESS);
   textArea.focus();
 });
 
@@ -288,131 +170,82 @@ const synth = window.speechSynthesis;
 
 if (synth) {
   const speechControls = el('speech-controls');
+  const voiceControls = el('voice-controls');
   const voiceSelect = el('voiceselection');
-  const speak = el('speak');
-  const speakLabel = el('speak-label');
+  const read = el('read');
+  const pause = el('pause');
+  const resume = el('resume');
   const stop = el('stop');
-  const LABELS = { idle: 'Listen', speaking: 'Pause', paused: 'Resume' };
-  const languageNames = new Intl.DisplayNames(['en'], { type: 'language' });
-  const baseOf = (tag) => (tag || '').toLowerCase().split(/[-_]/)[0];
   let voices = [];
-  let state = 'idle';
-  let chosen = '';
-  let current = null;
 
-  const setState = (next) => {
-    state = next;
-    speak.dataset.state = next;
-    speakLabel.textContent = LABELS[next];
-    stop.hidden = next === 'idle';
-  };
-
-  const nameOf = (base) => {
-    try {
-      return languageNames.of(base) || base;
-    } catch {
-      return base;
-    }
+  const speaking = (on) => {
+    pause.hidden = !on;
+    resume.hidden = true;
+    stop.hidden = !on;
   };
 
   const loadVoices = () => {
     // getVoices() is empty until the engine is ready, hence the voiceschanged listener below.
-    voices = synth.getVoices();
+    voices = synth.getVoices().slice().sort((a, b) => a.lang.localeCompare(b.lang) || a.name.localeCompare(b.name));
     if (!voices.length) return;
 
-    // Voices for the detected language come first, so the default matches the document.
-    const tag = (textArea.lang || navigator.language || '').toLowerCase();
-    const wanted = baseOf(tag);
-    const groups = new Map();
-    voices.forEach((voice) => {
-      const base = baseOf(voice.lang);
-      if (!groups.has(base)) groups.set(base, []);
-      groups.get(base).push(voice);
-    });
-    const order = [...groups.keys()].sort((a, b) => (b === wanted) - (a === wanted) || nameOf(a).localeCompare(nameOf(b)));
-
-    voiceSelect.replaceChildren(...order.map((base) => {
-      const group = document.createElement('optgroup');
-      group.label = nameOf(base);
-      group.append(...groups.get(base)
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((voice) => new Option(`${voice.name} (${voice.lang})`, voice.voiceURI)));
-      return group;
+    voiceSelect.replaceChildren(...voices.map((voice, index) => {
+      const option = new Option(`${voice.name} (${voice.lang})`, String(index));
+      option.selected = voice.default;
+      return option;
     }));
-
-    const matching = groups.get(wanted) || [];
-    const fallback = matching.find((voice) => voice.default) ||
-      matching.find((voice) => voice.lang.toLowerCase().replace('_', '-') === tag) ||
-      matching[0] || voices.find((voice) => voice.default) || voices[0];
-    voiceSelect.value = chosen || fallback.voiceURI;
+    voiceControls.hidden = false;
     speechControls.hidden = false;
-  };
-
-  stopReading = () => {
-    current = null;
-    synth.cancel();
-    setState('idle');
   };
 
   loadVoices();
   synth.addEventListener('voiceschanged', loadVoices);
-  voiceSelect.addEventListener('change', () => { chosen = voiceSelect.value; });
 
-  speak.addEventListener('click', (event) => {
-    if (state === 'speaking') {
-      synth.pause();
-      setState('paused');
-      return announce('Paused.');
-    }
-    if (state === 'paused') {
-      synth.resume();
-      setState('speaking');
-      return announce('Reading aloud.');
-    }
-
-    const { selectionStart, selectionEnd } = textArea;
-    const selected = textArea.value.slice(selectionStart, selectionEnd).trim();
+  read.addEventListener('click', () => {
+    const selected = window.getSelection().toString().trim();
     const text = selected || textArea.value;
     if (!text.trim()) return announce('There is no text to read yet.', DANGER);
 
     synth.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.voice = voices.find((voice) => voice.voiceURI === voiceSelect.value) || null;
+    utterance.voice = voices[Number(voiceSelect.value)] || null;
     utterance.rate = 0.9;
-    current = utterance;
 
-    // A cancelled utterance can still report back after Stop, Clear or a new Listen.
     utterance.onstart = () => {
-      if (current !== utterance) return;
-      setState('speaking');
-      // A keyboard user keeps focus on the button so Pause stays one key press away.
-      if (!selected && event.detail > 0) textArea.focus({ preventScroll: true });
+      speaking(true);
+      if (!selected) textArea.focus();
       announce(selected ? 'Reading the selection aloud.' : 'Reading aloud.');
     };
     utterance.onend = () => {
-      if (current !== utterance) return;
-      current = null;
-      setState('idle');
-      if (!selected) textArea.setSelectionRange(0, 0);
+      speaking(false);
       announce('Finished reading.');
     };
     // Follow along in the textarea, but only when reading its full contents.
-    utterance.onerror = () => {
-      if (current !== utterance) return;
-      current = null;
-      setState('idle');
-    };
-    utterance.onboundary = (boundary) => {
-      if (!selected && current === utterance) textArea.setSelectionRange(boundary.charIndex, boundary.charIndex + (boundary.charLength || 0));
+    utterance.onboundary = (event) => {
+      if (!selected) textArea.setSelectionRange(event.charIndex, event.charIndex + (event.charLength || 0));
     };
 
     synth.speak(utterance);
   });
 
+  pause.addEventListener('click', () => {
+    synth.pause();
+    pause.hidden = true;
+    resume.hidden = false;
+    announce('Paused.');
+  });
+
+  resume.addEventListener('click', () => {
+    synth.resume();
+    resume.hidden = true;
+    pause.hidden = false;
+    announce('Reading aloud.');
+  });
+
   stop.addEventListener('click', () => {
-    stopReading();
+    synth.cancel();
+    speaking(false);
     announce('Stopped reading.');
-    speak.focus();
   });
 
   window.addEventListener('pagehide', () => synth.cancel());
@@ -424,38 +257,32 @@ let ticker = null;
 
 const idle = () => {
   clearInterval(ticker);
-  busy = false;
   submit.disabled = false;
-  submitLabel.textContent = 'Convert to text';
-  submitKbd.hidden = false;
+  submitLabel.textContent = 'Convert';
   spinner.hidden = true;
   progressWrap.hidden = true;
-  elapsed.textContent = '0:00';
-  delete form.dataset.busy;
+  elapsed.textContent = '';
+  form.classList.remove('busy');
 };
 
 form.addEventListener('submit', (event) => {
   if (!fileInput.files.length) {
     event.preventDefault();
-    setInvalid(true);
     fileInput.focus();
     return announce('Choose a document to convert first.', DANGER);
   }
 
-  busy = true;
-  stopReading();
   submit.disabled = true;
   submitLabel.textContent = 'Converting';
-  submitKbd.hidden = true;
   spinner.hidden = false;
   progressWrap.hidden = false;
-  form.dataset.busy = '';
+  form.classList.add('busy');
   announce('Converting your document. Large scanned files can take a few minutes.');
 
   const started = Date.now();
   ticker = setInterval(() => {
     const seconds = Math.round((Date.now() - started) / 1000);
-    elapsed.textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+    elapsed.textContent = `Working for ${Math.floor(seconds / 60)}m ${String(seconds % 60).padStart(2, '0')}s`;
   }, 1000);
 });
 
@@ -470,14 +297,6 @@ window.addEventListener('pageshow', (event) => {
   announce(HINT);
 });
 
-if (textArea.value) {
-  const source = textArea.dataset.source;
-  const words = textArea.value.trim().split(/\s+/).length;
-  announce(`Extracted ${plural(words, 'word')}${source ? ` from ${source}` : ''}.`, SUCCESS);
-  if (!window.matchMedia('(min-width: 1024px)').matches) {
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    el('result').scrollIntoView({ block: 'start', behavior: still ? 'auto' : 'smooth' });
-  }
-} else {
-  announce(HINT);
+if (textArea.value && !window.matchMedia('(min-width: 1024px)').matches) {
+  textArea.closest('.card').scrollIntoView({ block: 'start', behavior: 'smooth' });
 }

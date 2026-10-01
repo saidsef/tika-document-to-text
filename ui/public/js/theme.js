@@ -44,7 +44,6 @@
 
     const items = document.querySelectorAll('[data-theme-value]');
     const paint = () => {
-      button.dataset.theme = current.id;
       button.setAttribute('aria-label', `Colour theme: ${current.label.toLowerCase()}`);
       items.forEach((item) => item.setAttribute('aria-checked', String(item.dataset.themeValue === current.id)));
     };

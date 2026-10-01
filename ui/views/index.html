@@ -39,186 +39,93 @@
   </script>
 </head>
 <body class="flex min-h-dvh flex-col bg-background-1 text-foreground antialiased lg:h-dvh">
-  <a href="#text" class="skip-link">Skip to the extracted text</a>
-
-  <header class="sticky top-0 z-40 border-b border-line-2 bg-background/90 backdrop-blur">
-    <div class="flex h-14 items-center gap-3 px-4 lg:px-6">
-      <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs" aria-hidden="true">
-        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /><path d="M10 9H8" /><path d="M16 13H8" /><path d="M16 17H8" /></svg>
-      </span>
+  <header class="border-b border-line-2 bg-background">
+    <div class="flex items-center gap-3 px-4 py-3 lg:px-6">
       <div class="me-auto min-w-0">
-        <h1 class="text-base font-semibold leading-tight">Document to Text</h1>
-        <p class="hidden truncate text-xs text-muted-foreground-1 sm:block">Text from PDF, Office files and images, with OCR and language detection by Apache Tika</p>
+        <h1 class="text-base font-semibold">Document to Text</h1>
+        <p class="hidden truncate text-xs text-muted-foreground-1 md:block">Upload a PDF, Office document or image. Scanned pages are read with OCR and the language is detected automatically.</p>
       </div>
-
       <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
-        <button type="button" id="theme" data-theme="auto" class="hs-dropdown-toggle group/theme btn-icon" aria-haspopup="menu" aria-expanded="false" aria-label="Colour theme">
-          <svg class="hidden size-4 group-data-[theme=light]/theme:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></svg>
-          <svg class="hidden size-4 group-data-[theme=dark]/theme:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>
-          <svg class="hidden size-4 group-data-[theme=auto]/theme:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="20" height="14" x="2" y="3" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" /></svg>
-        </button>
-        <div class="hs-dropdown-menu z-50 hidden min-w-44 rounded-xl border border-dropdown-line bg-dropdown p-1 opacity-0 shadow-lg transition-[opacity,margin] duration-150 hs-dropdown-open:opacity-100" role="menu" aria-labelledby="theme">
-          <button type="button" role="menuitemradio" aria-checked="false" data-theme-value="light" class="menu-item group">
-            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></svg>
-            Light
-            <svg class="invisible ms-auto size-4 text-primary-600 group-aria-checked:visible dark:text-primary-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5" /></svg>
-          </button>
-          <button type="button" role="menuitemradio" aria-checked="false" data-theme-value="dark" class="menu-item group">
-            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>
-            Dark
-            <svg class="invisible ms-auto size-4 text-primary-600 group-aria-checked:visible dark:text-primary-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5" /></svg>
-          </button>
-          <button type="button" role="menuitemradio" aria-checked="false" data-theme-value="auto" class="menu-item group">
-            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="20" height="14" x="2" y="3" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" /></svg>
-            System
-            <svg class="invisible ms-auto size-4 text-primary-600 group-aria-checked:visible dark:text-primary-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5" /></svg>
-          </button>
+        <button type="button" id="theme" class="hs-dropdown-toggle btn" aria-haspopup="menu" aria-expanded="false" aria-label="Colour theme">Theme</button>
+        <div class="hs-dropdown-menu z-50 hidden min-w-32 rounded-lg border border-dropdown-line bg-dropdown p-1 opacity-0 shadow-md transition-[opacity,margin] hs-dropdown-open:opacity-100" role="menu" aria-labelledby="theme">
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-value="light" class="menu-item">Light</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-value="dark" class="menu-item">Dark</button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-theme-value="auto" class="menu-item">System</button>
         </div>
       </div>
     </div>
   </header>
 
-  <main class="mx-auto flex w-full max-w-screen-2xl min-h-0 flex-1 flex-col px-4 py-4 lg:px-6 lg:py-6">
-    ${d.error ? `<div class="mb-4 flex items-start gap-x-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-500/10 dark:text-red-300" role="alert" id="alert">
-      <svg class="mt-0.5 size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="M12 8v4" /><path d="M12 16h.01" /></svg>
-      <div class="min-w-0 flex-1">
-        <p class="font-semibold">The document was not converted</p>
-        <p class="mt-1">${d.esc(d.error)}</p>
+  <main class="mx-auto flex min-h-0 w-full max-w-screen-2xl flex-1 flex-col p-4 lg:p-6">
+    ${d.error ? `<div class="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-500/10 dark:text-red-300" role="alert">${d.esc(d.error)}</div>` : ''}
+
+    <form action="/" method="post" enctype="multipart/form-data" id="convert" class="grid min-h-0 flex-1 gap-4 lg:grid-cols-[22rem_minmax(0,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:gap-6" data-max-bytes="${d.esc(d.maxUploadBytes)}">
+      <div class="card flex flex-col gap-4 self-start p-4">
+        <div class="rounded-lg border-2 border-dashed border-line-3 bg-muted transition-colors hover:border-primary focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/20 data-dragover:border-primary data-dragover:bg-primary-50 dark:data-dragover:bg-primary-500/10" id="dropzone">
+          <input type="file" class="sr-only" id="doc" name="doc" required />
+          <label class="flex cursor-pointer flex-col items-center gap-1 px-4 py-8 text-center" for="doc">
+            <span class="text-sm font-semibold">Choose a file</span>
+            <span class="text-xs text-muted-foreground-1">or drop one here</span>
+            <span class="mt-1 text-xs text-muted-foreground-1">PDF, Word, Excel, PowerPoint, ODF, HTML, e-mail and images, up to ${d.esc(d.maxUploadLabel)}</span>
+          </label>
+        </div>
+
+        <div class="flex items-center gap-3 rounded-lg border border-layer-line bg-layer p-3" id="file-meta" hidden>
+          <span class="min-w-0 flex-1">
+            <span class="block truncate text-sm font-medium" id="file-name"></span>
+            <span class="block truncate text-xs text-muted-foreground-1" id="file-size"></span>
+          </span>
+          <button type="button" class="btn" id="file-clear" aria-label="Remove the selected file">Remove</button>
+        </div>
+
+        <div id="image-preview-wrap" hidden>
+          <img id="image-preview" alt="Preview of the selected image" class="mx-auto max-h-56 max-w-full rounded-lg border border-line-2" />
+        </div>
+
+        <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus-visible:ring-4 focus-visible:ring-primary/30 disabled:opacity-80" id="submit">
+          <span class="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" id="spinner" role="presentation" hidden></span>
+          <span id="submit-label">Convert</span>
+        </button>
+
+        <div id="progress-wrap" hidden>
+          <div class="h-1.5 animate-pulse rounded-full bg-primary motion-reduce:animate-none" role="progressbar" aria-label="Conversion in progress"></div>
+          <p class="mt-2 text-xs text-muted-foreground-1" id="elapsed"></p>
+        </div>
       </div>
-      <button type="button" id="alert-dismiss" class="-m-1.5 inline-flex size-8 shrink-0 items-center justify-center rounded-lg hover:bg-red-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-red-500 dark:hover:bg-red-500/20" aria-label="Dismiss this message">
-        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-      </button>
-    </div>` : ''}
 
-    <form action="/" method="post" enctype="multipart/form-data" id="convert" novalidate class="grid min-h-0 flex-1 gap-4 lg:grid-cols-[22rem_minmax(0,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:gap-6 xl:grid-cols-[24rem_minmax(0,1fr)]" data-max-bytes="${d.esc(d.maxUploadBytes)}">
-      <section class="flex min-h-0 flex-col gap-4 lg:overflow-y-auto" aria-labelledby="upload-heading">
-        <div class="card p-4 sm:p-5">
-          <h2 id="upload-heading" class="mb-3 text-sm font-semibold">Upload a document</h2>
-
-          <div id="dropzone" class="group/drop relative rounded-xl border-2 border-dashed border-line-3 bg-muted transition-colors hover:border-primary focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/20 data-dragover:border-primary data-dragover:bg-primary-50 data-invalid:border-red-500 dark:data-dragover:bg-primary-500/10 dark:data-invalid:border-red-400">
-            <input type="file" class="sr-only" id="doc" name="doc" required aria-label="Choose a document" aria-describedby="dropzone-hint" />
-            <label for="doc" class="flex cursor-pointer flex-col items-center gap-1 px-4 py-8 text-center">
-              <span class="mb-2 flex size-12 items-center justify-center rounded-full bg-primary-100 text-primary-700 transition-transform group-data-dragover/drop:scale-110 dark:bg-primary-500/15 dark:text-primary-300" aria-hidden="true">
-                <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 13v8" /><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" /><path d="m8 17 4-4 4 4" /></svg>
-              </span>
-              <span class="text-sm font-semibold"><span id="dropzone-title">Drop a file here or</span> <span class="text-primary-600 underline-offset-2 group-hover/drop:underline dark:text-primary-400">browse</span></span>
-              <span class="text-xs text-muted-foreground-1" id="dropzone-hint">PDF, Word, Excel, PowerPoint, ODF, HTML, e-mail and images, up to ${d.esc(d.maxUploadLabel)}</span>
-            </label>
+      <div class="card flex min-h-[28rem] flex-col has-[#text:focus]:border-primary lg:min-h-0">
+        <div class="flex flex-wrap items-center gap-2 border-b border-card-divider px-4 py-3">
+          <label for="text" class="text-sm font-semibold">Extracted text</label>
+          ${d.source ? `<span class="max-w-full truncate rounded-full bg-surface px-2 py-0.5 text-xs">${d.esc(d.source)}</span>` : ''}
+          ${(d.detectedType || d.detectedLang) ? `<span class="rounded-full bg-surface px-2 py-0.5 text-xs">Detected: ${d.esc([d.detectedType, d.detectedLang].filter(Boolean).join(' · '))}</span>` : ''}
+          <span class="me-auto text-xs text-muted-foreground-1" id="counts"></span>
+          <div class="flex gap-2" role="group" aria-label="Text actions">
+            <button type="button" class="btn" id="copy">Copy</button>
+            <button type="button" class="btn" id="download">Download</button>
+            <button type="button" class="btn" id="clear">Clear</button>
           </div>
-
-          <div class="mt-4 flex items-center gap-3 rounded-xl border border-layer-line bg-layer p-3" id="file-meta" hidden>
-            <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-[10px] font-bold uppercase tracking-wide text-primary-700 dark:bg-primary-500/15 dark:text-primary-300" id="file-ext" aria-hidden="true"></span>
-            <span class="min-w-0 flex-1">
-              <span class="block truncate text-sm font-medium" id="file-name"></span>
-              <span class="block truncate text-xs text-muted-foreground-1" id="file-size"></span>
-            </span>
-            <div class="hs-tooltip inline-flex [--placement:top]">
-              <button type="button" class="hs-tooltip-toggle btn-icon size-8 border-transparent shadow-none" id="file-clear" aria-label="Remove the selected file">
-                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-              </button>
-              <span class="hs-tooltip-content tooltip" role="tooltip" aria-hidden="true">Remove file</span>
-            </div>
+          <div class="flex gap-2" role="group" aria-label="Read aloud" id="speech-controls" hidden>
+            <button type="button" class="btn" id="read">Read aloud</button>
+            <button type="button" class="btn" id="pause" hidden>Pause</button>
+            <button type="button" class="btn" id="resume" hidden>Resume</button>
+            <button type="button" class="btn" id="stop" hidden>Stop</button>
           </div>
-
-          <div class="mt-4" id="image-preview-wrap" hidden>
-            <img id="image-preview" alt="Preview of the selected image" class="mx-auto block max-h-56 w-auto max-w-full rounded-lg border border-line-2" />
-          </div>
-
-          <button type="submit" id="submit" class="mt-4 inline-flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-xs transition-colors hover:bg-primary-hover focus:outline-hidden focus-visible:ring-4 focus-visible:ring-primary/30 disabled:cursor-progress disabled:opacity-80">
-            <span class="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" id="spinner" role="presentation" hidden></span>
-            <span id="submit-label">Convert to text</span>
-            <kbd class="hidden items-center gap-0.5 rounded border border-white/25 bg-white/10 px-1.5 font-sans text-[11px] font-medium lg:inline-flex" id="submit-kbd" aria-hidden="true"><span data-mod>Ctrl</span><span>Enter</span></kbd>
-          </button>
-
-          <div class="mt-4" id="progress-wrap" hidden>
-            <div class="mb-1.5 flex items-center justify-between text-xs">
-              <span class="font-medium">Extracting text</span>
-              <span class="tabular-nums text-muted-foreground-1" id="elapsed">0:00</span>
-            </div>
-            <div class="relative h-1.5 w-full overflow-hidden rounded-full bg-surface" role="progressbar" aria-label="Conversion in progress">
-              <div class="absolute inset-y-0 w-1/3 animate-indeterminate rounded-full bg-primary motion-reduce:w-full motion-reduce:animate-none"></div>
-            </div>
-            <p class="mt-2 text-xs text-muted-foreground-1">Scanned pages are read with OCR, which can take a few minutes on long documents.</p>
+          <div id="voice-controls" hidden>
+            <label class="sr-only" for="voiceselection">Voice</label>
+            <select class="btn w-44" id="voiceselection"></select>
           </div>
         </div>
-
-        <div class="card hidden p-4 sm:p-5 lg:block">
-          <h2 class="mb-3 text-sm font-semibold">Tips</h2>
-          <ul class="space-y-2.5 text-xs text-muted-foreground-2">
-            <li class="flex gap-2"><span class="kbd" aria-hidden="true"><span data-mod>Ctrl</span>&nbsp;V</span><span>Paste a screenshot to read the text in it.</span></li>
-            <li class="flex gap-2"><span class="kbd" aria-hidden="true"><span data-mod>Ctrl</span>&nbsp;Enter</span><span>Convert the selected file.</span></li>
-            <li class="flex gap-2"><span class="kbd" aria-hidden="true">Select</span><span>Highlight part of the text before Listen to hear only that part.</span></li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="card flex min-h-[28rem] flex-col transition-shadow has-[#text:focus]:border-primary has-[#text:focus]:ring-4 has-[#text:focus]:ring-primary/15 lg:min-h-0" id="result" aria-labelledby="result-heading">
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-3 border-b border-card-divider px-4 py-3">
-          <div class="min-w-0 flex-1 basis-56">
-            <h2 class="text-sm font-semibold" id="result-heading"><label for="text">Extracted text</label></h2>
-            ${(d.source || d.detectedType || d.detectedLang) ? `<div class="mt-1.5 flex flex-wrap items-center gap-1.5" id="result-meta">
-              ${d.source ? `<span class="chip max-w-full" title="${d.esc(d.source)}">
-                <svg class="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /></svg>
-                <span class="sr-only">Source file: </span><span class="truncate" id="source-name">${d.esc(d.source)}</span>
-              </span>` : ''}
-              ${d.detectedType ? `<span class="chip" title="${d.esc(d.detectedMime)}"><span class="sr-only">Detected format: </span>${d.esc(d.detectedType)}</span>` : ''}
-              ${d.detectedLang ? `<span class="chip"><span class="sr-only">Detected language: </span>${d.esc(d.detectedLang)}</span>` : ''}
-            </div>` : ''}
-          </div>
-
-          <div class="flex flex-wrap items-center gap-2" role="toolbar" aria-label="Text actions">
-            <button type="button" class="btn" id="copy">
-              <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg>
-              <span id="copy-label">Copy</span>
-            </button>
-            <button type="button" class="btn" id="download">
-              <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="m7 10 5 5 5-5" /><path d="M12 15V3" /></svg>
-              Download
-            </button>
-            <button type="button" class="btn" id="clear">
-              <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
-              Clear
-            </button>
-
-            <div class="flex flex-wrap items-center gap-2 sm:border-s sm:border-line-2 sm:ps-2" id="speech-controls" hidden>
-              <button type="button" class="btn group/speak" id="speak" data-state="idle">
-                <svg class="size-3.5 group-data-[state=speaking]/speak:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /><path d="M16 9a5 5 0 0 1 0 6" /><path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></svg>
-                <svg class="hidden size-3.5 group-data-[state=speaking]/speak:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="14" y="4" width="4" height="16" rx="1" /><rect x="6" y="4" width="4" height="16" rx="1" /></svg>
-                <span id="speak-label">Listen</span>
-              </button>
-              <button type="button" class="btn" id="stop" hidden>
-                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="14" height="14" x="5" y="5" rx="2" /></svg>
-                Stop
-              </button>
-              <label class="sr-only" for="voiceselection">Voice</label>
-              <select class="w-44 truncate rounded-lg border border-layer-line bg-layer py-1.5 ps-2.5 pe-8 text-xs text-layer-foreground shadow-2xs focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/30" id="voiceselection"></select>
-            </div>
-          </div>
-        </div>
-
-        <textarea id="text" class="min-h-72 flex-1 resize-y bg-transparent p-4 font-mono text-sm leading-relaxed text-foreground placeholder:text-muted-foreground-1 focus:outline-hidden lg:min-h-0 lg:resize-none" rows="12" spellcheck="false" ${d.detectedLangCode ? `lang="${d.esc(d.detectedLangCode)}"` : ''} data-source="${d.esc(d.source)}" placeholder="Extracted text appears here. You can also type or paste text to have it read aloud.">${d.esc(d.text)}</textarea>
-
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-card-divider px-4 py-2 text-xs">
-          <p class="min-h-4 min-w-0 flex-1 text-muted-foreground-1" role="status" aria-live="polite" id="status"></p>
-          <button type="button" class="font-medium text-primary-600 underline-offset-2 hover:underline focus:outline-hidden focus-visible:underline dark:text-primary-400" id="undo" hidden>Undo</button>
-          <span class="tabular-nums text-muted-foreground-1" id="counts"></span>
-        </div>
-      </section>
+        <textarea id="text" class="min-h-72 flex-1 resize-y bg-transparent p-4 font-mono text-sm leading-relaxed focus:outline-hidden lg:min-h-0 lg:resize-none" rows="12" spellcheck="false" ${d.detectedLang ? `lang="${d.esc(d.detectedLang)}"` : ''} data-source="${d.esc(d.source)}" placeholder="The extracted text appears here. Choose a file and select Convert.">${d.esc(d.text)}</textarea>
+        <p class="min-h-9 border-t border-card-divider px-4 py-2 text-xs text-muted-foreground-1 data-[tone=danger]:text-red-600 data-[tone=success]:text-teal-700 dark:data-[tone=danger]:text-red-400 dark:data-[tone=success]:text-teal-400" role="status" aria-live="polite" id="status"></p>
+      </div>
     </form>
   </main>
 
-  <footer class="px-4 pb-4 text-center text-xs text-muted-foreground-1 lg:pb-3">
+  <footer class="px-4 pb-3 text-center text-xs text-muted-foreground-1">
     &copy; Copyright ${d.esc(d.copyright)} saidsef. All Rights Reserved
   </footer>
 
-  <div class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-primary-600/10 p-3 backdrop-blur-[2px] dark:bg-primary-500/10" id="drop-overlay" hidden>
-    <div class="flex size-full items-center justify-center rounded-2xl border-2 border-dashed border-primary">
-      <p class="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg">Drop the file to upload it</p>
-    </div>
-  </div>
-
   <script src="/build/dropdown.js" nonce="${d.nonce}" defer></script>
-  <script src="/build/tooltip.js" nonce="${d.nonce}" defer></script>
   <script src="/js/app.js" nonce="${d.nonce}" defer></script>
 </body>
 </html>
