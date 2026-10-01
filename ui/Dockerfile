@@ -1,3 +1,18 @@
+# Tailwind CSS and Preline are build tools only, so they stay out of the runtime image.
+# The output is plain CSS and JavaScript, so it is built once on the native platform.
+FROM --platform=$BUILDPLATFORM docker.io/node:26-alpine3.24 AS assets
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+
+COPY scripts ./scripts
+COPY styles ./styles
+COPY views ./views
+COPY public ./public
+RUN npm run build
+
 FROM docker.io/node:26-alpine3.24
 
 LABEL org.opencontainers.image.authors="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
@@ -29,6 +44,7 @@ COPY --chown=10001:10001 app.js ./
 COPY --chown=10001:10001 libs ./libs
 COPY --chown=10001:10001 views ./views
 COPY --chown=10001:10001 public ./public
+COPY --from=assets --chown=10001:10001 /app/public/build ./public/build
 
 USER 10001
 

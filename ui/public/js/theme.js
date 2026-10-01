@@ -30,10 +30,11 @@
   let current = THEMES.find((theme) => theme.id === stored) || THEMES[0];
 
   const apply = () => {
-    const preferred = dark.matches ? 'dark' : 'light';
-    document.documentElement.dataset.bsTheme = current.id === 'auto' ? preferred : current.id;
+    const isDark = current.id === 'auto' ? dark.matches : current.id === 'dark';
+    document.documentElement.classList.toggle('dark', isDark);
   };
 
+  // Runs in <head>, before first paint, so a dark page never flashes white.
   apply();
   dark.addEventListener('change', () => { if (current.id === 'auto') apply(); });
 
@@ -41,20 +42,19 @@
     const button = document.getElementById('theme');
     if (!button) return;
 
-    const label = document.getElementById('theme-label');
+    const items = document.querySelectorAll('[data-theme-value]');
     const paint = () => {
       button.dataset.theme = current.id;
-      button.setAttribute('aria-label', `Colour theme: ${current.label.toLowerCase()}. Select to change.`);
-      if (label) label.textContent = current.label;
+      button.setAttribute('aria-label', `Colour theme: ${current.label.toLowerCase()}`);
+      items.forEach((item) => item.setAttribute('aria-checked', String(item.dataset.themeValue === current.id)));
     };
 
-    button.addEventListener('click', () => {
-      const rest = THEMES.slice(THEMES.indexOf(current) + 1);
-      current = rest.length ? rest[0] : THEMES[0];
+    items.forEach((item) => item.addEventListener('click', () => {
+      current = THEMES.find((theme) => theme.id === item.dataset.themeValue) || THEMES[0];
       persist(current.id);
       apply();
       paint();
-    });
+    }));
 
     paint();
   });
