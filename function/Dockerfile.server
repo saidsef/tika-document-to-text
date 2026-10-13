@@ -4,7 +4,7 @@ ARG PORT=''
 ARG PORT_METRICS=''
 ARG POD_IP=''
 
-ENV TIKA_VERSION=4.0.0
+ENV TIKA_VERSION=4.1.0
 ENV CLASSPATH="/opt/tika-server/tika-server-standard-${TIKA_VERSION}.jar:/opt/tika-server/lib/*:/tika-extras/*:/opt/tika/libs/*"
 ENV PORT=${PORT:-8070}
 ENV PORT_METRICS=${PORT_METRICS:-7072}
