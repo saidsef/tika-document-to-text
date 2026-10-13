@@ -88,5 +88,5 @@ A Tika server to develop against:
 ```shell
 docker run --rm -p 9998:9998 \
   -v "$PWD/function/tika-config.json:/tika-config.json:ro" \
-  apache/tika:4.0.0-1-full -c /tika-config.json
+  apache/tika:4.1.0-1-full -c /tika-config.json
 ```
