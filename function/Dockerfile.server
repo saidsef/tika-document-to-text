@@ -13,6 +13,10 @@ ENV PROMETHEUS_JMX_JAR_VERSION=0.20.0
 ENV JAI_IMAGEIO_JPEG2000=1.4.0
 ENV JBIG2_IMAGEIO=3.0.4
 
+# dlcdn.apache.org drops a Tika release once the next one ships, which breaks a pinned
+# TIKA_VERSION. The archive keeps every release.
+ARG TIKA_DIST_URL=https://archive.apache.org/dist/tika
+
 LABEL maintainer="Said Sef <said@saidsef.co.uk> (saidsef.co.uk/)"
 LABEL org.opencontainers.image.source="https://github.com/saidsef/tika-document-to-text"
 LABEL org.opencontainers.image.description="Apache Tika API Server v${TIKA_VERSION} with Prometheus JMX Exporter"
@@ -34,9 +38,9 @@ RUN apt-get update && \
     curl -fSL https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/${PROMETHEUS_JMX_JAR_VERSION}/jmx_prometheus_javaagent-${PROMETHEUS_JMX_JAR_VERSION}.jar -o /opt/tika/jmx_prometheus_javaagent.jar && \
     curl -fSL https://repo1.maven.org/maven2/org/apache/pdfbox/jbig2-imageio/${JBIG2_IMAGEIO}/jbig2-imageio-${JBIG2_IMAGEIO}.jar -o /opt/tika/libs/levigo-jbig2-imageio.jar && \
     curl -fSL https://repo1.maven.org/maven2/com/github/jai-imageio/jai-imageio-jpeg2000/${JAI_IMAGEIO_JPEG2000}/jai-imageio-jpeg2000-${JAI_IMAGEIO_JPEG2000}.jar -o /opt/tika/libs/jai-imageio-jpeg2000.jar && \
-    curl -fSL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-sqlite3-package-${TIKA_VERSION}-shaded.jar -o /opt/tika/libs/tika-parser-sqlite3-package-${TIKA_VERSION}.jar && \
-    curl -fSL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-nlp-package-${TIKA_VERSION}-shaded.jar -o /opt/tika/libs/tika-parser-nlp-package-${TIKA_VERSION}.jar && \
-    curl -fSL https://dlcdn.apache.org/tika/${TIKA_VERSION}/tika-parser-scientific-package-${TIKA_VERSION}-shaded.jar -o /opt/tika/libs/tika-parser-scientific-package-${TIKA_VERSION}.jar && \
+    curl -fSL ${TIKA_DIST_URL}/${TIKA_VERSION}/tika-parser-sqlite3-package-${TIKA_VERSION}-shaded.jar -o /opt/tika/libs/tika-parser-sqlite3-package-${TIKA_VERSION}.jar && \
+    curl -fSL ${TIKA_DIST_URL}/${TIKA_VERSION}/tika-parser-nlp-package-${TIKA_VERSION}-shaded.jar -o /opt/tika/libs/tika-parser-nlp-package-${TIKA_VERSION}.jar && \
+    curl -fSL ${TIKA_DIST_URL}/${TIKA_VERSION}/tika-parser-scientific-package-${TIKA_VERSION}-shaded.jar -o /opt/tika/libs/tika-parser-scientific-package-${TIKA_VERSION}.jar && \
     chown -R 10001:10001 /opt/tika
 
 USER 10001
