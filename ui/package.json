@@ -46,7 +46,7 @@
   "homepage": "https://github.com/saidsef/tika-document-to-text#readme",
   "type": "module",
   "devDependencies": {
-    "@preline/dropdown": "^5.0.0",
+    "@preline/dropdown": "^5.1.0",
     "@tailwindcss/postcss": "^4.3.3",
     "postcss": "^8.5.31",
     "tailwindcss": "^4.3.3"
